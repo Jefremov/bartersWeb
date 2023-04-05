@@ -9,7 +9,7 @@ import lombok.Data;
 public class Trade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tradeid")
     private Long id;
 
