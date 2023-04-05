@@ -26,6 +26,8 @@ public class UserService {
 
         if(usersRepository.existsByUsername(userRegisterDto.getUsername()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User " + userRegisterDto.getUsername() + " is exist. Choose another user name");
+        if(usersRepository.existsByEmail(userRegisterDto.getEmail()))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is exist.");
         UserEntity user = userMapper.userRegisterDtoToUser(userRegisterDto);
         usersRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body("User " + userRegisterDto.getUsername() + " is registered");
