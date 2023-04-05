@@ -1,16 +1,13 @@
 package lv.bootcamp.bartersWeb.controller;
 
 import lv.bootcamp.bartersWeb.entity.Item;
+import lv.bootcamp.bartersWeb.entity.ItemCategory;
 import lv.bootcamp.bartersWeb.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,9 +29,10 @@ public class ItemController {
         return itemService.getItemsById(itemid);
     }
     @PostMapping("/addOrUpdateItem")
-    public String addOrUpdateItem(@RequestBody Item item) {
-        itemService.addOrUpdateItem(item);
-        return "New item added: " + item;
+    public String addOrUpdateItem(@RequestParam("file")MultipartFile file, @RequestParam("id") Long id, @RequestParam("title") String title, @RequestParam("category") Integer c, @RequestParam("status") String status, @RequestParam("description") String description) throws IOException {
+        ItemCategory category = ItemCategory.valueOf(c);
+        itemService.addOrUpdateItem(id,title,status,category,description,file);
+        return "New item added";
     }
     @DeleteMapping("/deleteItem/{itemid}")
     public String deleteItem(@PathVariable("itemid") Long itemid) {
