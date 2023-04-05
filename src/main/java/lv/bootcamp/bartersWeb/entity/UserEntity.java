@@ -28,7 +28,7 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
-    private String role;
+    private ERole role;
 
     @Column(name = "description")
     private String description;
