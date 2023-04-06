@@ -23,9 +23,9 @@ public class Item {
     @Column(name = "image")
     private String image;
     @Column(name = "category")
-    private ItemCategory category;
+    private ECategory category;
 
-    public Item(Long id, String title, String status, String description, String image, ItemCategory category) {
+    public Item(Long id, String title, String status, String description, String image, ECategory category) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -33,7 +33,7 @@ public class Item {
         this.image = image;
         this.category = category;
     }
-    public Item(String title, String status, String description, String image, ItemCategory category) {
+    public Item(String title, String status, String description, String image, ECategory category) {
         this.title = title;
         this.status = status;
         this.description = description;
