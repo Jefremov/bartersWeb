@@ -23,10 +23,24 @@ public class UserService {
 
     public ResponseEntity registerUser(UserRegisterDto userRegisterDto) {
 
-        if(usersRepository.existsByUsername(userRegisterDto.getUsername()))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User " + userRegisterDto.getUsername() + " is exist. Choose another user name");
-        if(usersRepository.existsByEmail(userRegisterDto.getEmail()))
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is exist.");
+        try {
+            User user = usersRepository.findUserByUsername(userRegisterDto.getUsername());
+            System.out.println("findUserByUsername: " + user);
+            if (user != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User " + userRegisterDto.getUsername() + " is exist. Choose another user name");
+            }
+        } catch (NullPointerException e){
+
+        }
+        try{
+            User user = usersRepository.findUserByEmail(userRegisterDto.getEmail());
+            System.out.println("findUserByEmail: " + user);
+            if (user != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is exist.");
+            }
+        } catch (NullPointerException e){
+
+        }
         User user = userMapper.userRegisterDtoToUser(userRegisterDto);
         usersRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body("User " + userRegisterDto.getUsername() + " is registered");

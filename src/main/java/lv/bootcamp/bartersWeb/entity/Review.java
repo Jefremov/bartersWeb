@@ -28,19 +28,19 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reviewId")
+    @Column(name = "review_Id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "userId")
-    private User user;
+//    @OneToOne
+//    @JoinColumn(name = "user_Id")
+//    private User user;
 
     @OneToOne
-    @JoinColumn(name = "reviewerId")
+    @JoinColumn(name = "reviewer_Id")
     private User reviewer;
 
     @OneToOne
-    @JoinColumn(name = "reviewedId")
+    @JoinColumn(name = "reviewed_Id")
     private User reviewed;
 
     @Column(name = "grade")
