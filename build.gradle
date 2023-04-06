@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.0.5'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'com.github.node-gradle.node' version '3.5.1'
 }
 
 group = 'lv.bootcamp'
@@ -16,6 +17,38 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+node {
+	version = '18.14.2'
+	download = true
+	workDir = file("${project.projectDir}/src/main/frontend/nodejs")
+	npmWorkDir = file("${project.projectDir}/src/main/frontend/npm")
+	nodeModulesDir = file("${project.projectDir}/src/main/frontend")
+}
+
+task npmInstallDependencies(type: NpmTask) {
+	dependsOn 'npmSetup'
+	execOverrides {
+		it.ignoreExitValue = true
+		it.workingDir = 'src/main/frontend'
+	}
+	args = ['install']
+}
+task npmBuild(type: NpmTask) {
+	dependsOn 'npmInstallDependencies'
+	execOverrides {
+		it.workingDir = 'src/main/frontend'
+	}
+	args = ['run', 'build']
+}
+task copyFrontendToBuild(type: Copy) {
+	dependsOn 'npmBuild'
+	from "$projectDir/src/main/frontend/build/"
+	into "$buildDir/resources/main/static"
+}
+processResources {
+	dependsOn 'copyFrontendToBuild'
 }
 
 dependencies {
