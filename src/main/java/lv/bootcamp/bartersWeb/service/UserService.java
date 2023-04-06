@@ -1,14 +1,13 @@
 package lv.bootcamp.bartersWeb.service;
 
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.entity.UserEntity;
+import lv.bootcamp.bartersWeb.entity.User;
 import lv.bootcamp.bartersWeb.repository.UsersRepository;
 import lv.bootcamp.bartersWeb.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 public class UserService {
@@ -28,7 +27,7 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User " + userRegisterDto.getUsername() + " is exist. Choose another user name");
         if(usersRepository.existsByEmail(userRegisterDto.getEmail()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is exist.");
-        UserEntity user = userMapper.userRegisterDtoToUser(userRegisterDto);
+        User user = userMapper.userRegisterDtoToUser(userRegisterDto);
         usersRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body("User " + userRegisterDto.getUsername() + " is registered");
     }
