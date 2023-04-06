@@ -5,16 +5,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +26,7 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
-    private String role;
+    private ERole role;
 
     @Column(name = "description")
     private String description;

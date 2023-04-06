@@ -16,7 +16,7 @@ public class Item {
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
     @JoinColumn (name="user_id")
-    private UserEntity userEntity;
+    private User user;
 
     private String condition;
 
