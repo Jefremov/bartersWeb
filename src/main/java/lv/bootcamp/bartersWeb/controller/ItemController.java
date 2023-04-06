@@ -28,10 +28,10 @@ public class ItemController {
     public Item getItems(@PathVariable("itemid") Long itemid){
         return itemService.getItemsById(itemid);
     }
-    @PostMapping("/addOrUpdateItem")
-    public String addOrUpdateItem(@RequestParam("file")MultipartFile file, @RequestParam("id") Long id, @RequestParam("title") String title, @RequestParam("category") Integer c, @RequestParam("status") String status, @RequestParam("description") String description) throws IOException {
+    @PostMapping("/addItem")
+    public String addItem(@RequestParam("file")MultipartFile file, @RequestParam("title") String title, @RequestParam("category") Integer c, @RequestParam("status") String status, @RequestParam("description") String description) throws IOException {
         ItemCategory category = ItemCategory.valueOf(c);
-        itemService.addOrUpdateItem(id,title,status,category,description,file);
+        itemService.addItem(title,status,category,description,file);
         return "New item added";
     }
     @DeleteMapping("/deleteItem/{itemid}")
