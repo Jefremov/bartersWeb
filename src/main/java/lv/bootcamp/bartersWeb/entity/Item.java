@@ -16,8 +16,8 @@ public class Item {
     private Long id;
     @Column(name = "title")
     private String title;
-    @Column(name = "status")
-    private String status;
+    @Column(name = "state")
+    private String state;
     @Column(name = "description")
     private String description;
     @Column(name = "image")
@@ -25,17 +25,17 @@ public class Item {
     @Column(name = "category")
     private ECategory category;
 
-    public Item(Long id, String title, String status, String description, String image, ECategory category) {
+    public Item(Long id, String title, String state, String description, String image, ECategory category) {
         this.id = id;
         this.title = title;
-        this.status = status;
+        this.state = state;
         this.description = description;
         this.image = image;
         this.category = category;
     }
-    public Item(String title, String status, String description, String image, ECategory category) {
+    public Item(String title, String state, String description, String image, ECategory category) {
         this.title = title;
-        this.status = status;
+        this.state = state;
         this.description = description;
         this.image = image;
         this.category = category;

@@ -1,7 +1,7 @@
 package lv.bootcamp.bartersWeb.service;
 
 import lv.bootcamp.bartersWeb.entity.Item;
-import lv.bootcamp.bartersWeb.entity.ItemCategory;
+import lv.bootcamp.bartersWeb.entity.ECategory;
 import lv.bootcamp.bartersWeb.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ public class ItemService {
     public Item getItemsById(Long id){
         return itemRepository.findById(id).get();
     }
-    public void addItem(String title, String status, ItemCategory category, String description, MultipartFile file) throws IOException {
+    public void addItem(String title, String state, ECategory category, String description, MultipartFile file) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
         String timestamp = now.format(formatter);
         String fileName = timestamp+file.getOriginalFilename();
         Files.copy(file.getInputStream(), this.root.resolve(fileName));
-        Item item = new Item(title, status,description,root.toString()+"/"+fileName,category);
+        Item item = new Item(title, state,description,root.toString()+"/"+fileName,category);
         itemRepository.save(item);
     }
 
