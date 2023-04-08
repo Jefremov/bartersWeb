@@ -2,6 +2,7 @@ package lv.bootcamp.bartersWeb.controller;
 
 import lv.bootcamp.bartersWeb.entity.Item;
 import lv.bootcamp.bartersWeb.entity.ECategory;
+import lv.bootcamp.bartersWeb.entity.EItemStatus;
 import lv.bootcamp.bartersWeb.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,10 @@ public class ItemController {
         return itemService.getItemsById(itemid);
     }
     @PostMapping("/addItem")
-    public String addItem(@RequestParam("file")MultipartFile file, @RequestParam("title") String title, @RequestParam("category") Integer c, @RequestParam("state") String state, @RequestParam("description") String description) throws IOException {
+    public String addItem(@RequestParam("file")MultipartFile file, @RequestParam("title") String title, @RequestParam("category") Integer c, @RequestParam("state") String state, @RequestParam("description") String description, @RequestParam("status") String statusStr, @RequestParam("userId") Long userId) throws IOException {
         ECategory category = ECategory.valueOf(c);
-        itemService.addItem(title,state,category,description,file);
+        EItemStatus status = EItemStatus.valueOf(statusStr);
+        itemService.addItem(title,state,category,description,file,status,userId);
         return "New item added";
     }
     @DeleteMapping("/deleteItem/{itemid}")
