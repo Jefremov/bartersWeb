@@ -35,8 +35,8 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
-    private ArrayList<Item> items;
+    @OneToMany(mappedBy = "user")
+    private List<Item> items;
 
 
 }

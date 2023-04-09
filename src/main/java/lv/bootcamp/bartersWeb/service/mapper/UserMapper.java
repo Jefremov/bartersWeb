@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static lv.bootcamp.bartersWeb.entity.ERole.ROLE_USER;
+
 @Component
 public class UserMapper {
 
@@ -20,8 +22,7 @@ public class UserMapper {
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setDescription(userDto.getDescription());
-        user.setRole(ERole.ROLE_USER);
-        user.setItems(new ArrayList<>());
+        user.setRole(ROLE_USER);
         return user;
 
     }

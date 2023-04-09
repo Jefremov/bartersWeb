@@ -14,15 +14,19 @@ public class Item {
     @Column(name = "item_id")
     private Long id;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn (name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    private String condition;
+    @Column(name = "state")
+    private String state;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "image")
     private String image;
 
+    @Column(name = "category")
     private String category;
 }
