@@ -17,4 +17,13 @@ public class UserRegisterDto {
     @NotNull
     private String description;
 
+    @Override
+    public String toString() {
+        return "UserRegisterDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

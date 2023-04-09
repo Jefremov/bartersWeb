@@ -1,21 +1,20 @@
 package lv.bootcamp.bartersWeb.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.support.WebExchangeBindException;
 
-import java.util.Optional;
+import org.apache.log4j.Logger;
+
 
 @ControllerAdvice
 class GlobalExceptionHandler {
+
+    private static Logger log = Logger.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
@@ -26,14 +25,16 @@ class GlobalExceptionHandler {
             String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage();
             if (!errorMessage.isEmpty() && !fieldName.isEmpty()) {
+                log.info(fieldName + " " + errorMessage);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fieldName + " " + errorMessage);
             } else {
+                log.error(fieldName + " " + errorMessage);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal error. Contact administrator");
             }
-        } catch (Exception e){
-
+        } catch (Exception e) {
+            log.error("An error occurred " + e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal error. Contact administrator");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal error. Contact administrator");
     }
 
 }
