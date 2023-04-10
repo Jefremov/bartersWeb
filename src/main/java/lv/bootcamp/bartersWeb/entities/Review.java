@@ -1,4 +1,4 @@
-package lv.bootcamp.bartersWeb.entity;
+package lv.bootcamp.bartersWeb.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,15 +33,15 @@ public class Review {
 
     @OneToOne
     @JoinColumn(name = "userId")
-    private UserEntity user;
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "reviewerId")
-    private UserEntity reviewer;
+    private User reviewer;
 
     @OneToOne
     @JoinColumn(name = "reviewedId")
-    private UserEntity reviewed;
+    private User reviewed;
 
     @Column(name = "grade")
     private ReviewGrade grade;

@@ -1,4 +1,4 @@
-package lv.bootcamp.bartersWeb.entity;
+package lv.bootcamp.bartersWeb.entities;
 
 import jakarta.persistence.*;
 
@@ -11,7 +11,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "itemid")
+    @Column(name = "item_id")
     private Long id;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)

@@ -1,11 +1,10 @@
-package lv.bootcamp.bartersWeb.controller;
+package lv.bootcamp.bartersWeb.controllers;
 
 
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.service.UserService;
+import lv.bootcamp.bartersWeb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
