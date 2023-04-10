@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.controller;
 
+import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
 import lv.bootcamp.bartersWeb.entity.EReviewGrade;
 import lv.bootcamp.bartersWeb.service.ReviewService;
@@ -28,7 +29,6 @@ public class ReviewController {
     }
     @GetMapping(value = "/of/{username}")
     public List<ReviewShowDto> getSpecificReviews(@PathVariable("username") String username){
-
         return reviewService.reviewsSpecific(username);
     }
     @GetMapping(value = "/{reviewid}")
@@ -40,13 +40,15 @@ public class ReviewController {
             return ResponseEntity.ok(review);
         }
     }
-    @PostMapping
-    public void addReview(@PathVariable("username") String reviewed,
-                          @RequestParam("reviewerId") Long reviewerId,
-                          @RequestParam("grade") String g,
-                          @RequestParam("comment") String comment){
+    @PostMapping(value ="/of/{username}" )
+    public ResponseEntity<?> addReview(@PathVariable("username") @Valid String reviewed,
+                          @RequestParam("reviewerId") @Valid Long reviewerId,
+                          @RequestParam("grade") @Valid String g,
+                          @RequestParam("comment") @Valid String comment){
         EReviewGrade grade = EReviewGrade.valueOf(g);
         reviewService.addReview(reviewed,reviewerId,grade, comment);
+        return ResponseEntity.ok().build();
+
     }
     @PutMapping(value = "/{reviewid}")
     public ResponseEntity<Void> updateReview(@PathVariable("reviewid") Long reviewId,

@@ -13,12 +13,13 @@ public class ReviewMapper {
     private UsersRepository usersRepository;
 
     public ReviewShowDto reviewToDtoReview(Review review){
+        if (review == null) {return null;}
         ReviewShowDto reviewShowDto = new ReviewShowDto();
         reviewShowDto.setId(review.getId());
-        reviewShowDto.setReviewed(usersRepository.findById(review.getReviewedId()).get().getUsername());
-        reviewShowDto.setReviewer(usersRepository.findById(review.getReviewerId()).get().getUsername());
-        reviewShowDto.setComment(review.getComment());
-        reviewShowDto.setGrade(review.getGrade().getDisplayName());
+        if(review.getReviewedId()!=null) {reviewShowDto.setReviewed(usersRepository.findById(review.getReviewedId()).get().getUsername()); }
+        if(review.getReviewerId()!=null) {reviewShowDto.setReviewer (usersRepository.findById(review.getReviewerId()).get().getUsername()); }
+        if (review.getComment()!=null) {reviewShowDto.setComment(review.getComment()); }
+        if (review.getGrade()!=null) {reviewShowDto.setGrade(review.getGrade().getDisplayName()); }
         return reviewShowDto;
     }
 
