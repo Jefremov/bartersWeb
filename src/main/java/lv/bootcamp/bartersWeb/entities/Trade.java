@@ -2,6 +2,7 @@ package lv.bootcamp.bartersWeb.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.util.Date;
 
 @Entity
@@ -9,37 +10,22 @@ import java.util.Date;
 @Table(name = "trades")
 public class Trade {
 
-    private enum TradeStatus {
-        PENDING("Pending"),
-        ACCEPTED("Accepted"),
-        REJECTED("Rejected");
-
-        private final String displayName;
-
-        TradeStatus(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "trade_Id")
+    @Column(name = "trade_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "item_Id")
+    @ManyToOne
+    @JoinColumn(name = "item_id")
     private Item item;
 
-    @Column(name = "offeredItem_Id")
-    private Long offeredItemId;
+    @ManyToOne
+    @JoinColumn(name = "offered_item_id")
+    private Item offeredItem;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private TradeStatus status;
+    private EStatus status;
 
     @Column(name = "comment")
     private String comment;
