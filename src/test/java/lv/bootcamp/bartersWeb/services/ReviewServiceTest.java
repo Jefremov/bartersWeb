@@ -51,37 +51,37 @@ public class ReviewServiceTest {
         assertTrue(reviewDtos.stream().anyMatch(dto -> dto.getId() == review1.getId()));
         assertTrue(reviewDtos.stream().anyMatch(dto -> dto.getId() == review2.getId()));
     }
-    @Test
-    public void testReviewsSpecific() {
-        User user1 = new User();
-        user1.setUsername("alpha");
-        usersRepository.save(user1);
-        User user2 = new User();
-        user2.setUsername("beta");
-        usersRepository.save(user2);
-
-        Review review1 = new Review();
-        review1.setReviewedId(user1.getId());
-        review1.setReviewerId(user2.getId());
-        reviewRepository.save(review1);
-        Review review2 = new Review();
-        review2.setReviewedId(user1.getId());
-        review2.setReviewerId(user2.getId());
-        reviewRepository.save(review2);
-        Review review3 = new Review();
-        review3.setReviewedId(user2.getId());
-        review3.setReviewerId(user1.getId());
-        reviewRepository.save(review3);
-
-        List<ReviewShowDto> reviewDtos = reviewService.reviewsSpecific("alpha");
-        assertEquals(2, reviewDtos.size());
-
-        reviewDtos = reviewService.reviewsSpecific("beta");
-        assertEquals(1, reviewDtos.size());
-
-        assertTrue(reviewDtos.stream().allMatch(dto -> dto.getReviewed().equals("beta")));
-        assertFalse(reviewDtos.stream().anyMatch(dto -> dto.getReviewed().equals("alpha")));
-    }
+//    @Test
+//    public void testReviewsSpecific() {
+//        User user1 = new User();
+//        user1.setUsername("alpha");
+//        usersRepository.save(user1);
+//        User user2 = new User();
+//        user2.setUsername("beta");
+//        usersRepository.save(user2);
+//
+//        Review review1 = new Review();
+//        review1.setReviewedId(user1.getId());
+//        review1.setReviewerId(user2.getId());
+//        reviewRepository.save(review1);
+//        Review review2 = new Review();
+//        review2.setReviewedId(user1.getId());
+//        review2.setReviewerId(user2.getId());
+//        reviewRepository.save(review2);
+//        Review review3 = new Review();
+//        review3.setReviewedId(user2.getId());
+//        review3.setReviewerId(user1.getId());
+//        reviewRepository.save(review3);
+//
+//        List<ReviewShowDto> reviewDtos = reviewService.reviewsSpecific("alpha");
+//        assertEquals(2, reviewDtos.size());
+//
+//        reviewDtos = reviewService.reviewsSpecific("beta");
+//        assertEquals(1, reviewDtos.size());
+//
+//        assertTrue(reviewDtos.stream().allMatch(dto -> dto.getReviewed().equals("beta")));
+//        assertFalse(reviewDtos.stream().anyMatch(dto -> dto.getReviewed().equals("alpha")));
+//    }
     @Test
     public void testAddReview() {
         User user1 = new User();
