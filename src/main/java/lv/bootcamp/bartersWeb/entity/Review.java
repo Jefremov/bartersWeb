@@ -18,13 +18,13 @@ public class Review {
     @Column(name = "reviewer_id")
     private Long reviewerId;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
-    @JoinColumn(name = "reviewer_id", referencedColumnName = "userid", insertable=false, updatable=false)
+    @JoinColumn(name = "reviewer_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User reviewer;
 
     @Column(name = "reviewed_id")
     private Long reviewedId;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
-    @JoinColumn(name = "reviewed_id", referencedColumnName = "userid", insertable=false, updatable=false)
+    @JoinColumn(name = "reviewed_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User reviewed;
 
     @Column(name = "grade")

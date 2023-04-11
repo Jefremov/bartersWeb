@@ -34,7 +34,7 @@ public class ReviewService {
 
     public ResponseEntity<List<ReviewShowDto>> reviewsSpecific(String username){
         if(usersRepository.existsByUsername(username)) {
-            return ResponseEntity.ok(reviewRepository.findByReviewedId(usersRepository.findByUsername(username).getId())
+            return ResponseEntity.ok(reviewRepository.findByReviewedId(usersRepository.findUserByUsername(username).getId())
                     .stream()
                     .map(reviewMapper::reviewToDtoReview)
                     .collect(Collectors.toList()));
@@ -44,7 +44,7 @@ public class ReviewService {
 
     public void addReview(String reviewed, Long reviewerId, EReviewGrade grade, String comment) {
         if(usersRepository.existsByUsername(reviewed)){
-            Long reviewedId=usersRepository.findByUsername(reviewed).getId();
+            Long reviewedId=usersRepository.findUserByUsername(reviewed).getId();
             Review review= new Review(reviewerId,reviewedId,grade,comment);
             reviewRepository.save(review);
         }
