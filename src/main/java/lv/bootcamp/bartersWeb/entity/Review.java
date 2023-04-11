@@ -8,44 +8,39 @@ import lombok.Data;
 @Table(name = "reviews")
 public class Review {
 
-    public enum ReviewGrade {
-        EXCELLENT("Excellent"),
-        GOOD("Good"),
-        AVERAGE("Average"),
-        POOR("Poor"),
-        FAIL("Fail");
 
-        private final String displayName;
-
-        ReviewGrade(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_Id")
+    @Column(name = "review_id")
     private Long id;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_Id")
-//    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "reviewer_Id")
+    @Column(name = "reviewer_id")
+    private Long reviewerId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "reviewer_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User reviewer;
 
-    @OneToOne
-    @JoinColumn(name = "reviewed_Id")
+    @Column(name = "reviewed_id")
+    private Long reviewedId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "reviewed_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User reviewed;
 
     @Column(name = "grade")
-    private ReviewGrade grade;
+    private EReviewGrade grade;
 
     @Column(name = "comment")
     private String comment;
+
+
+    public Review(Long reviewerId, Long reviewedId, EReviewGrade grade, String comment) {
+        this.reviewerId = reviewerId;
+        this.reviewedId = reviewedId;
+        this.grade = grade;
+        this.comment = comment;
+    }
+
+    public Review() {
+    }
 }
