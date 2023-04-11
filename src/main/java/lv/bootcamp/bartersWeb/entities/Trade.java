@@ -27,14 +27,14 @@ public class Trade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tradeId")
+    @Column(name = "trade_Id")
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "itemId")
+    @JoinColumn(name = "item_Id")
     private Item item;
 
-    @Column(name = "offeredItemId")
+    @Column(name = "offeredItem_Id")
     private Long offeredItemId;
 
     @Enumerated(EnumType.STRING)
