@@ -4,26 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ECategory {
-    FOODITEMS(1), BEVERAGES(2), CLOTHING(3), TOOLS(4), WEAPONS(5), ELECTRONICS(6), HOMEAPPLIANCES(7), JEWELRY(8), BEAUTYPRODUCTS(9), ARTSUPPLIES(10), SPORTSEQUIPMENT(11), MUSICALINSTRUMENTS(12), BOOKS(13), TOYSANDGAMES(14), OFFICESUPPLIES(15), AUTOMOTIVESUPPLIES(16), CLEANINGSUPPLIES(17), HEALTHANDWELLNESSPRODUCTS(18), GARDENINGTOOLS(19), PETSUPPLIES(20), TRAVELACCESSORIES(21), HOMEDECOR(22), STATIONERY(23), DIYSUPPLIES(24), CAMPINGGEAR(25), FISHINGEQUIPMENT(26), HUNTINGGEAR(27), EXERCISEEQUIPMENT(28), PARTYSUPPLIES(29), EDUCATIONALMATERIALS(30);
+    FOODITEMS("Food items"), BEVERAGES("Beverages"), CLOTHING("Clothing"), TOOLS("Tools"), WEAPONS("Weapons"), ELECTRONICS("Electronics"), HOMEAPPLIANCES("Home appliances"), JEWELRY("Jewelry"), BEAUTYPRODUCTS("Beauty products"), ARTSUPPLIES("Art supplies"), SPORTSEQUIPMENT("Sports equipment"), MUSICALINSTRUMENTS("Musical instruments"), BOOKS("Books"), TOYSANDGAMES("Toys and games"), OFFICESUPPLIES("Office supplies"), AUTOMOTIVESUPPLIES("Automotive supplies"), CLEANINGSUPPLIES("Cleaning supplies"), HEALTHANDWELLNESSPRODUCTS("Health and wellness products"), GARDENINGTOOLS("Gardening tools"), PETSUPPLIES("Pet supplies"), TRAVELACCESSORIES("Travel accessories"), HOMEDECOR("Home decor"), STATIONERY("Stationery"), DIYSUPPLIES("DIY supplies"), CAMPINGGEAR("Camping gear"), FISHINGEQUIPMENT("Fishing equipment"), HUNTINGGEAR("Hunting gear"), EXERCISEEQUIPMENT("Exercise equipment"), PARTYSUPPLIES("Party supplies"), EDUCATIONALMATERIALS("Educational materials");
 
-    private int value;
-    private static Map map = new HashMap<>();
-    private ECategory(int value){
-        this.value = value;
+    private String displayName;
+    ECategory(String displayName) {
+        this.displayName = displayName;
     }
-    static {
-        for (ECategory ic : ECategory.values()) {
-            map.put(ic.value, ic);
-        }
+    public String getDisplayName() {
+        return displayName;
     }
-
-    public static ECategory valueOf(int itemCategory) {
-        return (ECategory) map.get(itemCategory);
-    }
-
-    public int getValue() {
-        return value;
-    }
-
 
 }
