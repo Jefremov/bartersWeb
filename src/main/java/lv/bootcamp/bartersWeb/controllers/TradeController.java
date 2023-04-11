@@ -3,7 +3,7 @@ package lv.bootcamp.bartersWeb.controllers;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
-import lv.bootcamp.bartersWeb.repositories.ItemsRepository;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradesRepository;
 import lv.bootcamp.bartersWeb.services.TradeService;
 import lv.bootcamp.bartersWeb.utils.UpdateTradeStatusRequest;
@@ -23,7 +23,7 @@ public class TradeController {
     @Autowired
     private TradeService tradeService;
     @Autowired
-    private ItemsRepository itemsRepository;
+    private ItemRepository itemRepository;
     @Autowired
     private TradeMapper tradeMapper;
 

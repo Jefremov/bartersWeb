@@ -1,27 +1,26 @@
 package lv.bootcamp.bartersWeb.controllers;
 
-
+import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
 import lv.bootcamp.bartersWeb.services.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@Controller
 public class RegisterController {
 
+    private static Logger log = Logger.getLogger(RegisterController.class);
     @Autowired
     UserService userService;
 
     @PostMapping("/register")
-    public @ResponseBody ResponseEntity<Object> registerUser(@Validated @RequestBody UserRegisterDto userRegisterDto){
+    public @ResponseBody ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto)
+            throws MethodArgumentNotValidException, NoSuchMethodException {
+        log.info("New user registration " + userRegisterDto.toString());
         return userService.registerUser(userRegisterDto);
     }
-
-
 }

@@ -4,7 +4,7 @@ import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
-import lv.bootcamp.bartersWeb.repositories.ItemsRepository;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradesRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,12 @@ import java.util.List;
 public class TradeService {
 
     private final TradesRepository tradesRepository;
-    private final ItemsRepository itemsRepository;
+    private final ItemRepository itemRepository;
     private final TradeMapper tradeMapper;
 
-    public TradeService(TradesRepository tradesRepository, ItemsRepository itemsRepository, TradeMapper tradeMapper) {
+    public TradeService(TradesRepository tradesRepository, ItemRepository itemsRepository, TradeMapper tradeMapper) {
         this.tradesRepository = tradesRepository;
-        this.itemsRepository = itemsRepository;
+        this.itemRepository = itemsRepository;
         this.tradeMapper = tradeMapper;
     }
 

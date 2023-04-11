@@ -4,7 +4,6 @@ package lv.bootcamp.bartersWeb.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.util.List;
 
 @Entity
@@ -16,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "username")
@@ -34,8 +33,18 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<Item> items;
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", description='" + description + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
