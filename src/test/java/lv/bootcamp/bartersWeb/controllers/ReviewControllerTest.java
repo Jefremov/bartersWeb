@@ -1,7 +1,7 @@
 package lv.bootcamp.bartersWeb.controllers;
 
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.service.ReviewService;
+import lv.bootcamp.bartersWeb.services.ReviewService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

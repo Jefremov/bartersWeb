@@ -1,11 +1,11 @@
 package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.entity.EReviewGrade;
-import lv.bootcamp.bartersWeb.entity.Review;
-import lv.bootcamp.bartersWeb.entity.User;
-import lv.bootcamp.bartersWeb.repository.UsersRepository;
-import lv.bootcamp.bartersWeb.service.mapper.ReviewMapper;
+import lv.bootcamp.bartersWeb.entities.EReviewGrade;
+import lv.bootcamp.bartersWeb.entities.Review;
+import lv.bootcamp.bartersWeb.entities.User;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
+import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
