@@ -1,8 +1,7 @@
-package lv.bootcamp.bartersWeb.repository;
+package lv.bootcamp.bartersWeb.repositories;
 
-import lv.bootcamp.bartersWeb.entity.Review;
+import lv.bootcamp.bartersWeb.entities.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
