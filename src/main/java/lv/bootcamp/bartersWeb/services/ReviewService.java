@@ -1,11 +1,11 @@
-package lv.bootcamp.bartersWeb.service;
+package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.entity.EReviewGrade;
-import lv.bootcamp.bartersWeb.entity.Review;
-import lv.bootcamp.bartersWeb.repository.ReviewRepository;
-import lv.bootcamp.bartersWeb.repository.UsersRepository;
-import lv.bootcamp.bartersWeb.service.mapper.ReviewMapper;
+import lv.bootcamp.bartersWeb.entities.EReviewGrade;
+import lv.bootcamp.bartersWeb.entities.Review;
+import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
+import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

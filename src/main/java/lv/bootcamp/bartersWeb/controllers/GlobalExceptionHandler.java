@@ -1,4 +1,4 @@
-package lv.bootcamp.bartersWeb.controller;
+package lv.bootcamp.bartersWeb.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

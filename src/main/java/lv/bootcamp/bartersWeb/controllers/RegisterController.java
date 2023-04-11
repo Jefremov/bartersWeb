@@ -1,8 +1,8 @@
-package lv.bootcamp.bartersWeb.controller;
+package lv.bootcamp.bartersWeb.controllers;
 
 import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.service.UserService;
+import lv.bootcamp.bartersWeb.services.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

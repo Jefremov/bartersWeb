@@ -1,7 +1,7 @@
 package lv.bootcamp.bartersWeb;
 
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.entity.User;
+import lv.bootcamp.bartersWeb.entities.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;

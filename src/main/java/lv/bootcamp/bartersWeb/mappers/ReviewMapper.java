@@ -1,8 +1,8 @@
-package lv.bootcamp.bartersWeb.service.mapper;
+package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.entity.Review;
-import lv.bootcamp.bartersWeb.repository.UsersRepository;
+import lv.bootcamp.bartersWeb.entities.Review;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -28,7 +28,7 @@ public class Item {
     @Column(name = "user_id")
     private Long userId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
-    @JoinColumn(name = "user_id", referencedColumnName = "userid", insertable=false, updatable=false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User user;
     public Item(Long id, String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId) {
         this.id = id;
