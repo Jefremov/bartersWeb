@@ -1,9 +1,7 @@
-package lv.bootcamp.bartersWeb.service.mapper;
+package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.ItemDto;
-import lv.bootcamp.bartersWeb.entity.Item;
-import lv.bootcamp.bartersWeb.entity.EItemStatus;
-import lv.bootcamp.bartersWeb.entity.ECategory;
+import lv.bootcamp.bartersWeb.entities.Item;
 import org.springframework.stereotype.Component;
 
 @Component

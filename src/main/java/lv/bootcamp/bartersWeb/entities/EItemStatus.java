@@ -1,4 +1,4 @@
-package lv.bootcamp.bartersWeb.entity;
+package lv.bootcamp.bartersWeb.entities;
 public enum EItemStatus {
     AVAILABLE("Available"),
     UNAVAILABLE("Unavailable");

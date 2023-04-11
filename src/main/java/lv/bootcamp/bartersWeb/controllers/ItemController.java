@@ -1,10 +1,10 @@
-package lv.bootcamp.bartersWeb.controller;
+package lv.bootcamp.bartersWeb.controllers;
 
 import lv.bootcamp.bartersWeb.dto.ItemDto;
-import lv.bootcamp.bartersWeb.entity.ECategory;
-import lv.bootcamp.bartersWeb.entity.EItemStatus;
-import lv.bootcamp.bartersWeb.service.ItemService;
-import lv.bootcamp.bartersWeb.service.mapper.ItemMapper;
+import lv.bootcamp.bartersWeb.entities.ECategory;
+import lv.bootcamp.bartersWeb.entities.EItemStatus;
+import lv.bootcamp.bartersWeb.services.ItemService;
+import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

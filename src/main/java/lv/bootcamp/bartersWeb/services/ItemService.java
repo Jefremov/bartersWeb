@@ -1,11 +1,11 @@
-package lv.bootcamp.bartersWeb.service;
+package lv.bootcamp.bartersWeb.services;
 
-import lv.bootcamp.bartersWeb.entity.Item;
+import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
-import lv.bootcamp.bartersWeb.entity.ECategory;
-import lv.bootcamp.bartersWeb.entity.EItemStatus;
-import lv.bootcamp.bartersWeb.service.mapper.ItemMapper;
-import lv.bootcamp.bartersWeb.repository.ItemRepository;
+import lv.bootcamp.bartersWeb.entities.ECategory;
+import lv.bootcamp.bartersWeb.entities.EItemStatus;
+import lv.bootcamp.bartersWeb.mappers.ItemMapper;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
