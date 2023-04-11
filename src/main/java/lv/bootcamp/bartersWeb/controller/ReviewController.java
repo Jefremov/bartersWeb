@@ -28,7 +28,7 @@ public class ReviewController {
         return reviewService.reviewsAll();
     }
     @GetMapping(value = "/of/{username}")
-    public List<ReviewShowDto> getSpecificReviews(@PathVariable("username") String username){
+    public ResponseEntity<List<ReviewShowDto>> getSpecificReviews(@PathVariable("username") String username){
         return reviewService.reviewsSpecific(username);
     }
     @GetMapping(value = "/{reviewid}")
@@ -41,10 +41,10 @@ public class ReviewController {
         }
     }
     @PostMapping(value ="/of/{username}" )
-    public ResponseEntity<?> addReview(@PathVariable("username") @Valid String reviewed,
-                          @RequestParam("reviewerId") @Valid Long reviewerId,
-                          @RequestParam("grade") @Valid String g,
-                          @RequestParam("comment") @Valid String comment){
+    public ResponseEntity<?> addReview(@PathVariable("username") String reviewed,
+                          @RequestParam("reviewerId") Long reviewerId,
+                          @RequestParam("grade")  String g,
+                          @RequestParam("comment") String comment){
         EReviewGrade grade = EReviewGrade.valueOf(g);
         reviewService.addReview(reviewed,reviewerId,grade, comment);
         return ResponseEntity.ok().build();

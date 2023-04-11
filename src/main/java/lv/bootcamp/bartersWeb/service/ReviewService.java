@@ -7,6 +7,7 @@ import lv.bootcamp.bartersWeb.repository.ReviewRepository;
 import lv.bootcamp.bartersWeb.repository.UsersRepository;
 import lv.bootcamp.bartersWeb.service.mapper.ReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,14 +32,14 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReviewShowDto> reviewsSpecific(String username){
+    public ResponseEntity<List<ReviewShowDto>> reviewsSpecific(String username){
         if(usersRepository.existsByUsername(username)) {
-            return reviewRepository.findByReviewedId(usersRepository.findByUsername(username).getId())
+            return ResponseEntity.ok(reviewRepository.findByReviewedId(usersRepository.findByUsername(username).getId())
                     .stream()
                     .map(reviewMapper::reviewToDtoReview)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()));
         }
-        return null;
+        else return ResponseEntity.notFound().build();
     }
 
     public void addReview(String reviewed, Long reviewerId, EReviewGrade grade, String comment) {
