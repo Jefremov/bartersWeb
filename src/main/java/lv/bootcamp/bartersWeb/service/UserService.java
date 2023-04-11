@@ -1,9 +1,9 @@
-package lv.bootcamp.bartersWeb.services;
+package lv.bootcamp.bartersWeb.service;
 
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.entities.User;
-import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import lv.bootcamp.bartersWeb.mappers.UserMapper;
+import lv.bootcamp.bartersWeb.entity.User;
+import lv.bootcamp.bartersWeb.repository.UsersRepository;
+import lv.bootcamp.bartersWeb.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

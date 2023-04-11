@@ -1,12 +1,13 @@
 package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.entities.EReviewGrade;
-import lv.bootcamp.bartersWeb.entities.Review;
-import lv.bootcamp.bartersWeb.entities.User;
-import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
-import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
+import lv.bootcamp.bartersWeb.entity.EReviewGrade;
+import lv.bootcamp.bartersWeb.entity.Review;
+import lv.bootcamp.bartersWeb.entity.User;
+import lv.bootcamp.bartersWeb.repository.ReviewRepository;
+import lv.bootcamp.bartersWeb.repository.UsersRepository;
+import lv.bootcamp.bartersWeb.service.ReviewService;
+import lv.bootcamp.bartersWeb.service.mapper.ReviewMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

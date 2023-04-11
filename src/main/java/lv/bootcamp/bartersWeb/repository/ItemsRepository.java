@@ -1,6 +1,6 @@
-package lv.bootcamp.bartersWeb.repositories;
+package lv.bootcamp.bartersWeb.repository;
 
-import lv.bootcamp.bartersWeb.entities.Item;
+import lv.bootcamp.bartersWeb.entity.Item;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

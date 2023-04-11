@@ -1,8 +1,8 @@
-package lv.bootcamp.bartersWeb.mappers;
+package lv.bootcamp.bartersWeb.service.mapper;
 
 import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
-import lv.bootcamp.bartersWeb.entities.ERole;
-import lv.bootcamp.bartersWeb.entities.User;
+import lv.bootcamp.bartersWeb.entity.ERole;
+import lv.bootcamp.bartersWeb.entity.User;
 
 import org.springframework.stereotype.Component;
 

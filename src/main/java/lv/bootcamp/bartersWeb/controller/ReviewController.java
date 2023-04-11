@@ -1,9 +1,10 @@
-package lv.bootcamp.bartersWeb.controllers;
+package lv.bootcamp.bartersWeb.controller;
 
+import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
-import lv.bootcamp.bartersWeb.entities.EReviewGrade;
-import lv.bootcamp.bartersWeb.services.ReviewService;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
+import lv.bootcamp.bartersWeb.entity.EReviewGrade;
+import lv.bootcamp.bartersWeb.service.ReviewService;
+import lv.bootcamp.bartersWeb.service.mapper.ReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

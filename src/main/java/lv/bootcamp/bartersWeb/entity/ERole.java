@@ -1,4 +1,4 @@
-package lv.bootcamp.bartersWeb.entities;
+package lv.bootcamp.bartersWeb.entity;
 
 public enum ERole {
     ROLE_USER,
