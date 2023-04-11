@@ -1,7 +1,6 @@
 package lv.bootcamp.bartersWeb.entities;
 
 import jakarta.persistence.*;
-
 import lombok.Data;
 
 @Entity
@@ -11,14 +10,14 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_id")
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
     @JoinColumn (name="user_id")
     private User user;
 
-    private String condition;
+    private String state;
 
     private String description;
 

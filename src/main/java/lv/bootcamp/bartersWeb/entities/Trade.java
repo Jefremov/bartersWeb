@@ -2,6 +2,7 @@ package lv.bootcamp.bartersWeb.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.util.Date;
 
 @Entity
@@ -14,11 +15,11 @@ public class Trade {
     @Column(name = "trade_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "offered_item_id")
     private Item offeredItem;
 
