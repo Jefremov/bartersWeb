@@ -4,7 +4,7 @@ import lv.bootcamp.bartersWeb.dto.UserRegisterDto;
 import lv.bootcamp.bartersWeb.entities.User;
 import org.springframework.stereotype.Component;
 
-import static lv.bootcamp.bartersWeb.entities.ERole.ROLE_USER;
+import static lv.bootcamp.bartersWeb.entities.ERole.USER;
 
 @Component
 public class UserMapper {
@@ -16,7 +16,7 @@ public class UserMapper {
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setDescription(userDto.getDescription());
-        user.setRole(ROLE_USER);
+        user.setRole(USER);
         return user;
 
     }

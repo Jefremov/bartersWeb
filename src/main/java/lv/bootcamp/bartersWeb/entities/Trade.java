@@ -33,4 +33,8 @@ public class Trade {
     @Column(name = "date")
     private Date date;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable=false, updatable=false)
+    private User user;
+
 }
