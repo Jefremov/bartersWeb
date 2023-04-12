@@ -3,8 +3,7 @@ package lv.bootcamp.bartersWeb.controllers;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
-import lv.bootcamp.bartersWeb.repositories.ItemRepository;
-import lv.bootcamp.bartersWeb.repositories.TradesRepository;
+import lv.bootcamp.bartersWeb.repositories.TradeRepository;
 import lv.bootcamp.bartersWeb.services.TradeService;
 import lv.bootcamp.bartersWeb.utils.UpdateTradeStatusRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +18,15 @@ import java.util.List;
 public class TradeController {
 
     @Autowired
-    private TradesRepository tradesRepository;
-    @Autowired
     private TradeService tradeService;
     @Autowired
-    private ItemRepository itemRepository;
-    @Autowired
     private TradeMapper tradeMapper;
+    @Autowired
+    private TradeRepository tradeRepository;
 
     @GetMapping
-    public List<Trade> allTrades() {
-        return (List<Trade>) tradesRepository.findAll();
+    public List<TradeDto> allTrades() {
+        return tradeService.getAllTrades();
     }
 
     @PostMapping("/create")
@@ -46,7 +43,7 @@ public class TradeController {
     }
 
     @PutMapping("/update/{id}")
-    public TradeDto updateTradeStatus(@PathVariable Long id, @RequestBody UpdateTradeStatusRequest request) {
+    public String updateTradeStatus(@PathVariable Long id, @RequestBody UpdateTradeStatusRequest request) {
         return tradeService.updateTradeStatus(id, request.getStatus());
     }
 
