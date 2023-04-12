@@ -1,13 +1,63 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+		monospace;
+}
+
+.navigationMenu {
+	background-color: #3f9c9f !important;
+	margin-bottom: 20px;
+}
+
+.menuItem {
+	color: #fff !important;
+	font-size: 13px !important;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	text-transform: uppercase;
+	align-items: center;
+	text-decoration: none !important;
+}
+
+.menuItemMobile {
+	color: #000 !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none !important;
+}
+
+.menuItemIcon {
+	height: 24px;
+	padding-right: 6px;
+	opacity: 0.8;
+}
+
+.menuItemIcon div li a {
+	text-decoration: none !important;
+	text-decoration-color: none !important;
+}
+
+.menuItemIcon svg {
+	width: 16px;
+}
+
+.pageNotFound {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	padding-top: 20%;
+}
+
+.warning404 {
+	font-size: 30px;
 }
