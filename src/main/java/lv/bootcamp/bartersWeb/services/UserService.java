@@ -30,22 +30,22 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public ResponseEntity registerUser(UserRegisterDto userRegisterDto) throws MethodArgumentNotValidException, NoSuchMethodException {
-        if (usersRepository.existsByUsername(userRegisterDto.getUsername())) {
-            log.info("Registering a user with an existing username " + userRegisterDto.getUsername());
-            BindingResult bindingResult = new BeanPropertyBindingResult(userRegisterDto, "userRegisterDto");
-            FieldError fieldError = new FieldError("userRegisterDto", "Username " + userRegisterDto.getUsername(), "already exist. Choose another username");
-            bindingResult.addError(fieldError);
-            throw new MethodArgumentNotValidException(
-                    new MethodParameter(getClass().getMethod("registerUser", UserRegisterDto.class), 0), bindingResult);
-        }
-        if (usersRepository.existsByEmail(userRegisterDto.getEmail())) {
-            log.info("Registering a user with an existing email " + userRegisterDto.getEmail());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is registered already.");
-        }
-        User user = userMapper.userRegisterDtoToUser(userRegisterDto);
-        usersRepository.save(user);
-        log.info("new user registered " + user.toString());
-        return ResponseEntity.status(HttpStatus.OK).body("User " + userRegisterDto.getUsername() + " has been registered successfully.");
-    }
+//    public ResponseEntity registerUser(UserRegisterDto userRegisterDto) throws MethodArgumentNotValidException, NoSuchMethodException {
+//        if (usersRepository.existsByUsername(userRegisterDto.getUsername())) {
+//            log.info("Registering a user with an existing username " + userRegisterDto.getUsername());
+//            BindingResult bindingResult = new BeanPropertyBindingResult(userRegisterDto, "userRegisterDto");
+//            FieldError fieldError = new FieldError("userRegisterDto", "Username " + userRegisterDto.getUsername(), "already exist. Choose another username");
+//            bindingResult.addError(fieldError);
+//            throw new MethodArgumentNotValidException(
+//                    new MethodParameter(getClass().getMethod("registerUser", UserRegisterDto.class), 0), bindingResult);
+//        }
+//        if (usersRepository.existsByEmail(userRegisterDto.getEmail())) {
+//            log.info("Registering a user with an existing email " + userRegisterDto.getEmail());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email " + userRegisterDto.getEmail() + " is registered already.");
+//        }
+//        User user = userMapper.userRegisterDtoToUser(userRegisterDto);
+//        usersRepository.save(user);
+//        log.info("new user registered " + user.toString());
+//        return ResponseEntity.status(HttpStatus.OK).body("User " + userRegisterDto.getUsername() + " has been registered successfully.");
+//    }
 }

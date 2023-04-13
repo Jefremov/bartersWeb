@@ -37,4 +37,16 @@ class GlobalExceptionHandler {
         }
     }
 
+    @ExceptionHandler(NoSuchMethodException.class)
+    public ResponseEntity<Object> handleNoSuchMethodException(NoSuchMethodException ex) {
+
+        try {
+            log.info("An error occurred " + ex);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal error. Contact administrator");
+        } catch (Exception e) {
+            log.error("An error occurred " + e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Internal error. Contact administrator");
+        }
+    }
+
 }
