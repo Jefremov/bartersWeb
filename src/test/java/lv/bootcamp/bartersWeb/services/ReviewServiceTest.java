@@ -1,148 +1,242 @@
 package lv.bootcamp.bartersWeb.services;
 
+import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
+import lv.bootcamp.bartersWeb.dto.ReviewUpdateDto;
 import lv.bootcamp.bartersWeb.entities.EReviewGrade;
 import lv.bootcamp.bartersWeb.entities.Review;
 import lv.bootcamp.bartersWeb.entities.User;
+import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import lv.bootcamp.bartersWeb.services.ReviewService;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class ReviewServiceTest {
-    @Autowired
-    ReviewRepository reviewRepository;
-    @Autowired
-    UsersRepository usersRepository;
-    @Autowired
-    ReviewService reviewService;
-    @Autowired
-    ReviewMapper reviewMapper;
 
-    @AfterEach
-    void tearDown() {
-        reviewRepository.deleteAll();
-        usersRepository.deleteAll();
+    private ReviewRepository reviewRepository;
+    private UsersRepository usersRepository;
+
+
+    private ReviewMapper reviewMapper;
+
+    private ReviewService reviewService;
+
+    @BeforeEach
+    public void setUp() {
+        reviewRepository = mock(ReviewRepository.class);
+        reviewMapper = mock(ReviewMapper.class);
+        usersRepository = mock(UsersRepository.class);
+        reviewService = new ReviewService(reviewRepository, reviewMapper,usersRepository);
     }
-
     @Test
-    public void testReviewsAll() {
-        User user1 = new User();
-        User user2 = new User();
-        usersRepository.save(user1);
-        usersRepository.save(user2);
+    public void shouldReturnAllReviews() {
+        List<Review> reviews = new ArrayList<>();
         Review review1 = new Review();
+        review1.setId(1L);
+        review1.setComment("Review 1");
+        reviews.add(review1);
         Review review2 = new Review();
-        reviewRepository.save(review1);
-        reviewRepository.save(review2);
+        review2.setId(2L);
+        review2.setComment("Review 2");
+        reviews.add(review2);
 
-        List<ReviewShowDto> reviewDtos = reviewService.reviewsAll();
+        List<ReviewShowDto> reviewShowDtos = new ArrayList<>();
+        ReviewShowDto reviewShowDto1 = new ReviewShowDto();
+        reviewShowDto1.setId(1L);
+        reviewShowDto1.setComment("Review 1");
+        reviewShowDtos.add(reviewShowDto1);
+        ReviewShowDto reviewShowDto2 = new ReviewShowDto();
+        reviewShowDto2.setId(2L);
+        reviewShowDto2.setComment("Review 2");
+        reviewShowDtos.add(reviewShowDto2);
 
-        assertEquals(2, reviewDtos.size());
-        assertTrue(reviewDtos.stream().anyMatch(dto -> dto.getId() == review1.getId()));
-        assertTrue(reviewDtos.stream().anyMatch(dto -> dto.getId() == review2.getId()));
+        when(reviewRepository.findAll()).thenReturn(reviews);
+        when(reviewMapper.reviewToDtoReview(review1)).thenReturn(reviewShowDto1);
+        when(reviewMapper.reviewToDtoReview(review2)).thenReturn(reviewShowDto2);
+
+        List<ReviewShowDto> actualReviews = reviewService.reviewsAll();
+
+        assertEquals(reviewShowDtos.size(), actualReviews.size());
+        assertEquals(reviewShowDtos.get(0).getId(), actualReviews.get(0).getId());
+        assertEquals(reviewShowDtos.get(0).getComment(), actualReviews.get(0).getComment());
+        assertEquals(reviewShowDtos.get(1).getId(), actualReviews.get(1).getId());
+        assertEquals(reviewShowDtos.get(1).getComment(), actualReviews.get(1).getComment());
     }
-//    @Test
-//    public void testReviewsSpecific() {
-//        User user1 = new User();
-//        user1.setUsername("alpha");
-//        usersRepository.save(user1);
-//        User user2 = new User();
-//        user2.setUsername("beta");
-//        usersRepository.save(user2);
-//
-//        Review review1 = new Review();
-//        review1.setReviewedId(user1.getId());
-//        review1.setReviewerId(user2.getId());
-//        reviewRepository.save(review1);
-//        Review review2 = new Review();
-//        review2.setReviewedId(user1.getId());
-//        review2.setReviewerId(user2.getId());
-//        reviewRepository.save(review2);
-//        Review review3 = new Review();
-//        review3.setReviewedId(user2.getId());
-//        review3.setReviewerId(user1.getId());
-//        reviewRepository.save(review3);
-//
-//        List<ReviewShowDto> reviewDtos = reviewService.reviewsSpecific("alpha");
-//        assertEquals(2, reviewDtos.size());
-//
-//        reviewDtos = reviewService.reviewsSpecific("beta");
-//        assertEquals(1, reviewDtos.size());
-//
-//        assertTrue(reviewDtos.stream().allMatch(dto -> dto.getReviewed().equals("beta")));
-//        assertFalse(reviewDtos.stream().anyMatch(dto -> dto.getReviewed().equals("alpha")));
-//    }
+
     @Test
-    public void testAddReview() {
-        User user1 = new User();
-        user1.setUsername("alpha");
-        usersRepository.save(user1);
-        User user2 = new User();
-        user2.setUsername("beta");
-        usersRepository.save(user2);
+    public void testReviewsAll_NoReviewsFound() {
+        List<Review> reviews = new ArrayList<>();
+        when(reviewRepository.findAll()).thenReturn(reviews);
 
-        reviewService.addReview("beta", user1.getId(), EReviewGrade.GOOD, "Alpha is reviewing beta");
+        List<ReviewShowDto> actualResult = reviewService.reviewsAll();
 
-        List<Review> reviews = reviewRepository.findAll();
-        assertEquals(1, reviews.size());
-        assertEquals("Alpha is reviewing beta", reviews.get(0).getComment());
+        assertTrue(actualResult.isEmpty());
+    }
+
+    @Test
+    void testReviewsSpecificWithValidUsername() {
+        User user = new User();
+        user.setUsername("alpha");
+        user.setId(1L);
+
+        Review review1 = new Review(11L, 1L, EReviewGrade.GOOD, "Great transaction!");
+        Review review2 = new Review(1L, 1L, EReviewGrade.EXCELLENT, "Smooth trade");
+        List<Review> reviews = Arrays.asList(review1, review2);
+        when(usersRepository.existsByUsername("alpha")).thenReturn(true);
+        when(usersRepository.findUserByUsername("alpha")).thenReturn(user);
+        when(reviewRepository.findByReviewedId(1L)).thenReturn(reviews);
+        when(reviewMapper.reviewToDtoReview(review1)).thenReturn(new ReviewShowDto());
+        when(reviewMapper.reviewToDtoReview(review2)).thenReturn(new ReviewShowDto());
+
+        ResponseEntity<List<ReviewShowDto>> response = reviewService.reviewsSpecific("alpha");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size());
+    }
+
+    @Test
+    void testReviewsSpecificWithInvalidUsername() {
+        // Arrange
+        String username = "idontexist";
+        when(usersRepository.existsByUsername(username)).thenReturn(false);
+
+        ResponseEntity<List<ReviewShowDto>> response = reviewService.reviewsSpecific(username);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
     }
     @Test
-    public void testDeleteById() {
+    public void addReview_validUser_reviewCreated() {
+        ReviewCreateDto reviewCreateDto = new ReviewCreateDto();
+        reviewCreateDto.setComment("Great product");
+        reviewCreateDto.setGrade("FAIL");
+
+        String username = "alpha";
+        User user = new User();
+        user.setId(1L);
+        user.setUsername(username);
+        reviewCreateDto.setReviewerId(1L);
+        when(usersRepository.existsByUsername(username)).thenReturn(true);
+        when(usersRepository.findUserByUsername(username)).thenReturn(user);
+
         Review review = new Review();
-        reviewRepository.save(review);
+        review.setId(1L);
+        when(reviewMapper.CreateDtoToReview(reviewCreateDto, username)).thenReturn(review);
 
-        boolean result = reviewService.deleteById(review.getId());
+        ResponseEntity<ReviewCreateDto> responseEntity = reviewService.addReview(reviewCreateDto, username);
 
-        assertFalse(reviewRepository.existsById(review.getId()));
-        assertTrue(result);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(reviewCreateDto, responseEntity.getBody());
+        verify(reviewRepository, times(1)).save(review);
+    }
+    @Test
+    public void addReview_invalidUser_notFound() {
+        User user = new User();
+        user.setId(1L);
+
+        ReviewCreateDto reviewCreateDto = new ReviewCreateDto();
+        reviewCreateDto.setComment("Great product");
+        reviewCreateDto.setGrade("FAIL");
+        reviewCreateDto.setReviewerId(1L);
+
+        String username = "alpha";
+        when(usersRepository.existsByUsername(username)).thenReturn(false);
+
+        ResponseEntity<ReviewCreateDto> responseEntity = reviewService.addReview(reviewCreateDto, username);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertNull(responseEntity.getBody());
+        verify(reviewRepository, never()).save(any());
+    }
+
+    @Test
+    public void testDeleteByIdSuccess() {
+        Long reviewId = 1L;
+        when(reviewRepository.existsById(reviewId)).thenReturn(true);
+
+        ResponseEntity responseEntity = reviewService.deleteById(reviewId);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        verify(reviewRepository, times(1)).deleteById(reviewId);
+    }
+
+    @Test
+    public void testDeleteByIdNotFound() {
+        Long reviewId = 1L;
+        when(reviewRepository.existsById(reviewId)).thenReturn(false);
+
+        ResponseEntity responseEntity = reviewService.deleteById(reviewId);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        verify(reviewRepository, never()).deleteById(reviewId);
     }
     @Test
     public void testGetReviewById() {
+        Long reviewId = 1L;
         Review review = new Review();
-        reviewRepository.save(review);
+        review.setId(reviewId);
+        ReviewShowDto reviewShowDto = new ReviewShowDto();
+        reviewShowDto.setId(reviewId);
+        when(reviewRepository.existsById(reviewId)).thenReturn(true);
+        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
+        when(reviewMapper.reviewToDtoReview(review)).thenReturn(reviewShowDto);
 
-        ReviewShowDto reviewDto = reviewService.getReviewById(review.getId());
+        ResponseEntity<ReviewShowDto> response = reviewService.getReviewById(reviewId);
 
-        assertEquals(review.getId(), reviewDto.getId());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(reviewShowDto, response.getBody());
     }
+
+    @Test
+    public void testGetReviewByIdNotFound() {
+        Long reviewId = 1L;
+        when(reviewRepository.existsById(reviewId)).thenReturn(false);
+
+        ResponseEntity<ReviewShowDto> response = reviewService.getReviewById(reviewId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
     @Test
     public void testUpdateReview() {
-        User user1 = new User();
-        user1.setUsername("alpha");
-        user1.setEmail("alpha@test.com");
-        usersRepository.save(user1);
-        User user2 = new User();
-        usersRepository.save(user2);
+        Long reviewId = 1L;
+        ReviewUpdateDto reviewUpdateDto = new ReviewUpdateDto();
+        Review review = new Review();
+        when(reviewRepository.existsById(reviewId)).thenReturn(true);
+        when(reviewMapper.UpdateDtoToReview(reviewUpdateDto, reviewId)).thenReturn(review);
+        when(reviewRepository.save(review)).thenReturn(review);
 
-        Review review = new Review(user2.getId(), user1.getId(), EReviewGrade.GOOD, "Good review");
-        reviewRepository.save(review);
+        ResponseEntity response = reviewService.updateReview(reviewUpdateDto, reviewId);
 
-        EReviewGrade newGrade = EReviewGrade.FAIL;
-        String newComment = "Fail review";
-        boolean success = reviewService.updateReview(review.getId(), newGrade, newComment);
-
-        assertTrue(success);
-
-        Review updatedReview = reviewRepository.findById(review.getId()).orElse(null);
-
-        assertNotNull(updatedReview);
-        assertEquals(newGrade, updatedReview.getGrade());
-        assertEquals(newComment, updatedReview.getComment());
-
-        ReviewShowDto updatedReviewDto = reviewMapper.reviewToDtoReview(updatedReview);
-        assertEquals(newGrade.getDisplayName(), updatedReviewDto.getGrade());
-        assertEquals(newComment.toString(), updatedReviewDto.getComment());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
+    @Test
+    public void testUpdateReviewNotFound() {
+        Long reviewId = 1L;
+        ReviewUpdateDto reviewUpdateDto = new ReviewUpdateDto();
+        when(reviewRepository.existsById(reviewId)).thenReturn(false);
+
+        ResponseEntity response = reviewService.updateReview(reviewUpdateDto, reviewId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 }

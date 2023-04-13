@@ -1,26 +1,45 @@
 package lv.bootcamp.bartersWeb.mappers;
 
+import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
+import lv.bootcamp.bartersWeb.dto.ReviewUpdateDto;
 import lv.bootcamp.bartersWeb.entities.EReviewGrade;
 import lv.bootcamp.bartersWeb.entities.Review;
 import lv.bootcamp.bartersWeb.entities.User;
+import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ReviewMapperTest {
-    @Autowired
-    private ReviewMapper reviewMapper;
-    @Autowired
+    @Mock
     private UsersRepository usersRepository;
+    @Mock
+    private ReviewRepository reviewRepository;
+    @InjectMocks
+    private ReviewMapper reviewMapper;
 
 
+    @AfterEach
+    public void tearDown() {
+        reset(usersRepository);
+    }
     @Test
     public void testReviewToDtoReview() {
         Review review = new Review();
@@ -36,8 +55,9 @@ public class ReviewMapperTest {
         user2.setId(2L);
         user1.setUsername("a");
         user2.setUsername("b");
-        usersRepository.save(user1);
-        usersRepository.save(user2);
+
+        when(usersRepository.findById(1L)).thenReturn(Optional.of(user1));
+        when(usersRepository.findById(2L)).thenReturn(Optional.of(user2));
 
         ReviewShowDto reviewDto = reviewMapper.reviewToDtoReview(review);
 
@@ -47,11 +67,50 @@ public class ReviewMapperTest {
         assertEquals("b", reviewDto.getReviewed());
         assertEquals("This is a good review", reviewDto.getComment());
     }
-    @Test
+
+
+   @Test
     public void testReviewToDtoReview_NullInput() {
         ReviewShowDto reviewDto = reviewMapper.reviewToDtoReview(null);
-
         assertNull(reviewDto);
     }
 
+    @Test
+    public void testCreateDtoToReview() {
+
+        User user = new User();
+        user.setId(1L);
+        when(usersRepository.findUserByUsername("user")).thenReturn(user);
+
+        ReviewCreateDto reviewCreateDto = new ReviewCreateDto();
+        reviewCreateDto.setReviewerId(1L);
+        reviewCreateDto.setGrade("GOOD");
+        reviewCreateDto.setComment("Test comment");
+
+        Review review = reviewMapper.CreateDtoToReview(reviewCreateDto, "user");
+
+        assertEquals(1L, review.getReviewedId());
+        assertEquals(1L, review.getReviewerId());
+        assertEquals(EReviewGrade.GOOD, review.getGrade());
+        assertEquals("Test comment", review.getComment());
+    }
+
+    @Test
+    public void testUpdateDtoToReview() {
+
+        Review testReview = new Review();
+        testReview.setId(1L);
+        when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview));
+
+
+        ReviewUpdateDto reviewUpdateDto = new ReviewUpdateDto();
+        reviewUpdateDto.setGrade("FAIL");
+        reviewUpdateDto.setComment("Updated comment");
+
+        Review review = reviewMapper.UpdateDtoToReview(reviewUpdateDto, 1L);
+
+        assertEquals(1L, review.getId());
+        assertEquals(EReviewGrade.FAIL, review.getGrade());
+        assertEquals("Updated comment", review.getComment());
+    }
 }
