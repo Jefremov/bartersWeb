@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,14 +27,14 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody @Valid RegisterRequest request
-    ) throws MethodArgumentNotValidException, NoSuchMethodException {
+    ) throws MethodArgumentNotValidException, IncorrectDataException {
         log.info("New user registration " + request.toString());
         return ResponseEntity.ok(authenticationService.registerUser(request));
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate (
             @RequestBody @Valid AuthenticationRequest request
-    ) throws MethodArgumentNotValidException, NoSuchMethodException {
+    ) throws MethodArgumentNotValidException, IncorrectDataException {
         log.info("User registration " + request.toString());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }

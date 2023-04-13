@@ -11,6 +11,7 @@ import lv.bootcamp.bartersWeb.authService.token.ETokenType;
 import lv.bootcamp.bartersWeb.authService.token.Token;
 import lv.bootcamp.bartersWeb.authService.token.TokenRepository;
 import lv.bootcamp.bartersWeb.entities.ERole;
+import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -40,28 +41,14 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registerUser(RegisterRequest request)
-            throws MethodArgumentNotValidException, NoSuchMethodException {
+    public AuthenticationResponse registerUser(RegisterRequest request) throws IncorrectDataException {
         if (usersRepository.existsByUsername(request.getUsername())) {
             log.info("Registering a user with an existing username " + request.getUsername());
-            BindingResult bindingResult = new BeanPropertyBindingResult(request, "request");
-            FieldError fieldError = new FieldError("request", "Username " + request.getUsername(),
-                    " already exist. Choose another username");
-            bindingResult.addError(fieldError);
-            throw new MethodArgumentNotValidException(
-                    new MethodParameter(this.getClass().getMethod("registerUser", RegisterRequest.class),
-                            0), bindingResult);
-
+            throw new IncorrectDataException("Username " + request.getUsername() + " already exist. Choose another username");
         }
         if (usersRepository.existsByEmail(request.getEmail())) {
             log.info("Registering a user with an existing email " + request.getEmail());
-            BindingResult bindingResult = new BeanPropertyBindingResult(request, "request");
-            FieldError fieldError = new FieldError("request", "Email " + request.getEmail(),
-                    " already exist. Choose another email");
-            bindingResult.addError(fieldError);
-            throw new MethodArgumentNotValidException(
-                    new MethodParameter(getClass().getMethod("registerUser", RegisterRequest.class),
-                            0), bindingResult);
+            throw new IncorrectDataException("Email " + request.getEmail() + " already exist. Choose another email");
         }
         var user = User.builder()
                 .username(request.getUsername())
@@ -82,17 +69,9 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request)
-            throws MethodArgumentNotValidException, NoSuchMethodException {
+            throws MethodArgumentNotValidException, IncorrectDataException {
         if (!usersRepository.existsByUsername(request.getUsername())) {
-            log.info("Login a user with an non-existent username " + request.getUsername());
-            BindingResult bindingResult = new BeanPropertyBindingResult(request, "request");
-            FieldError fieldError = new FieldError("request", "Username " + request.getUsername(),
-                    " does not exist");
-            bindingResult.addError(fieldError);
-            throw new MethodArgumentNotValidException(
-                    new MethodParameter(this.getClass().getMethod("authenticate", RegisterRequest.class),
-                            0), bindingResult);
-
+            throw new IncorrectDataException("Username " + request.getUsername() + " does not exist");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
