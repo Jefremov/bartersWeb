@@ -42,14 +42,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse registerUser(RegisterRequest request) throws IncorrectDataException {
-        if (usersRepository.existsByUsername(request.getUsername())) {
-            log.info("Registering a user with an existing username " + request.getUsername());
-            throw new IncorrectDataException("Username " + request.getUsername() + " already exist. Choose another username");
-        }
-        if (usersRepository.existsByEmail(request.getEmail())) {
-            log.info("Registering a user with an existing email " + request.getEmail());
-            throw new IncorrectDataException("Email " + request.getEmail() + " already exist. Choose another email");
-        }
+        registerUserExistenceCheck(request);
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -70,9 +63,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request)
             throws MethodArgumentNotValidException, IncorrectDataException {
-        if (!usersRepository.existsByUsername(request.getUsername())) {
-            throw new IncorrectDataException("Username " + request.getUsername() + " does not exist");
-        }
+        loginUserExistenceCheck(request);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -140,4 +131,29 @@ public class AuthenticationService {
             }
         }
     }
+
+    private void registerUserExistenceCheck(RegisterRequest request) throws IncorrectDataException {
+        boolean usernameExists = usersRepository.existsByUsername(request.getUsername());
+        boolean emailExists = usersRepository.existsByEmail(request.getEmail());
+        if (usernameExists && emailExists) {
+            log.info("Registering a user with an existing username " + request.getUsername() + " and email " + request.getEmail());
+            throw new IncorrectDataException("Username " + request.getUsername() + " and email " + request.getEmail() +
+                    " already exist. Choose another username and email");
+        }
+        if (usernameExists) {
+            log.info("Registering a user with an existing username " + request.getUsername());
+            throw new IncorrectDataException("Username " + request.getUsername() + " already exist. Choose another username");
+        }
+        if (emailExists) {
+            log.info("Registering a user with an existing email " + request.getEmail());
+            throw new IncorrectDataException("Email " + request.getEmail() + " already exist. Choose another email");
+        }
+    }
+
+    private void loginUserExistenceCheck(AuthenticationRequest request) throws IncorrectDataException {
+        if (!usersRepository.existsByUsername(request.getUsername())) {
+            throw new IncorrectDataException("Username " + request.getUsername() + " does not exist");
+        }
+    }
+
 }
