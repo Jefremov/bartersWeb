@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/")
+@RequestMapping(path="/items")
 public class ItemController {
     private final ItemService itemService;
 
