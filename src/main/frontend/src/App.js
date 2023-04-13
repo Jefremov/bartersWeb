@@ -1,25 +1,33 @@
 import React from 'react';
 import './App.css';
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/HomePage';
-import Items from './pages/ItemsPage';
-import Trades from './pages/TradesPage';
-import Layout from './components/Navigation';
+import ItemsPage from './pages/ItemsPage';
+import TradesPage from './pages/TradesPage';
 import TestComponent from './pages/TestComponent';
+import ResponsiveAppBar from './components/ResponsiveAppBar';
+import ReviewsPage from './pages/ReviewsPage';
+import AdminPage from './pages/AdminPage';
+import UsersPage from './pages/UsersPage';
+import LoginPage from './pages/LoginPage';
+import PageNotFound from './pages/PageNotFound';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/items" element={<Items />} />
-            <Route path="/trades" element={<Trades />} />
-            <Route path="/test" element={<TestComponent />} />
-        </Route>
-      </Routes>
-    </Router>
+      <Router>
+      <ResponsiveAppBar/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/items" element={<ItemsPage />} />
+          <Route path="/trades" element={<TradesPage />} />s
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/reviews" element={<ReviewsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/test" element={<TestComponent />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Router>
   );
 }
 
