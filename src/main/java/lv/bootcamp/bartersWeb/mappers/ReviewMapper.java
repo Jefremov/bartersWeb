@@ -1,16 +1,24 @@
 package lv.bootcamp.bartersWeb.mappers;
 
+import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
+import lv.bootcamp.bartersWeb.dto.ReviewUpdateDto;
+import lv.bootcamp.bartersWeb.entities.EReviewGrade;
 import lv.bootcamp.bartersWeb.entities.Review;
+import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class ReviewMapper {
 
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public ReviewShowDto reviewToDtoReview(Review review){
         if (review == null) {return null;}
@@ -22,5 +30,18 @@ public class ReviewMapper {
         if (review.getGrade()!=null) {reviewShowDto.setGrade(review.getGrade().getDisplayName()); }
         return reviewShowDto;
     }
-
+    public Review CreateDtoToReview(ReviewCreateDto reviewCreateDto, String username){
+        Review review = new Review();
+            review.setReviewedId(usersRepository.findUserByUsername(username).getId());
+            review.setReviewerId(reviewCreateDto.getReviewerId());
+            review.setGrade(EReviewGrade.valueOf(reviewCreateDto.getGrade()));
+            review.setComment(reviewCreateDto.getComment());
+        return review;
+    }
+    public Review UpdateDtoToReview(ReviewUpdateDto reviewUpdateDto, Long reviewId){
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new RuntimeException("No review match"));
+        review.setGrade(EReviewGrade.valueOf(reviewUpdateDto.getGrade()));
+        review.setComment(reviewUpdateDto.getComment());
+        return review;
+    }
 }
