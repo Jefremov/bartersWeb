@@ -27,7 +27,7 @@ class GlobalExceptionHandler {
             String errorMessage = fieldError.getDefaultMessage();
             if (!errorMessage.isEmpty() && !fieldName.isEmpty()) {
                 log.info(fieldName + " " + errorMessage);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(fieldName + " " + errorMessage));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(errorMessage));
             } else {
                 log.error(fieldName + " " + errorMessage);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Internal error. Contact administrator"));

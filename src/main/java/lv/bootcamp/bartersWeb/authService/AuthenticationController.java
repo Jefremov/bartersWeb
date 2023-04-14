@@ -35,7 +35,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate (
             @RequestBody @Valid AuthenticationRequest request
     ) throws MethodArgumentNotValidException, IncorrectDataException {
-        log.info("User registration " + request.toString());
+        log.info("User logon " + request.toString());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 

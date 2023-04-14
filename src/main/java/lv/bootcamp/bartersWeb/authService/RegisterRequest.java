@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank
+    @NotBlank(message = "User name must not be blank")
     private String username;
-    @NotBlank
+    @NotBlank(message = "Password must not be blank")
     @Size(min = 8, message = "Password must have at least 8 characters")
     private String password;
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Incorrect email")
+    @NotBlank(message = "Email must not be blank")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Incorrect email address")
     private String email;
-    @NotNull
+    @NotNull(message = "Phone number must not be NULL")
     private String phoneNumber;
 
     @Override
