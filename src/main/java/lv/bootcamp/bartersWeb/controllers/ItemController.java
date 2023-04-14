@@ -23,29 +23,29 @@ public class ItemController {
     }
     @Autowired
     private ItemMapper itemMapper;
-    @PostMapping("/addItem")
+    @PostMapping("/add")
     public String addItem(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("category") String categoryStr, @RequestParam("state") String state, @RequestParam("description") String description, @RequestParam("status") String statusStr, @RequestParam("userId") Long userId) throws IOException {
         ECategory category = ECategory.valueOf(categoryStr);
         EItemStatus status = EItemStatus.valueOf(statusStr);
         itemService.addItem(title,state,category,description,file,status,userId);
         return "New item added";
     }
-    @GetMapping("/items")
+    @GetMapping
     public List<ItemDto> getItems() {
         return itemService.getItems();
     }
-    @GetMapping("/item/{itemid}")
+    @GetMapping("/{itemid}")
     public ItemDto getItem(@PathVariable("itemid") Long itemid){
         return itemService.getItemById(itemid);
     }
-    @PutMapping("/updateItem/{itemid}")
+    @PutMapping("/update/{itemid}")
     public String updateItem(@PathVariable("itemid") Long itemid, @RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("category") String categoryStr, @RequestParam("state") String state, @RequestParam("description") String description, @RequestParam("status") String statusStr, @RequestParam("userId") Long userId) throws IOException {
         ECategory category = ECategory.valueOf(categoryStr);
         EItemStatus status = EItemStatus.valueOf(statusStr);
         itemService.updateItem(itemid,title,state,category,description,file,status,userId);
         return "Item updated";
     }
-    @DeleteMapping("/deleteItem/{itemid}")
+    @DeleteMapping("/delete/{itemid}")
     public String deleteItem(@PathVariable("itemid") Long itemid) {
         itemService.deleteItemById(itemid);
         return "Item deleted";
