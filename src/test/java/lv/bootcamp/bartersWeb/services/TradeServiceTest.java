@@ -1,67 +1,114 @@
 package lv.bootcamp.bartersWeb.services;
 
-import lv.bootcamp.bartersWeb.controllers.TradeController;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
+import lv.bootcamp.bartersWeb.repositories.TradeRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-@SpringBootTest
-class TradeServiceTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    private MockMvc mockMvc;
+@ExtendWith(MockitoExtension.class)
+public class TradeServiceTest {
 
     @InjectMocks
-    TradeController tradeController;
+    private TradeService tradeService;
 
     @Mock
-    TradeService tradeService;
+    private TradeRepository tradeRepository;
 
     @Mock
-    TradeMapper tradeMapper;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private TradeMapper tradeMapper;
 
     @Test
-    @DisplayName("Should create trade")
-    void shouldCreateTrade() {
+    @DisplayName("Test getAllTrades() method")
+    public void testGetAllTrades() {
+        List<Trade> trades = new ArrayList<>();
+        trades.add(new Trade());
+        trades.add(new Trade());
+        when(tradeRepository.findAll()).thenReturn(trades);
+
         TradeDto tradeDto = new TradeDto();
-        Trade trade = new Trade();
-        TradeDto createdTradeDto = new TradeDto();
-        createdTradeDto.setId(1L);
+        when(tradeMapper.toDto(any(Trade.class))).thenReturn(tradeDto);
 
-        when(tradeMapper.toEntity(tradeDto)).thenReturn(trade);
-        when(tradeMapper.toDto(trade)).thenReturn(createdTradeDto);
+        List<TradeDto> tradeDtos = tradeService.getAllTrades();
 
-        ResponseEntity<TradeDto> responseEntity = tradeController.createTrade(tradeDto);
-
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertNotNull(tradeDtos);
+        assertEquals(trades.size(), tradeDtos.size());
+        verify(tradeRepository, times(1)).findAll();
+        verify(tradeMapper, times(trades.size())).toDto(any(Trade.class));
     }
 
     @Test
-    @DisplayName("Should delete trade")
-    void shouldDeleteTrade() {
-        Long tradeId = 1L;
+    @DisplayName("Should create a trade")
+    void testCreateTrade() {
+        Trade trade = new Trade();
+        Mockito.when(tradeRepository.save(trade)).thenReturn(trade);
+        Trade createdTrade = tradeService.createTrade(trade);
+        Assertions.assertEquals(trade, createdTrade);
+        verify(tradeRepository, times(1)).save(any(Trade.class));
+    }
 
-        tradeController.deleteTrade(tradeId);
+    @Test
+    @DisplayName("Should handle an exception when creating a trade")
+    void testCreateTradeException() {
+        Trade trade = new Trade();
+        Mockito.when(tradeRepository.save(trade)).thenThrow(new RuntimeException("Database connection error"));
+        Assertions.assertThrows(RuntimeException.class, () -> tradeService.createTrade(trade));
+    }
+    
 
-        Assertions.assertDoesNotThrow(() -> tradeService.deleteTrade(tradeId));
+    @Test
+    @DisplayName("Test deleteTrade() method")
+    public void testDeleteTrade() {
+        Long id = 1L;
+
+        tradeService.deleteTrade(id);
+
+        verify(tradeRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    @DisplayName("Test updateTradeStatus() method - trade exists")
+    public void testUpdateTradeStatus_TradeExists() {
+        Long id = 1L;
+        Trade trade = new Trade();
+        trade.setStatus(EStatus.PENDING);
+        Optional<Trade> optionalTrade = Optional.of(trade);
+        when(tradeRepository.findById(id)).thenReturn(optionalTrade);
+
+        String result = tradeService.updateTradeStatus(id, EStatus.DECLINED);
+
+        assertEquals("Trade status updated successfully", result);
+        assertEquals(EStatus.DECLINED, trade.getStatus());
+        verify(tradeRepository, times(1)).findById(id);
+        verify(tradeRepository, times(1)).save(trade);
+    }
+
+    @Test
+    @DisplayName("Test updateTradeStatus() method - trade does not exist")
+    public void testUpdateTradeStatus_TradeDoesNotExist() {
+        Long id = 1L;
+        when(tradeRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () -> tradeService.updateTradeStatus(id, EStatus.ACCEPTED));
+        verify(tradeRepository, times(1)).findById(id);
+        verify(tradeRepository, never()).save(any(Trade.class));
     }
 
 }
+
