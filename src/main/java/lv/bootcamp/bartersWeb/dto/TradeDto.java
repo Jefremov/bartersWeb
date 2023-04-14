@@ -14,10 +14,10 @@ public class TradeDto {
     private Long id;
 
     @NotNull
-    private String itemId;
+    private Long itemId;
 
     @NotNull
-    private String offeredItemId;
+    private Long offeredItemId;
 
     @NotNull
     private EStatus status;
