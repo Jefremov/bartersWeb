@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/HomePage';
 import ItemsPage from './pages/ItemsPage';
 import TradesPage from './pages/TradesPage';
-import TestComponent from './pages/TestComponent';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import ReviewsPage from './pages/ReviewsPage';
 import AdminPage from './pages/AdminPage';
@@ -24,7 +23,6 @@ function App() {
           <Route path="/users" element={<UsersPage />} />
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="/test" element={<TestComponent />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>

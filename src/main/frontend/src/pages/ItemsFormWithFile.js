@@ -39,7 +39,7 @@ const AddItemForm = () => {
     data.append('userId', formData.userId);
     data.append('status', formData.status);
 
-    axios.post('/addItem', data, {
+    axios.post('/api/items/add', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
