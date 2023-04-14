@@ -6,7 +6,7 @@ const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/reviews');
+      const response = await fetch('/api/reviews');
       const json = await response.json();
       setData(json);
     };

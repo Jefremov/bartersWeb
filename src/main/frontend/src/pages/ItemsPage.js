@@ -5,7 +5,7 @@ function Items() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/items');
+      const response = await fetch('/api/items');
       const json = await response.json();
       setData(json);
     };
