@@ -42,13 +42,13 @@ public class ReviewController {
 
     @PostMapping(value ="/of/{username}" )
     public ResponseEntity<ReviewCreateDto> addReview(@PathVariable("username") String reviewed,
-                                       @Valid @RequestBody ReviewCreateDto reviewCreateDto){
+                                       @Valid @ModelAttribute ReviewCreateDto reviewCreateDto){
         return reviewService.addReview(reviewCreateDto,reviewed);
     }
 
     @PutMapping(value = "/{reviewid}")
     public ResponseEntity updateReview(@PathVariable("reviewid") Long reviewId,
-                                             @RequestBody @Valid ReviewUpdateDto reviewUpdateDto){
+                                             @ModelAttribute @Valid ReviewUpdateDto reviewUpdateDto){
         return reviewService.updateReview(reviewUpdateDto,reviewId);
     }
 

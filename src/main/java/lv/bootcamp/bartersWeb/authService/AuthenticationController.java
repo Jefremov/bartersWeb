@@ -9,10 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -26,14 +23,14 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody @Valid RegisterRequest request
+            @ModelAttribute @Valid RegisterRequest request
     ) throws MethodArgumentNotValidException, IncorrectDataException {
         log.info("New user registration " + request.toString());
         return ResponseEntity.ok(authenticationService.registerUser(request));
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate (
-            @RequestBody @Valid AuthenticationRequest request
+            @ModelAttribute @Valid AuthenticationRequest request
     ) throws MethodArgumentNotValidException, IncorrectDataException {
         log.info("User registration " + request.toString());
         return ResponseEntity.ok(authenticationService.authenticate(request));

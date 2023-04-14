@@ -1,11 +1,16 @@
 package lv.bootcamp.bartersWeb.controllers;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
+import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.services.ItemService;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,11 +29,8 @@ public class ItemController {
     @Autowired
     private ItemMapper itemMapper;
     @PostMapping("/add")
-    public String addItem(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("category") String categoryStr, @RequestParam("state") String state, @RequestParam("description") String description, @RequestParam("status") String statusStr, @RequestParam("userId") Long userId) throws IOException {
-        ECategory category = ECategory.valueOf(categoryStr);
-        EItemStatus status = EItemStatus.valueOf(statusStr);
-        itemService.addItem(title,state,category,description,file,status,userId);
-        return "New item added";
+    public ResponseEntity<List<String>> addItem(@ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
+        return itemService.addItem(itemCreateDto);
     }
     @GetMapping
     public List<ItemDto> getItems() {
