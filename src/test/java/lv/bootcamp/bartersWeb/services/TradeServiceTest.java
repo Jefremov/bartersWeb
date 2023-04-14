@@ -1,6 +1,7 @@
 package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -42,35 +45,49 @@ public class TradeServiceTest {
         trades.add(new Trade());
         when(tradeRepository.findAll()).thenReturn(trades);
 
-        TradeDto tradeDto = new TradeDto();
-        when(tradeMapper.toDto(any(Trade.class))).thenReturn(tradeDto);
+        TradeShowDto tradeShowDto = new TradeShowDto();
+        when(tradeMapper.toDto(any(Trade.class))).thenReturn(tradeShowDto);
 
-        List<TradeDto> tradeDtos = tradeService.getAllTrades();
+        List<TradeShowDto> tradeShowDtos = tradeService.getAllTrades();
 
-        assertNotNull(tradeDtos);
-        assertEquals(trades.size(), tradeDtos.size());
+        assertNotNull(tradeShowDtos);
+        assertEquals(trades.size(), tradeShowDtos.size());
         verify(tradeRepository, times(1)).findAll();
         verify(tradeMapper, times(trades.size())).toDto(any(Trade.class));
     }
 
     @Test
     @DisplayName("Should create a trade")
-    void testCreateTrade() {
-        Trade trade = new Trade();
-        Mockito.when(tradeRepository.save(trade)).thenReturn(trade);
-        Trade createdTrade = tradeService.createTrade(trade);
-        Assertions.assertEquals(trade, createdTrade);
-        verify(tradeRepository, times(1)).save(any(Trade.class));
-    }
+    public void testCreateTrade() {
+        TradeDto tradeDto = new TradeDto();
 
+        Trade expectedTrade = new Trade();
+
+        when(tradeMapper.toEntity(tradeDto)).thenReturn(expectedTrade);
+        when(tradeRepository.save(expectedTrade)).thenReturn(expectedTrade);
+
+        ResponseEntity<Trade> result = tradeService.createTrade(tradeDto);
+
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(expectedTrade, result.getBody());
+
+        verify(tradeMapper, times(1)).toEntity(tradeDto);
+        verify(tradeRepository, times(1)).save(expectedTrade);
+    }
     @Test
     @DisplayName("Should handle an exception when creating a trade")
-    void testCreateTradeException() {
-        Trade trade = new Trade();
-        Mockito.when(tradeRepository.save(trade)).thenThrow(new RuntimeException("Database connection error"));
-        Assertions.assertThrows(RuntimeException.class, () -> tradeService.createTrade(trade));
+    public void shouldHandleExceptionWhenCreatingTrade() {
+        // Arrange
+        TradeDto tradeDto = new TradeDto();
+        when(tradeMapper.toEntity(tradeDto)).thenReturn(new Trade());
+        doThrow(new RuntimeException()).when(tradeRepository).save(any(Trade.class));
+
+        // Act and Assert
+        assertThrows(RuntimeException.class, () -> tradeService.createTrade(tradeDto));
+
+        verify(tradeMapper, times(1)).toEntity(tradeDto);
+        verify(tradeRepository, times(1)).save(any(Trade.class));
     }
-    
 
     @Test
     @DisplayName("Test deleteTrade() method")

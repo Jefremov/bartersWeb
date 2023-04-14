@@ -4,20 +4,24 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lv.bootcamp.bartersWeb.entities.EStatus;
+import lv.bootcamp.bartersWeb.entities.Item;
 
 import java.time.LocalDateTime;
 
 @Data
-public class TradeDto {
+public class TradeShowDto {
+    private Long id;
 
-    @NotNull(message = "No item has been picked")
     private Long itemId;
 
-    @NotNull(message = "Must select an item for the trade")
+    private Item item;
+
     private Long offeredItemId;
 
-    @Size(max = 300)
-    @Size(min = 5, message = "Comment must be at least 5 characters")
     private String comment;
+
+    private LocalDateTime date;
+
+    private EStatus status;
 
 }

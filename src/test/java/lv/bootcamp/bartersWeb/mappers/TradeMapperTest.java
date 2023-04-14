@@ -1,6 +1,7 @@
 package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
@@ -23,16 +24,11 @@ class TradeMapperTest {
     @DisplayName("Test mapping TradeDto to Trade entity")
     void testToEntity() {
         TradeDto tradeDto = new TradeDto();
-        tradeDto.setId(1L);
         tradeDto.setItemId(3L);
         tradeDto.setOfferedItemId(4L);
-        tradeDto.setStatus(EStatus.PENDING);
         tradeDto.setComment("Test comment");
-        tradeDto.setDate(LocalDateTime.now());
 
         Trade trade = tradeMapper.toEntity(tradeDto);
-
-        assertThat(trade.getId()).isEqualTo(tradeDto.getId());
 
         Item item = trade.getItem();
         assertThat(item).isNotNull();
@@ -42,14 +38,11 @@ class TradeMapperTest {
         assertThat(offeredItem).isNotNull();
         assertThat(offeredItem.getId()).isEqualTo(tradeDto.getOfferedItemId());
 
-        assertThat(trade.getStatus()).isEqualTo(tradeDto.getStatus());
         assertThat(trade.getComment()).isEqualTo(tradeDto.getComment());
-        assertThat(trade.getDate()).isEqualTo(tradeDto.getDate());
     }
 
-
     @Test
-    @DisplayName("Test mapping Trade entity to TradeDto")
+    @DisplayName("Test mapping Trade entity to TradeShowDto")
     void testToDto() {
         Item item = new Item();
         item.setId(2L);
@@ -64,36 +57,25 @@ class TradeMapperTest {
         trade.setComment("Test comment");
         trade.setDate(LocalDateTime.now());
 
-        TradeDto tradeDto = tradeMapper.toDto(trade);
+        TradeShowDto tradeShowDto = tradeMapper.toDto(trade);
 
-        assertEquals(trade.getId(), tradeDto.getId());
-        assertEquals(trade.getItem().getId(), tradeDto.getItemId());
-        assertEquals(trade.getOfferedItem().getId(), tradeDto.getOfferedItemId());
-        assertEquals(trade.getStatus(), tradeDto.getStatus());
-        assertEquals(trade.getComment(), tradeDto.getComment());
-        assertEquals(trade.getDate(), tradeDto.getDate());
+        assertEquals(trade.getId(), tradeShowDto.getId());
+        assertEquals(trade.getItem().getId(), tradeShowDto.getItemId());
+        assertEquals(trade.getOfferedItem().getId(), tradeShowDto.getOfferedItemId());
+        assertEquals(trade.getStatus(), tradeShowDto.getStatus());
+        assertEquals(trade.getComment(), tradeShowDto.getComment());
+        assertEquals(trade.getDate(), tradeShowDto.getDate());
     }
 
     @Test
-    @DisplayName("Test mapping null TradeDto to Trade entity")
-    void testToEntityWithNullDto() {
+    @DisplayName("Mapping Item to item ID")
+    public void testMapToItemId() {
         Item item = new Item();
-        item.setId(2L);
-        Item offeredItem = new Item();
-        offeredItem.setId(3L);
+        item.setId(1L);
 
-        Trade trade = new Trade();
-        trade.setId(1L);
-        trade.setItem(item);
-        trade.setOfferedItem(offeredItem);
-        trade.setStatus(EStatus.PENDING);
-        trade.setComment("Test comment");
-        trade.setDate(LocalDateTime.now());
+        Long itemId = tradeMapper.mapToItemId(item);
 
-        TradeDto tradeDto = tradeMapper.toDto(trade);
-        Trade tradeFromDto = tradeMapper.toEntity(tradeDto);
-
-        Assertions.assertEquals(tradeFromDto, trade);
+        assertEquals(item.getId(), itemId);
     }
 }
 

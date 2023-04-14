@@ -1,36 +1,45 @@
 package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
+import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
+import org.hibernate.type.descriptor.java.LocalDateJavaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 public class TradeMapper {
+    @Autowired
+    ItemRepository itemRepository;
 
     public Trade toEntity(TradeDto tradeDto) {
         Trade trade = new Trade();
-        trade.setId(tradeDto.getId());
         trade.setItem(mapToItem(tradeDto.getItemId()));
         trade.setOfferedItem(mapToItem(tradeDto.getOfferedItemId()));
-        trade.setStatus(tradeDto.getStatus());
+        trade.setStatus(EStatus.PENDING);
         trade.setComment(tradeDto.getComment());
-        trade.setDate(tradeDto.getDate());
+        trade.setDate(LocalDateTime.now());
         return trade;
     }
 
-    public TradeDto toDto(Trade trade) {
-        TradeDto tradeDto = new TradeDto();
-        tradeDto.setId(trade.getId());
-        tradeDto.setItemId(mapToItemId(trade.getItem()));
-        tradeDto.setOfferedItemId(mapToItemId(trade.getOfferedItem()));
-        tradeDto.setStatus(trade.getStatus());
-        tradeDto.setComment(trade.getComment());
-        tradeDto.setDate(trade.getDate());
-        return tradeDto;
+    public TradeShowDto toDto(Trade trade) {
+        TradeShowDto tradeShowDto = new TradeShowDto();
+        tradeShowDto.setId(trade.getId());
+        tradeShowDto.setItemId(mapToItemId(trade.getItem()));
+        tradeShowDto.setOfferedItemId(mapToItemId(trade.getOfferedItem()));
+        tradeShowDto.setStatus(trade.getStatus());
+        tradeShowDto.setComment(trade.getComment());
+        tradeShowDto.setDate(trade.getDate());
+        return tradeShowDto;
     }
 
-    private Long mapToItemId(Item item) {
+    public Long mapToItemId(Item item) {
         return item != null ? item.getId() : null;
     }
 

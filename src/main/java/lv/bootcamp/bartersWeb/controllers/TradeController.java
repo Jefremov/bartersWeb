@@ -1,11 +1,12 @@
 package lv.bootcamp.bartersWeb.controllers;
 
+import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
 import lv.bootcamp.bartersWeb.services.TradeService;
 import lv.bootcamp.bartersWeb.utils.UpdateTradeStatusRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,16 +25,13 @@ public class TradeController {
     }
 
     @GetMapping
-    public List<TradeDto> allTrades() {
+    public List<TradeShowDto> allTrades() {
         return tradeService.getAllTrades();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TradeDto> createTrade(@RequestBody TradeDto tradeDto) {
-        Trade trade = tradeMapper.toEntity(tradeDto);
-        Trade createdTrade = tradeService.createTrade(trade);
-        TradeDto createdTradeDto = tradeMapper.toDto(createdTrade);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTradeDto);
+    public ResponseEntity<Trade> createTrade(@ModelAttribute @Valid TradeDto tradeDto) {
+        return tradeService.createTrade(tradeDto);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -42,7 +40,7 @@ public class TradeController {
     }
 
     @PutMapping("/update/{id}")
-    public String updateTradeStatus(@PathVariable Long id, @RequestBody UpdateTradeStatusRequest request) {
+    public String updateTradeStatus(@PathVariable Long id, @ModelAttribute UpdateTradeStatusRequest request) {
         return tradeService.updateTradeStatus(id, request.getStatus());
     }
 
