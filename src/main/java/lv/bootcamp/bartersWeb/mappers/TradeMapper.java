@@ -3,14 +3,10 @@ package lv.bootcamp.bartersWeb.mappers;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TradeMapper {
-
-    @Autowired
-    private ItemMapper itemMapper;
 
     public Trade toEntity(TradeDto tradeDto) {
         Trade trade = new Trade();
