@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class TradeDto {
@@ -26,6 +26,6 @@ public class TradeDto {
     private String comment;
 
     @NotNull
-    private Date date;
+    private LocalDateTime date;
 
 }
