@@ -21,10 +21,9 @@ public class ItemController {
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
-    @Autowired
-    private ItemMapper itemMapper;
+
     @PostMapping("/add")
-    public ResponseEntity<List<String>> addItem(@ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
+    public ResponseEntity<String> addItem(@ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
         return itemService.addItem(itemCreateDto);
     }
     @GetMapping
