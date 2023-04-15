@@ -7,6 +7,8 @@ import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ItemMapper {
     public ItemDto itemToDto(Item item) {
@@ -17,6 +19,7 @@ public class ItemMapper {
         dto.setDescription(item.getDescription());
         dto.setCategory(item.getCategory().getDisplayName());
         dto.setState(item.getState());
+        dto.setDate(item.getDate());
         dto.setStatus(item.getStatus().getDisplayName());
         dto.setUserId(item.getUserId());
         return dto;
@@ -28,7 +31,8 @@ public class ItemMapper {
         item.setDescription(itemCreateDto.getDescription());
         item.setCategory(ECategory.valueOf(itemCreateDto.getCategory()));
         item.setState(itemCreateDto.getState());
-        item.setStatus(EItemStatus.valueOf(itemCreateDto.getStatus()));
+        item.setDate(LocalDateTime.now());
+        item.setStatus(EItemStatus.AVAILABLE);
         item.setUserId(itemCreateDto.getUserId());
         return item;
     }

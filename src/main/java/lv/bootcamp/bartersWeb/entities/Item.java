@@ -3,6 +3,8 @@ package lv.bootcamp.bartersWeb.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "items")
 @Data
@@ -25,12 +27,14 @@ public class Item {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EItemStatus status;
+    @Column(name = "date")
+    private LocalDateTime date;
     @Column(name = "user_id")
     private Long userId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User user;
-    public Item(Long id, String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId) {
+    public Item(Long id, String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId, LocalDateTime date) {
         this.id = id;
         this.title = title;
         this.state = state;
@@ -38,9 +42,10 @@ public class Item {
         this.image = image;
         this.category = category;
         this.status = status;
+        this.date = date;
         this.userId = userId;
     }
-    public Item(String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId) {
+    public Item(String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId, LocalDateTime date) {
         this.title = title;
         this.state = state;
         this.description = description;
@@ -48,6 +53,7 @@ public class Item {
         this.category = category;
         this.status = status;
         this.userId = userId;
+        this.date = date;
     }
 
     public Item() {
