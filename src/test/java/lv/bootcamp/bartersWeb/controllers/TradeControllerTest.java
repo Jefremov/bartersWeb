@@ -1,6 +1,7 @@
 package lv.bootcamp.bartersWeb.controllers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
@@ -43,37 +44,29 @@ public class TradeControllerTest {
     @Test
     @DisplayName("Test get all trades controller")
     public void testAllTrades() {
-        TradeDto tradeDto = new TradeDto();
-        tradeDto.setId(1L);
+        TradeShowDto tradeShowDto = new TradeShowDto();
+        tradeShowDto.setId(1L);
 
-        when(tradeService.getAllTrades()).thenReturn(List.of(tradeDto));
+        when(tradeService.getAllTrades()).thenReturn(List.of(tradeShowDto));
 
-        List<TradeDto> tradeDtos = tradeController.allTrades();
+        List<TradeShowDto> tradeShowDtos = tradeController.allTrades();
 
-        assertEquals(1, tradeDtos.size());
-        assertThat(tradeDtos.get(0)).isEqualTo(tradeDto);
+        assertEquals(1, tradeShowDtos.size());
+        assertThat(tradeShowDtos.get(0)).isEqualTo(tradeShowDto);
     }
 
     @Test
     @DisplayName("Test create trade controller")
-    public void testCreateTrade() {
-        TradeDto tradeDto = new TradeDto();
+    void testCreateTrade() {
         Trade trade = new Trade();
+        TradeDto tradeDto= new TradeDto();
+        // set up trade properties
+        when(tradeService.createTrade(tradeDto)).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(trade));
 
-        Trade createdTrade = new Trade();
-        createdTrade.setId(1L);
+        ResponseEntity<Trade> responseEntity = tradeController.createTrade(tradeDto);
 
-        TradeDto createdTradeDto = new TradeDto();
-        createdTradeDto.setId(1L);
-
-        when(tradeMapper.toEntity(tradeDto)).thenReturn(trade);
-        when(tradeService.createTrade(trade)).thenReturn(createdTrade);
-        when(tradeMapper.toDto(createdTrade)).thenReturn(createdTradeDto);
-
-        ResponseEntity<TradeDto> response = tradeController.createTrade(tradeDto);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertThat(response.getBody()).isEqualTo(createdTradeDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getBody()).isEqualTo(trade);
     }
 
     @Test

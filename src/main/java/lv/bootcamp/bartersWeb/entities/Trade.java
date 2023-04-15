@@ -15,12 +15,16 @@ public class Trade {
     @Column(name = "trade_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @Column(name = "item_id")
+    private Long ItemId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Item.class)
+    @JoinColumn(name = "item_id", referencedColumnName = "id", insertable=false, updatable=false)
+    private Item Item;
 
-    @ManyToOne
-    @JoinColumn(name = "offered_item_id")
+    @Column(name = "offered_item_id")
+    private Long offeredItemId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Item.class)
+    @JoinColumn(name = "offered_item_id", referencedColumnName = "id", insertable=false, updatable=false)
     private Item offeredItem;
 
     @Enumerated(EnumType.STRING)

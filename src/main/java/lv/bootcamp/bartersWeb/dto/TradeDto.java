@@ -10,22 +10,14 @@ import java.time.LocalDateTime;
 @Data
 public class TradeDto {
 
-    @NotNull
-    private Long id;
-
-    @NotNull
+    @NotNull(message = "No item has been picked")
     private Long itemId;
 
-    @NotNull
+    @NotNull(message = "Must select an item for the trade")
     private Long offeredItemId;
 
-    @NotNull
-    private EStatus status;
-
     @Size(max = 300)
+    @Size(min = 5, message = "Comment must be at least 5 characters")
     private String comment;
-
-    @NotNull
-    private LocalDateTime date;
 
 }
