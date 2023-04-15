@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,12 +31,38 @@ const Copyright = (props) => {
 const theme = createTheme();
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+        ...formData,
+        [event.target.name]: event.target.value,
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    data.append('username', formData.username);
+    data.append('password', formData.password);
+
+    axios.post('/api/login', JSON.stringify(formData), {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        alert("Successfully logged in!");
+        localStorage.setItem('accessToken', response.data.access_token);
+        localStorage.setItem('refreshToken', response.data.refresh_token);
+        navigate('/');
+    })
+    .catch(error => {
+        alert(error.response.data.message);
     });
   };
 
@@ -61,10 +89,12 @@ const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -72,6 +102,8 @@ const SignIn = () => {
               required
               fullWidth
               name="password"
+              value={formData.password}
+              onChange={handleChange}
               label="Password"
               type="password"
               id="password"

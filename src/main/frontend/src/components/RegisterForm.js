@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -27,12 +29,40 @@ const Copyright = (props) => {
 const theme = createTheme();
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+        ...formData,
+        [event.target.name]: event.target.value,
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    data.append('username', formData.username);
+    data.append('email', formData.email);
+    data.append('phoneNumber', formData.phoneNumber);
+    data.append('password', formData.password);
+
+    axios.post('/api/register', JSON.stringify(formData), {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        alert("User successfully created! Please log in to continue.");
+        navigate('/login');
+    })
+    .catch(error => {
+        alert(error.response.data.message);
     });
   };
 
@@ -59,11 +89,13 @@ const SignUp = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="Username"
                   autoFocus
                 />
               </Grid>
@@ -71,19 +103,11 @@ const SignUp = () => {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   autoComplete="email"
                 />
               </Grid>
@@ -91,7 +115,21 @@ const SignUp = () => {
                 <TextField
                   required
                   fullWidth
+                  id="phoneNumber"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  autoComplete="phoneNumber"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   label="Password"
                   type="password"
                   id="password"
