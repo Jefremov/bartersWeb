@@ -16,7 +16,7 @@ public class Trade {
     private Long id;
 
     @Column(name = "item_id")
-    private Long ItemId;
+    private Long itemId;
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Item.class)
     @JoinColumn(name = "item_id", referencedColumnName = "id", insertable=false, updatable=false)
     private Item Item;
