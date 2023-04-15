@@ -11,7 +11,6 @@ const TradeCard = ({ trade }) => {
     if (confirmed) {
       axios.put(`/api/trades/update/${trade.id}`, { status: 'ACCEPTED' })
         .then(response => {
-          console.log(response.data);
           setStatus('ACCEPTED');
         })
         .catch(error => {
@@ -25,7 +24,6 @@ const TradeCard = ({ trade }) => {
     if (confirmed) {
       axios.put(`/api/trades/update/${trade.id}`, { status: 'DECLINED' })
         .then(response => {
-          console.log(response.data);
           setStatus('DECLINED');
         })
         .catch(error => {

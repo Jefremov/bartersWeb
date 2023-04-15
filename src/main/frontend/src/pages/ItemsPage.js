@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import ItemCard from '../components/ItemCard';
 
-function Items() {
-  const [data, setData] = useState([]);
+const Items = () => {
+  const [allItems, setAlItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch('/api/items');
       const json = await response.json();
-      setData(json);
+      setAlItems(json);
     };
     fetchData();
   }, []);
 
+  console.log('Items', allItems);
+
   return (
-    <div>
-      {data.map((item) => (
-        <div key={item.id}>
-          <h2>{item.title}</h2>
-          <p>{item.description}</p>
-          <p>{item.category}</p>
-        </div>
-      ))}
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <ItemCard items={allItems} />
     </div>
   );
 }

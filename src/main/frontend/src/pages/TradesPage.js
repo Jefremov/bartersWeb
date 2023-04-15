@@ -15,7 +15,6 @@ const Trades = () => {
   useEffect(() => {
     axios.get('/api/trades')
       .then(response => {
-        console.log(response);
         const data = response.data;
         setTrades(data);
       })
