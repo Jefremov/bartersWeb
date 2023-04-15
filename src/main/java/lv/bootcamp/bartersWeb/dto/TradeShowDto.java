@@ -1,10 +1,7 @@
 package lv.bootcamp.bartersWeb.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lv.bootcamp.bartersWeb.entities.EStatus;
-import lv.bootcamp.bartersWeb.entities.Item;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +10,11 @@ public class TradeShowDto {
     private Long id;
 
     private Long itemId;
-
-    private Item item;
+    private String item;
 
     private Long offeredItemId;
+
+    private String offeredItem;
 
     private String comment;
 
