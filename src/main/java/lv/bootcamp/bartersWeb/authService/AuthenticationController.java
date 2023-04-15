@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +23,8 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private static Logger log = Logger.getLogger(AuthenticationController.class);
+
+    @Autowired
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
