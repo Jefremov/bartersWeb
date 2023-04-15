@@ -28,18 +28,17 @@ import java.util.stream.Collectors;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final TradeRepository tradeRepository;
+    private final ItemMapper itemMapper;
     private final Path root = Paths.get("src/main/resources/itemimages");
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository) {
+    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper) {
         this.itemRepository = itemRepository;
         this.tradeRepository = tradeRepository;
+        this.itemMapper = itemMapper;
     }
 
-    @Autowired
-    private ItemMapper itemMapper;
-
-    public ResponseEntity<List<String>> addItem(ItemCreateDto itemCreateDto) throws IOException  {
+    public ResponseEntity<String> addItem(ItemCreateDto itemCreateDto) throws IOException  {
         if (itemCreateDto.getFile().getSize()!=0) {
             MultipartFile file = itemCreateDto.getFile();
             LocalDateTime now = LocalDateTime.now();
@@ -50,9 +49,9 @@ public class ItemService {
             Files.copy(file.getInputStream(), this.root.resolve(fileName));
             Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, filePath);
             itemRepository.save(item);
-            return ResponseEntity.ok(Collections.singletonList("Added"));
+            return ResponseEntity.ok("Added");
         }
-        else return ResponseEntity.ok().build();
+        else return ResponseEntity.badRequest().build();
     }
 
     public List<ItemDto> getItems() {
