@@ -1,6 +1,8 @@
 package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
@@ -26,7 +29,7 @@ public class TradeService {
 
     private static final Logger logger = LogManager.getLogger(TradeService.class);
 
-    public List<TradeDto> getAllTrades() {
+    public List<TradeShowDto> getAllTrades() {
         try {
             return tradesRepository.findAll()
                     .stream()
@@ -38,9 +41,11 @@ public class TradeService {
         }
     }
 
-    public Trade createTrade(Trade trade) {
+    public ResponseEntity<Trade> createTrade(TradeDto tradeDto) {
         try {
-            return tradesRepository.save(trade);
+            Trade trade = tradeMapper.toEntity(tradeDto);
+            tradesRepository.save(trade);
+            return ResponseEntity.status(HttpStatus.CREATED).body(trade);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error occurred while creating trade");
@@ -59,4 +64,9 @@ public class TradeService {
         return "Trade status updated successfully";
     }
 
+    public ResponseEntity<TradeShowOneDto> getTradeById(Long id) {
+        TradeShowOneDto tradeShowOneDto = tradeMapper.toOneDto(tradesRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trade not found")));
+        return ResponseEntity.ok().body(tradeShowOneDto);
+    }
 }
