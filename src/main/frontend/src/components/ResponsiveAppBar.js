@@ -107,7 +107,6 @@ function ResponsiveAppBar() {
               {pages.map((page, index) => (
                   <MenuItem key={index} onClick={handleCloseNavMenu} style={{display: "flex", alignContent: "center"}}>
                     <Link to={page.href} className='menuItemMobile'>
-                      {console.log(page)}
                       <span className='menuItemIcon'>{page.icon}</span>
                       <span>{page.name}</span>
                     </Link>
