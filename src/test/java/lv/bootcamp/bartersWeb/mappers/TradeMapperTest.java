@@ -2,71 +2,100 @@ package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
-import lv.bootcamp.bartersWeb.entities.EStatus;
-import lv.bootcamp.bartersWeb.entities.Item;
-import lv.bootcamp.bartersWeb.entities.Trade;
+import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
+import lv.bootcamp.bartersWeb.entities.*;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 
-@DisplayName("TradeMapper tests")
+@RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 class TradeMapperTest {
 
-    private final TradeMapper tradeMapper = new TradeMapper();
+    @Mock
+    private ItemRepository itemRepository;
+
+    @Mock
+    private UsersRepository usersRepository;
+
+    @InjectMocks
+    private TradeMapper tradeMapper;
 
     @Test
     @DisplayName("Test mapping TradeDto to Trade entity")
-    void testToEntity() {
+    public void testToEntity() {
         TradeDto tradeDto = new TradeDto();
-        tradeDto.setItemId(3L);
-        tradeDto.setOfferedItemId(4L);
-        tradeDto.setComment("Test comment");
+        tradeDto.setItemId(1L);
+        tradeDto.setOfferedItemId(2L);
+        tradeDto.setComment("test comment");
 
         Trade trade = tradeMapper.toEntity(tradeDto);
 
-        Item item = trade.getItem();
-        assertThat(item).isNotNull();
-        assertThat(item.getId()).isEqualTo(tradeDto.getItemId());
-
-        Item offeredItem = trade.getOfferedItem();
-        assertThat(offeredItem).isNotNull();
-        assertThat(offeredItem.getId()).isEqualTo(tradeDto.getOfferedItemId());
-
-        assertThat(trade.getComment()).isEqualTo(tradeDto.getComment());
+        assertEquals(tradeDto.getItemId(), trade.getItemId());
+        assertEquals(tradeDto.getOfferedItemId(), trade.getOfferedItemId());
+        assertEquals(EStatus.PENDING, trade.getStatus());
+        assertEquals(tradeDto.getComment(), trade.getComment());
+        assertEquals(LocalDateTime.now().getDayOfYear(), trade.getDate().getDayOfYear());
     }
 
     @Test
     @DisplayName("Test mapping Trade entity to TradeShowDto")
-    void testToDto() {
+    public void testToOneDto() {
         Item item = new Item();
-        item.setId(2L);
+        item.setId(1L);
+        item.setTitle("test item");
+        item.setState("new");
+        item.setCategory(ECategory.ELECTRONICS);
+        item.setDescription("test description");
+        item.setUserId(1L);
+
         Item offeredItem = new Item();
-        offeredItem.setId(3L);
+        offeredItem.setId(2L);
+        offeredItem.setTitle("test offered item");
+        offeredItem.setState("used");
+        offeredItem.setCategory(ECategory.CLOTHING);
+        offeredItem.setDescription("test offered description");
+        offeredItem.setUserId(2L);
 
         Trade trade = new Trade();
         trade.setId(1L);
-        trade.setItem(item);
-        trade.setOfferedItem(offeredItem);
-        trade.setStatus(EStatus.PENDING);
-        trade.setComment("Test comment");
-        trade.setDate(LocalDateTime.now());
+        trade.setItemId(1L);
+        trade.setOfferedItemId(2L);
+        trade.setStatus(EStatus.ACCEPTED);
+        trade.setComment("test comment");
+        trade.setDate(LocalDateTime.of(2023, 4, 15, 12, 0, 0));
 
-        TradeShowDto tradeShowDto = tradeMapper.toDto(trade);
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
+        when(itemRepository.findById(2L)).thenReturn(Optional.of(offeredItem));
+        when(usersRepository.findById(1L)).thenReturn(Optional.of(new User()));
+        when(usersRepository.findById(2L)).thenReturn(Optional.of(new User()));
 
-        assertEquals(trade.getId(), tradeShowDto.getId());
-        assertEquals(trade.getItem().getId(), tradeShowDto.getItemId());
-        assertEquals(trade.getOfferedItem().getId(), tradeShowDto.getOfferedItemId());
-        assertEquals(trade.getStatus(), tradeShowDto.getStatus());
-        assertEquals(trade.getComment(), tradeShowDto.getComment());
-        assertEquals(trade.getDate(), tradeShowDto.getDate());
+        TradeShowOneDto tradeShowOneDto = tradeMapper.toOneDto(trade);
+
+        assertEquals(trade.getId(), tradeShowOneDto.getId());
+        assertEquals(item.getId(), tradeShowOneDto.getItemId());
+        assertEquals(item.getImage(), tradeShowOneDto.getItemImage());
+        assertEquals(item.getTitle(), tradeShowOneDto.getItemTitle());
+        assertEquals(item.getState(), tradeShowOneDto.getItemState());
+        assertEquals(item.getCategory().getDisplayName(), tradeShowOneDto.getItemCategory());
+        assertEquals(item.getDescription(), tradeShowOneDto.getItemDescription());
     }
-
     @Test
     @DisplayName("Mapping Item to item ID")
     public void testMapToItemId() {
