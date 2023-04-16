@@ -50,9 +50,9 @@ const SignIn = () => {
     data.append('username', formData.username);
     data.append('password', formData.password);
 
-    axios.post('/api/login', JSON.stringify(formData), {
+    axios.post('/api/login', formData, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
     })
     .then(response => {
