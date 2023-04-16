@@ -42,19 +42,18 @@ public class ReviewMapperTest {
     }
     @Test
     public void testReviewToDtoReview() {
-        Review review = new Review();
-        review.setId(1L);
-        review.setReviewerId(1L);
-        review.setReviewedId(2L);
-        review.setGrade(EReviewGrade.GOOD);
-        review.setComment("This is a good review");
-
         User user1 = new User();
         User user2 = new User();
         user1.setId(1L);
         user2.setId(2L);
         user1.setUsername("a");
         user2.setUsername("b");
+        Review review = new Review();
+        review.setId(1L);
+        review.setReviewerId(1L);
+        review.setReviewedId(2L);
+        review.setGrade(EReviewGrade.GOOD);
+        review.setComment("This is a good review");
 
         when(usersRepository.findById(1L)).thenReturn(Optional.of(user1));
         when(usersRepository.findById(2L)).thenReturn(Optional.of(user2));

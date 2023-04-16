@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.authService;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,17 +14,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "User registration form")
 public class RegisterRequest {
 
-    @NotBlank(message = "User name must not be blank")
+    @NotBlank
+    @Schema(description = "Uniq username")
     private String username;
-    @NotBlank(message = "Password must not be blank")
+    @NotBlank
     @Size(min = 8, message = "Password must have at least 8 characters")
     private String password;
-    @NotBlank(message = "Email must not be blank")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Incorrect email address")
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Incorrect email")
+    @Schema(description = "Uniq email")
     private String email;
-    @NotNull(message = "Phone number must not be NULL")
+    @NotNull
     private String phoneNumber;
 
     @Override

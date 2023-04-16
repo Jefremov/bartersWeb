@@ -1,18 +1,12 @@
 package lv.bootcamp.bartersWeb.controllers;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
-import lv.bootcamp.bartersWeb.entities.ECategory;
-import lv.bootcamp.bartersWeb.entities.EItemStatus;
-import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.services.ItemService;
-import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,10 +20,9 @@ public class ItemController {
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
-    @Autowired
-    private ItemMapper itemMapper;
+
     @PostMapping("/add")
-    public ResponseEntity<List<String>> addItem(@ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
+    public ResponseEntity<String> addItem(@ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
         return itemService.addItem(itemCreateDto);
     }
     @GetMapping
@@ -37,20 +30,26 @@ public class ItemController {
         return itemService.getItems();
     }
     @GetMapping("/{itemid}")
-    public ItemDto getItem(@PathVariable("itemid") Long itemid){
+    public ResponseEntity<ItemDto> getItem(@PathVariable("itemid") Long itemid){
         return itemService.getItemById(itemid);
     }
     @PutMapping("/update/{itemid}")
-    public String updateItem(@PathVariable("itemid") Long itemid, @RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("category") String categoryStr, @RequestParam("state") String state, @RequestParam("description") String description, @RequestParam("status") String statusStr, @RequestParam("userId") Long userId) throws IOException {
-        ECategory category = ECategory.valueOf(categoryStr);
-        EItemStatus status = EItemStatus.valueOf(statusStr);
-        itemService.updateItem(itemid,title,state,category,description,file,status,userId);
-        return "Item updated";
+    public ResponseEntity updateItem(@PathVariable("itemid") Long id, @ModelAttribute @Valid ItemCreateDto itemCreateDto) throws IOException {
+        return itemService.updateItem(itemCreateDto, id);
+
     }
     @DeleteMapping("/delete/{itemid}")
-    public String deleteItem(@PathVariable("itemid") Long itemid) {
-        itemService.deleteItemById(itemid);
-        return "Item deleted";
+    public ResponseEntity deleteItem(@PathVariable("itemid") Long itemId) {
+        return itemService.deleteItemById(itemId);
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ItemDto>> getItemsByCategory(@PathVariable String category) {
+        List<ItemDto> items = itemService.getItemsByCategory(category);
+        if(items.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(items);
     }
 
 }

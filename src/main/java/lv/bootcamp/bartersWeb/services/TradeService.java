@@ -3,9 +3,11 @@ package lv.bootcamp.bartersWeb.services;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
+import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
+import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +26,8 @@ public class TradeService {
 
     @Autowired
     private TradeRepository tradesRepository;
+    @Autowired
+    private ItemRepository itemRepository;
     @Autowired
     private TradeMapper tradeMapper;
 
@@ -59,6 +63,10 @@ public class TradeService {
     public String updateTradeStatus(Long id, EStatus status) {
         Trade trade = tradesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trade not found"));
+        if(status==EStatus.ACCEPTED){
+            itemRepository.findById(trade.getItemId()).get().setStatus(EItemStatus.UNAVAILABLE);
+            itemRepository.findById(trade.getOfferedItemId()).get().setStatus(EItemStatus.UNAVAILABLE);
+        }
         trade.setStatus(status);
         tradesRepository.save(trade);
         return "Trade status updated successfully";

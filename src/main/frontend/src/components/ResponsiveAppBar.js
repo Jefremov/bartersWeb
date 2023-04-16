@@ -14,13 +14,14 @@ import Box from '@mui/material/Box';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MailIcon from '@mui/icons-material/Mail';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import { isAuthenticated } from '../auth/isAuthenticated';
 
 const pages = [
   { name: 'Home', href: '/' , icon: <HomeIcon />},
@@ -31,9 +32,15 @@ const pages = [
   { name: 'Admin', href: '/admin', icon: <AdminPanelSettingsIcon />}
 
 ];
-const settings = ['Profile', 'Dashboard', 'Support', 'Logout'];
+const settings = [
+  { name: 'Profile', link: '/' },
+  { name: 'Dashboard', link: '/' },
+  { name: 'Support', link: '/' },
+  { name: 'Logout', link: 'login' }
+];
 
 function ResponsiveAppBar() {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -50,6 +57,11 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   };
 
   return (
@@ -81,7 +93,6 @@ function ResponsiveAppBar() {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
               color="inherit"
             >
               <MenuIcon />
@@ -107,7 +118,6 @@ function ResponsiveAppBar() {
               {pages.map((page, index) => (
                   <MenuItem key={index} onClick={handleCloseNavMenu} style={{display: "flex", alignContent: "center"}}>
                     <Link to={page.href} className='menuItemMobile'>
-                      {console.log(page)}
                       <span className='menuItemIcon'>{page.icon}</span>
                       <span>{page.name}</span>
                     </Link>
@@ -164,8 +174,8 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Tooltip title={isAuthenticated() ? "Open settings" : "Register"} >
+              <IconButton onClick={isAuthenticated() ? handleOpenUserMenu : () => navigate('/login')} sx={{ p: 0 }}>
                 <Avatar>
                   <AccountCircleIcon sx={{ color: "#FFF", fontSize: "44px" }} />
                 </Avatar>
@@ -187,11 +197,22 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+                    setting.name === 'Logout' ? (
+                      <MenuItem key={setting.name}>
+                        <Link to={setting.link} onClick={handleLogout}>
+                          <Typography textAlign="center">{setting.name}</Typography>
+                        </Link>
+                      </MenuItem>
+                    ) : (
+                      <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                        <Link to={setting.link}>
+                          <Typography textAlign="center">{setting.name}</Typography>
+                        </Link>
+                      </MenuItem>
+                    )
+                  ))}
             </Menu>
           </Box>
         </Toolbar>

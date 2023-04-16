@@ -1,5 +1,7 @@
 package lv.bootcamp.bartersWeb.authService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
+@Tag(name = "Home", description = "Users registration and authentication")
 public class AuthenticationController {
 
     private static Logger log = Logger.getLogger(AuthenticationController.class);
@@ -25,6 +28,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
+    @Operation(summary = "User registration and autologin")
     public ResponseEntity<AuthenticationResponse> register(
             @ModelAttribute @Valid RegisterRequest request
     ) throws MethodArgumentNotValidException, IncorrectDataException {
@@ -32,6 +36,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.registerUser(request));
     }
     @PostMapping("/login")
+    @Operation(summary = "User logging")
     public ResponseEntity<AuthenticationResponse> authenticate (
             @ModelAttribute @Valid AuthenticationRequest request
     ) throws MethodArgumentNotValidException, IncorrectDataException {
@@ -40,6 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
+    @Operation
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

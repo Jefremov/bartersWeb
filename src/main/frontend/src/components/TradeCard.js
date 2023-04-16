@@ -3,15 +3,20 @@ import { Card, CardContent, Typography, Button } from '@mui/material';
 import axios from 'axios';
 import Chip from '@mui/material/Chip';
 
+const config = {
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  }
+};
+
 const TradeCard = ({ trade }) => {
   const [status, setStatus] = useState(trade.status);
 
   const handleAccept = () => {
     const confirmed = window.confirm('Are you sure you want to accept this trade?');
     if (confirmed) {
-      axios.put(`/api/trades/update/${trade.id}`, { status: 'ACCEPTED' })
+      axios.put(`/api/trades/update/${trade.id}`, { status: 'ACCEPTED' }, config)
         .then(response => {
-          console.log(response.data);
           setStatus('ACCEPTED');
         })
         .catch(error => {
@@ -23,9 +28,8 @@ const TradeCard = ({ trade }) => {
   const handleDecline = () => {
     const confirmed = window.confirm('Are you sure you want to decline this trade?');
     if (confirmed) {
-      axios.put(`/api/trades/update/${trade.id}`, { status: 'DECLINED' })
+      axios.put(`/api/trades/update/${trade.id}`, { status: 'DECLINED' }, config)
         .then(response => {
-          console.log(response.data);
           setStatus('DECLINED');
         })
         .catch(error => {
@@ -51,7 +55,7 @@ const TradeCard = ({ trade }) => {
   };
 
   return (
-    <Card style={{ width:'300px', margin:'10px'}}>
+    <Card style={{ width:'300px', margin:'10px', border: '1px, solid, gray', padding: '10px'}}>
       <Typography color="textSecondary">
         <code style={{fontSize: '11px', padding: '6px'}}>
           {formatDate(trade.date)} {formatTime(trade.date)}

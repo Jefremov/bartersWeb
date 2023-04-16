@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
@@ -40,6 +41,7 @@ public class TradeController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(hidden = true)
     public void deleteTrade(@PathVariable Long id) {
         tradeService.deleteTrade(id);
     }
