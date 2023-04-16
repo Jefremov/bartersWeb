@@ -2,12 +2,9 @@ package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
-import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
 import lv.bootcamp.bartersWeb.entities.*;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -86,16 +82,12 @@ class TradeMapperTest {
         when(usersRepository.findById(1L)).thenReturn(Optional.of(new User()));
         when(usersRepository.findById(2L)).thenReturn(Optional.of(new User()));
 
-        TradeShowOneDto tradeShowOneDto = tradeMapper.toOneDto(trade);
+        TradeShowDto tradeShowOneDto = tradeMapper.toDto(trade);
 
         assertEquals(trade.getId(), tradeShowOneDto.getId());
         assertEquals(item.getId(), tradeShowOneDto.getItemId());
-        assertEquals(item.getImage(), tradeShowOneDto.getItemImage());
-        assertEquals(item.getTitle(), tradeShowOneDto.getItemTitle());
-        assertEquals(item.getState(), tradeShowOneDto.getItemState());
-        assertEquals(item.getCategory().getDisplayName(), tradeShowOneDto.getItemCategory());
-        assertEquals(item.getDescription(), tradeShowOneDto.getItemDescription());
     }
+
     @Test
     @DisplayName("Mapping Item to item ID")
     public void testMapToItemId() {
