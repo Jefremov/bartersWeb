@@ -3,6 +3,8 @@ import ItemCard from '../components/ItemCard';
 import { Button } from '@mui/material';
 import AddItemForm from '../components/AddItemForm';
 import ECategory from '../enums/ECategory';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 const Items = () => {
   const [allItems, setAllItems] = useState([]);
@@ -46,9 +48,24 @@ const Items = () => {
         <AddItemForm />
       )}
       <br/>
-      {Object.values(ECategory).map(category => (
-        <Button key={category} style={{marginRight: '10px', marginBottom: '10px'}} variant={categoryFilter === category ? "contained" : "outlined"} onClick={() => handleCategoryFilter(category.value)}>{category.displayName}</Button>
-      ))}
+      <h/>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Box display="flex" overflow="auto">
+            {Object.values(ECategory).map((category) => (
+              <Button
+                key={category}
+                style={{ marginRight: '10px', minWidth:'auto', pointer: 'cursor', color: 'black', borderColor: 'gray', fontSize: '11px' }}
+                variant={categoryFilter === category ? 'contained' : 'outlined'}
+                onClick={() => handleCategoryFilter(category.value)}
+              >
+                {category.displayName}
+              </Button>
+            ))}
+          </Box>
+        </Grid>
+      </Grid>
+        <h/>
     </div>
   
     {allItems?.length > 0 &&
