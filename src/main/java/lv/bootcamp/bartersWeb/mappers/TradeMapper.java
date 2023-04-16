@@ -2,7 +2,6 @@ package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
-import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
@@ -23,16 +22,6 @@ public class TradeMapper {
         return trade;
     }
 
-    public TradeShowOneDto toOneDto(Trade trade) {
-        TradeShowOneDto tradeShowDto = new TradeShowOneDto();
-        tradeShowDto.setId(trade.getId());
-        tradeShowDto.setItemId(trade.getItemId());
-        tradeShowDto.setOfferedItemId(trade.getOfferedItemId());
-        tradeShowDto.setStatus(trade.getStatus());
-        tradeShowDto.setComment(trade.getComment());
-        tradeShowDto.setDate(trade.getDate());
-        return tradeShowDto;
-    }
     public TradeShowDto toDto(Trade trade) {
         TradeShowDto tradeShowDto = new TradeShowDto();
         tradeShowDto.setId(trade.getId());

@@ -1,7 +1,7 @@
 package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
-import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
+import lv.bootcamp.bartersWeb.dto.TradeShowDto;
 import lv.bootcamp.bartersWeb.entities.*;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
@@ -82,7 +82,7 @@ class TradeMapperTest {
         when(usersRepository.findById(1L)).thenReturn(Optional.of(new User()));
         when(usersRepository.findById(2L)).thenReturn(Optional.of(new User()));
 
-        TradeShowOneDto tradeShowOneDto = tradeMapper.toOneDto(trade);
+        TradeShowDto tradeShowOneDto = tradeMapper.toDto(trade);
 
         assertEquals(trade.getId(), tradeShowOneDto.getId());
         assertEquals(item.getId(), tradeShowOneDto.getItemId());

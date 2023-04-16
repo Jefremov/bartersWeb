@@ -2,7 +2,6 @@ package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
-import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
@@ -16,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,9 +72,9 @@ public class TradeService {
         return "Trade status updated successfully";
     }
 
-    public ResponseEntity<TradeShowOneDto> getTradeById(Long id) {
-        TradeShowOneDto tradeShowOneDto = tradeMapper.toOneDto(tradesRepository.findById(id)
+    public ResponseEntity<TradeShowDto> getTradeById(Long id) {
+        TradeShowDto tradeShowDto = tradeMapper.toDto(tradesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trade not found")));
-        return ResponseEntity.ok().body(tradeShowOneDto);
+        return ResponseEntity.ok().body(tradeShowDto);
     }
 }
