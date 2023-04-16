@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemServiceTest {
@@ -244,4 +245,30 @@ public class ItemServiceTest {
         assertNull(responseEntity.getBody());
         verify(itemRepository, never()).delete(any(Item.class));
     }
+
+    @Test
+    @DisplayName("Test get items by category")
+    void testGetItemsByCategory() {
+        List<Item> items = new ArrayList<>();
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("Item 1");
+        item1.setCategory(ECategory.CLOTHING);
+        items.add(item1);
+
+        when(itemRepository.findByCategory(ECategory.CLOTHING)).thenReturn(items);
+
+        List<ItemDto> itemDtos = new ArrayList<>();
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("Item 1");
+        itemDto1.setCategory("CLOTHING");
+        itemDtos.add(itemDto1);
+
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+
+        List<ItemDto> result = itemService.getItemsByCategory("CLOTHING");
+        assertThat(result).isEqualTo(itemDtos);
+    }
+
 }

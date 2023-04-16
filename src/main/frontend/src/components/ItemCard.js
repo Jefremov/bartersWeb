@@ -55,8 +55,14 @@ const ItemCard = ({ items }) => {
   
   return (
     <>
+    {!items && (
+        <div style={{ textAlign: 'center' }}>
+          No items in this category, yet. Would you like to add one? 
+        </div>
+    )}
+
     {
-      items.map((itemObj) => (
+      items?.map((itemObj) => (
         <Paper style={{padding: '10px', margin:'10px', width: '350px', height: 'auto', border: '1px, solid, gray'}}>
         <img style={{maxWidth: "100%"}} src={itemObj.image} alt={itemObj.title} />
         <h/>
