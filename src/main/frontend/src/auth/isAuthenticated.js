@@ -18,33 +18,6 @@ export const getLoggedInUser = () => {
   return null;
 };
 
-const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-
-  if (refreshToken) {
-    try {
-      const response = await fetch('/api/refresh-token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        return true;
-      }
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-    }
-  }
-
-  return false;
-};
-
 export const isAuthenticated = () => {
   const token = localStorage.getItem('accessToken');
 
@@ -52,16 +25,9 @@ export const isAuthenticated = () => {
     const isExpired = isTokenExpired(token);
 
     if (isExpired) {
-    /*
-      const refreshed = await refreshAccessToken();
-      if (refreshed) {
-        return true;
-      } else {
-      */
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         return false;
-      //}
     }
 
     return true;
