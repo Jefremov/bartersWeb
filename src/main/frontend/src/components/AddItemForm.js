@@ -46,6 +46,7 @@ const AddItemForm = () => {
     })
       .then(response => {
         alert("Item successfully added!");
+        window.location.reload();
       })
       .catch(error => {
         alert("ERROR");
