@@ -61,7 +61,6 @@ function ResponsiveAppBar() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
   };
 
   return (
