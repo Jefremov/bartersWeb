@@ -51,18 +51,16 @@ const ItemCard = ({ items }) => {
     .catch(error => {
       console.error('Error creating trade:', error);
     });
+    };
   
-    console.log('offeredItemId', offeredItemId);
-    console.log('selected item', selectedItem.id);
-    console.log('text', text);
-  };
-  
-
   return (
     <>
     {
       items.map((itemObj) => (
-        <Paper style={{padding: '6px', margin:'10px', width: '350px' }}>
+        <Paper style={{padding: '10px', margin:'10px', width: '350px', height: 'auto', border: '1px, solid, gray'}}>
+        <img style={{maxWidth: "100%"}} src={itemObj.image} alt={itemObj.title} />
+        <h/>
+
         <Typography variant="h6">
           {itemObj.title}
         </Typography>
@@ -101,7 +99,7 @@ const ItemCard = ({ items }) => {
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <section>
                 <b>{itemObj.title}</b>
-                <img src={itemObj.image} alt={itemObj.title} style={{width: '100%'}} />
+                <img style={{width: '100%'}} src={itemObj.image} alt={itemObj.title} style={{width: '100%'}} />
               </section>
 
               <h3>TRADE FOR</h3>
@@ -122,7 +120,6 @@ const ItemCard = ({ items }) => {
               <h6>MESSAGE:</h6>
               <Textarea
                 placeholder="Type in here…"
-                defaultValue="..."
                 minRows={6}
                 maxRows={6}
                 onChange={(event) => setText(event.target.value)}
@@ -132,8 +129,8 @@ const ItemCard = ({ items }) => {
             </FormControl>
 
               <div style={{width:"100%", textAlign: "right", marginTop: '6px'}}>
-                <Button size="small" variant="contained" onClick={handleCreateTradeFormSubmit}>SUBMIT</Button>
-                <Button size="small" variant="contained" onClick={handleCreateTradeClose}>CANCEL</Button>
+                <Button style={{marginRight: '20px'}} size="small" variant="contained" onClick={handleCreateTradeFormSubmit}>SUBMIT</Button>
+                <Button size="small" variant="outlined" onClick={handleCreateTradeClose}>CANCEL</Button>
               </div>
             </Box>
           </Modal>

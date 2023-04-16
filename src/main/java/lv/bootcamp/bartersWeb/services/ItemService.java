@@ -1,10 +1,10 @@
 package lv.bootcamp.bartersWeb.services;
 
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
-import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
+import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
@@ -17,10 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final TradeRepository tradeRepository;
     private final ItemMapper itemMapper;
-    private final Path root = Paths.get("src/main/resources/itemimages");
+    private final Path root = Paths.get("src", "main", "resources", "static", "images");
+
 
     @Autowired
     public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper) {
@@ -45,7 +47,7 @@ public class ItemService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
             String timestamp = now.format(formatter);
             String fileName = timestamp + file.getOriginalFilename();
-            String filePath = root.toString() + "/" + fileName;
+            String filePath = "/images/" + fileName;
             Files.copy(file.getInputStream(), this.root.resolve(fileName));
             Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, filePath);
             itemRepository.save(item);
