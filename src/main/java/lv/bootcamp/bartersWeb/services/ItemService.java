@@ -57,7 +57,8 @@ public class ItemService {
     }
 
     public List<ItemDto> getItems() {
-        List<Item> items = itemRepository.findAll();
+        List<Item> items = itemRepository.findAllByStatus(EItemStatus.AVAILABLE);
+        if(items.isEmpty()) return null;
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 

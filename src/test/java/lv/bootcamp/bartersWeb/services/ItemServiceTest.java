@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -94,36 +95,51 @@ public class ItemServiceTest {
 
     }
     @Test
-    @DisplayName("Should return all items in database")
-    public void shouldReturnAllItems() {
+    @DisplayName("Should return all available items in the database")
+    public void shouldReturnAllAvailableItems() {
         Item item1 = new Item();
         item1.setId(1L);
         item1.setTitle("Item 1");
+        item1.setStatus(EItemStatus.AVAILABLE);
+
         Item item2 = new Item();
         item2.setId(2L);
         item2.setTitle("Item 2");
+        item2.setStatus(EItemStatus.AVAILABLE);
+
         List<Item> items = new ArrayList<>();
         items.add(item1);
         items.add(item2);
 
-        when(itemRepository.findAll()).thenReturn(items);
+        when(itemRepository.findAllByStatus(EItemStatus.AVAILABLE)).thenReturn(items);
 
         ItemDto itemDto1 = new ItemDto();
         itemDto1.setId(1L);
         itemDto1.setTitle("Item 1");
+
         ItemDto itemDto2 = new ItemDto();
         itemDto2.setId(2L);
         itemDto2.setTitle("Item 2");
+
         List<ItemDto> expectedItemDtos = new ArrayList<>();
         expectedItemDtos.add(itemDto1);
         expectedItemDtos.add(itemDto2);
 
-        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
-        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+        when(itemMapper.itemToDto(ArgumentMatchers.any(Item.class))).thenReturn(itemDto1, itemDto2);
 
         List<ItemDto> actualItemDtos = itemService.getItems();
 
         assertEquals(expectedItemDtos, actualItemDtos);
+    }
+    @Test
+    @DisplayName("Should return null when no items are available")
+    public void shouldReturnNullWhenNoItemsAvailable() {
+        List<Item> items = new ArrayList<>();
+        when(itemRepository.findAllByStatus(EItemStatus.AVAILABLE)).thenReturn(items);
+
+        List<ItemDto> actualItemDtos = itemService.getItems();
+
+        assertNull(actualItemDtos);
     }
     @Test
     @DisplayName("Should return item with specified id")
