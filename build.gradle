@@ -70,11 +70,9 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 	implementation 'org.springframework.security:spring-security-test'
 
-	//Swagger
+	//docs
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
 
-//	implementation 'org.springdoc:springdoc-openapi-core:1.5.11'
-//	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 
 }
 
