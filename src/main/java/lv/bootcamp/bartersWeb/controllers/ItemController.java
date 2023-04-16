@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.services.ItemService;
-import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +41,15 @@ public class ItemController {
     @DeleteMapping("/delete/{itemid}")
     public ResponseEntity deleteItem(@PathVariable("itemid") Long itemId) {
         return itemService.deleteItemById(itemId);
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<ItemDto>> getItemsByCategory(@PathVariable String category) {
+        List<ItemDto> items = itemService.getItemsByCategory(category);
+        if(items.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(items);
     }
 
 }

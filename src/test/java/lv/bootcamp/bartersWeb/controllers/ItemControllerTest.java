@@ -14,12 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemControllerTest {
@@ -182,4 +183,32 @@ public class ItemControllerTest {
         ResponseEntity response = itemController.deleteItem(1L);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
+
+    @Test
+    @DisplayName("Test get items by category")
+    void testGetItemsByCategory() {
+        List<ItemDto> items = new ArrayList<>();
+        ItemDto item1 = new ItemDto();
+        item1.setId(1L);
+        item1.setTitle("Item 1");
+        item1.setCategory("CLOTHING");
+        items.add(item1);
+
+        when(itemService.getItemsByCategory("CLOTHING")).thenReturn(items);
+
+        ResponseEntity<List<ItemDto>> response = itemController.getItemsByCategory("CLOTHING");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertThat(response.getBody()).isNotNull().isEqualTo(items);
+    }
+
+    @Test
+    @DisplayName("Test get items by non-existing category")
+    void testGetItemsByNonExistingCategory() {
+        when(itemService.getItemsByCategory("FOOD")).thenReturn(new ArrayList<>());
+
+        ResponseEntity<List<ItemDto>> response = itemController.getItemsByCategory("FOOD");
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
 }

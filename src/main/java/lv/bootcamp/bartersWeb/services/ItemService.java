@@ -108,4 +108,11 @@ public class ItemService {
         }
         else return ResponseEntity.notFound().build();
     }
+
+    public List<ItemDto> getItemsByCategory(String category) {
+        ECategory categoryEnum = ECategory.valueOf(category.toUpperCase());
+        List<Item> items = itemRepository.findByCategory(categoryEnum);
+        return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
+
 }
