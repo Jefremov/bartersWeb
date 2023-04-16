@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.TradeDto;
 import lv.bootcamp.bartersWeb.dto.TradeShowDto;
-import lv.bootcamp.bartersWeb.dto.TradeShowOneDto;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
 import lv.bootcamp.bartersWeb.services.TradeService;
@@ -31,7 +30,7 @@ public class TradeController {
         return tradeService.getAllTrades();
     }
     @GetMapping("/{id}")
-    public ResponseEntity<TradeShowOneDto> oneTrade(@PathVariable Long id) {
+    public ResponseEntity<TradeShowDto> oneTrade(@PathVariable Long id) {
         return tradeService.getTradeById(id);
     }
 

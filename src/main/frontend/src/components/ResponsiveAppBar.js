@@ -61,7 +61,6 @@ function ResponsiveAppBar() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
   };
 
   return (
@@ -201,13 +200,13 @@ function ResponsiveAppBar() {
               {settings.map((setting) => (
                     setting.name === 'Logout' ? (
                       <MenuItem key={setting.name}>
-                        <Link to={setting.link} onClick={handleLogout}>
+                        <Link to={setting.link} onClick={handleLogout} style={{ textDecoration: 'none', color: '#000' }}>
                           <Typography textAlign="center">{setting.name}</Typography>
                         </Link>
                       </MenuItem>
                     ) : (
                       <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                        <Link to={setting.link}>
+                        <Link to={setting.link} style={{ textDecoration: 'none', color: '#000' }}>
                           <Typography textAlign="center">{setting.name}</Typography>
                         </Link>
                       </MenuItem>

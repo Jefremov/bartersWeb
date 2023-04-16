@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { setAuthToken } from '../auth/setAuthToken';
 
 const Copyright = (props) => {
   return (
@@ -50,15 +51,15 @@ const SignIn = () => {
     data.append('username', formData.username);
     data.append('password', formData.password);
 
-    axios.post('/api/login', JSON.stringify(formData), {
+    axios.post('/api/login', formData, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
     })
     .then(response => {
         alert("Successfully logged in!");
         localStorage.setItem('accessToken', response.data.access_token);
-        localStorage.setItem('refreshToken', response.data.refresh_token);
+        setAuthToken(response.data.access_token);
         navigate('/');
     })
     .catch(error => {

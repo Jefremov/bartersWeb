@@ -6,13 +6,11 @@ import lv.bootcamp.bartersWeb.entities.EStatus;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.TradeMapper;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,12 +75,10 @@ public class TradeServiceTest {
     @Test
     @DisplayName("Should handle an exception when creating a trade")
     public void shouldHandleExceptionWhenCreatingTrade() {
-        // Arrange
         TradeDto tradeDto = new TradeDto();
         when(tradeMapper.toEntity(tradeDto)).thenReturn(new Trade());
         doThrow(new RuntimeException()).when(tradeRepository).save(any(Trade.class));
 
-        // Act and Assert
         assertThrows(RuntimeException.class, () -> tradeService.createTrade(tradeDto));
 
         verify(tradeMapper, times(1)).toEntity(tradeDto);

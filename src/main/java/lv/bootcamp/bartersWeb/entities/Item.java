@@ -11,8 +11,7 @@ import java.time.LocalDateTime;
 public class Item {
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name="item_sequence",sequenceName = "item_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "title")
     private String title;
