@@ -1,5 +1,9 @@
 package lv.bootcamp.bartersWeb.entities;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.*;
 import lv.bootcamp.bartersWeb.authService.token.Token;
 
@@ -21,11 +25,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username")
 })
+@Schema(hidden = true)
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @Hidden
     private Long id;
 
     @Column(name = "username")
@@ -35,6 +41,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "role")
+    @Hidden
     private ERole role;
 
     @Column(name = "description")
@@ -53,6 +60,7 @@ public class User implements UserDetails {
     private List<Item> items;
 
     @OneToMany(mappedBy = "user")
+    @Hidden
     private List<Token> tokens;
 
     @Override

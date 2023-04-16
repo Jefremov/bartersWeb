@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
@@ -53,6 +54,7 @@ public class ReviewController {
     }
 
     @DeleteMapping(value = "/{reviewid}")
+    @Operation(hidden = true)
     public ResponseEntity deleteById(@PathVariable("reviewid") Long reviewId){
         return reviewService.deleteById(reviewId);
     }
