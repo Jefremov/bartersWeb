@@ -11,31 +11,7 @@ public class TradeShowOneDto {
 
     private Long itemId;
 
-    private String itemTitle;
-
-    private String itemDescription;
-
-    private String itemState;
-
-    private String itemCategory;
-
-    private String itemUsername;
-
-    private String itemImage;
-
     private Long offeredItemId;
-
-    private String offeredItemTitle;
-
-    private String offeredItemDescription;
-
-    private String offeredItemState;
-
-    private String offeredItemCategory;
-
-    private String offeredItemUsername;
-
-    private String offeredItemImage;
 
     private String comment;
 

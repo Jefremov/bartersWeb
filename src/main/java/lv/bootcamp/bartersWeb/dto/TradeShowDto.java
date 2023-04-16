@@ -10,11 +10,8 @@ public class TradeShowDto {
     private Long id;
 
     private Long itemId;
-    private String item;
 
     private Long offeredItemId;
-
-    private String offeredItem;
 
     private String comment;
 
