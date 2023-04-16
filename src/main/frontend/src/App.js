@@ -10,8 +10,13 @@ import AdminPage from './pages/AdminPage';
 import UsersPage from './pages/UsersPage';
 import LoginPage from './pages/LoginPage';
 import PageNotFound from './pages/PageNotFound';
+import { setAuthToken } from './auth/setAuthToken';
 
 function App() {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    setAuthToken(token);
+  }
   return (
       <Router>
       <ResponsiveAppBar/>

@@ -52,9 +52,9 @@ const SignUp = () => {
     data.append('phoneNumber', formData.phoneNumber);
     data.append('password', formData.password);
 
-    axios.post('/api/register', JSON.stringify(formData), {
+    axios.post('/api/register', formData, {
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
         },
     })
     .then(response => {
