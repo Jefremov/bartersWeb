@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.authService;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequest {
 
-    @NotEmpty
+    @NotEmpty (message = "User name must not be blank")
     private String username;
-    @NotEmpty
-    String password;
+    @NotEmpty (message = "Password name must not be blank")
+    private String password;
 
     @Override
     public String toString() {
