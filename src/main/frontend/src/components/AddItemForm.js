@@ -9,10 +9,9 @@ const AddItemForm = () => {
     description: '',
     state: '',
     file: null,
-    category: '',
+    category: 'FOODITEMS',
     username: getLoggedInUser()
   });
-  console.log(formData);
 
   const handleChange = (event) => {
     setFormData({

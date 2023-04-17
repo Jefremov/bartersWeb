@@ -50,8 +50,7 @@ const Items = () => {
         console.log(error);
       }
     };
-
-    fetchData();
+    if (!(isAuthenticated() && location.pathname == '/my-items')) { fetchData(); }
   }, [searchQuery]);
 
   const handleShowModalClick = () => {
@@ -81,10 +80,6 @@ const Items = () => {
     setSearchQuery('');
   };
 
-
-  console.log(allItems);
-
-  console.log(searchQuery)
 
   return (
     <>
