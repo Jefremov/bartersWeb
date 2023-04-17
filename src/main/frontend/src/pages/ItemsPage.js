@@ -50,8 +50,8 @@ const Items = () => {
         console.log(error);
       }
     };
-    if (!(isAuthenticated() && location.pathname == '/my-items')) { fetchData(); }
-  }, [searchQuery]);
+    if (!(isAuthenticated() && location.pathname === '/my-items')) { fetchData(); }
+  }, [searchQuery, location.pathname]);
 
   const handleShowModalClick = () => {
     setShowModal(true);
@@ -89,7 +89,10 @@ const Items = () => {
       <Button style={{marginBottom: '10px'}} variant="contained" color="primary" onClick={handleShowModalClick}>Create Item</Button>
       <br/>
       {showModal && (
-        <AddItemForm />
+        <>
+          <AddItemForm />
+          <Button style={{marginBottom: '10px'}} variant="outlined" color="error" onClick={() => setShowModal(false)}>X</Button>
+        </>
       )}
       <br/>
     </>
