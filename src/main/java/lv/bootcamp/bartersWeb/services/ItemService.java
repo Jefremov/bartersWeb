@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.services;
 
+import com.amazonaws.services.s3.AmazonS3;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
@@ -10,19 +11,18 @@ import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,26 +30,28 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final TradeRepository tradeRepository;
     private final ItemMapper itemMapper;
-    private final Path root = Paths.get("src", "main", "resources", "static", "images");
-
+    private AmazonS3 s3Client;
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
+    @Value("${aws.s3.url}")
+    private String url;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper) {
+    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper, AmazonS3 s3Client) {
         this.itemRepository = itemRepository;
         this.tradeRepository = tradeRepository;
         this.itemMapper = itemMapper;
+        this.s3Client = s3Client;
     }
 
     public ResponseEntity<String> addItem(ItemCreateDto itemCreateDto) throws IOException  {
         if (itemCreateDto.getFile().getSize()!=0) {
-            MultipartFile file = itemCreateDto.getFile();
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-            String timestamp = now.format(formatter);
-            String fileName = timestamp + file.getOriginalFilename();
-            String filePath = "/images/" + fileName;
-            Files.copy(file.getInputStream(), this.root.resolve(fileName));
-            Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, filePath);
+            String fileName = System.currentTimeMillis()+"_"+itemCreateDto.getFile().getOriginalFilename();
+            File file = convertMultiPartFileToFile(itemCreateDto.getFile());
+            s3Client.putObject(bucketName,fileName, file);
+            file.delete();
+            String imagePath=this.url+fileName;
+            Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, imagePath);
             itemRepository.save(item);
             return ResponseEntity.ok("Added");
         }
@@ -75,12 +77,12 @@ public class ItemService {
         if(itemRepository.existsById(id)) {
             Item item = itemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found"));;
             if(itemCreateDto.isImageChange()) {
-                LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-                String timestamp = now.format(formatter);
-                String fileName = timestamp + itemCreateDto.getFile().getOriginalFilename();
-                Files.copy(itemCreateDto.getFile().getInputStream(), this.root.resolve(fileName));
-                item.setImage(root.toString() + "/" + fileName);
+                String fileName = System.currentTimeMillis()+"_"+itemCreateDto.getFile().getOriginalFilename();
+                File file = convertMultiPartFileToFile(itemCreateDto.getFile());
+                s3Client.putObject(bucketName,fileName, file);
+                file.delete();
+                String imagePath=this.url+fileName;
+                item.setImage(imagePath);
             }
             item.setTitle(itemCreateDto.getTitle());
             item.setState(itemCreateDto.getState());
@@ -122,6 +124,13 @@ public class ItemService {
             return null;
         }
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
+    private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
+        File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e){return null;}
+        return convertedFile;
     }
 
 }
