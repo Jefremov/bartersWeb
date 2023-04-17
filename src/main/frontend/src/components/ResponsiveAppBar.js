@@ -12,8 +12,6 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Box from '@mui/material/Box';
 import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MailIcon from '@mui/icons-material/Mail';
 import { Link, useNavigate } from 'react-router-dom';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
@@ -21,7 +19,10 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import { isAuthenticated } from '../auth/isAuthenticated';
+import { isAuthenticated, getLoggedInUser } from "../auth/isAuthenticated";
+import ArticleIcon from '@mui/icons-material/Article';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Divider } from '@mui/material';
 
 const pages = [
   { name: 'Home', href: '/' , icon: <HomeIcon />},
@@ -93,6 +94,7 @@ function ResponsiveAppBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               color="inherit"
+              onClick={handleOpenNavMenu}
             >
               <MenuIcon />
             </IconButton>
@@ -127,7 +129,7 @@ function ResponsiveAppBar() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              
+
             </IconButton>
             </Menu>
           </Box>
@@ -141,7 +143,7 @@ function ResponsiveAppBar() {
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontWeight: 300,
-              letterSpacing: '.5rem',
+              letterSpacing: '.2rem',
               color: 'inherit',
               textDecoration: 'none',
               fontFamily: 'Verdana, sans-serif'
@@ -162,17 +164,16 @@ function ResponsiveAppBar() {
 
           <Box>
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <ArticleIcon/>
           </Badge>
 
-          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0 }} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding:' 20px'}}>
+            <div style={{marginRight: '6px'}}>
+              {isAuthenticated() ? `${getLoggedInUser()}` : " Guest"}
+            </div>
+
             <Tooltip title={isAuthenticated() ? "Open settings" : "Register"} >
               <IconButton onClick={isAuthenticated() ? handleOpenUserMenu : () => navigate('/login')} sx={{ p: 0 }}>
                 <Avatar>
@@ -181,7 +182,7 @@ function ResponsiveAppBar() {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: '45px', padding: '10px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -196,22 +197,27 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-
-              {settings.map((setting) => (
-                    setting.name === 'Logout' ? (
-                      <MenuItem key={setting.name}>
-                        <Link to={setting.link} onClick={handleLogout} style={{ textDecoration: 'none', color: '#000' }}>
-                          <Typography textAlign="center">{setting.name}</Typography>
-                        </Link>
-                      </MenuItem>
-                    ) : (
-                      <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                        <Link to={setting.link} style={{ textDecoration: 'none', color: '#000' }}>
-                          <Typography textAlign="center">{setting.name}</Typography>
-                        </Link>
-                      </MenuItem>
-                    )
-                  ))}
+            <div style={{padding: '16px'}}>
+              {isAuthenticated() && (<div>Welcome back, <br/><b>{getLoggedInUser()}</b>!</div>)}
+            </div>
+            {settings.map((setting) => (
+                  setting.name === 'Logout' ? (
+                    <MenuItem key={setting.name}>
+                      <Divider/>
+                      <Link to={setting.link} onClick={handleLogout} style={{ textDecoration: 'none', color: '#000' }}>
+                        <Typography textAlign="center" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <LogoutIcon />  {setting.name}
+                          </Typography>
+                      </Link>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                      <Link to={setting.link} style={{ textDecoration: 'none', color: '#000' }}>
+                        <Typography textAlign="center">{setting.name}</Typography>
+                      </Link>
+                    </MenuItem>
+                  )
+                ))}
             </Menu>
           </Box>
         </Toolbar>
