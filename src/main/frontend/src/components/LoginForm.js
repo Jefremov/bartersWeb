@@ -16,19 +16,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { setAuthToken } from '../auth/setAuthToken';
 
-const Copyright = (props) => {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        BARTERS
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const theme = createTheme();
 
 const SignIn = () => {
@@ -57,13 +44,12 @@ const SignIn = () => {
         },
     })
     .then(response => {
-        alert("Successfully logged in!");
         localStorage.setItem('accessToken', response.data.access_token);
         setAuthToken(response.data.access_token);
         navigate('/');
     })
     .catch(error => {
-        alert(error.response.data.message);
+        console.log(error.response.data)
     });
   };
 
@@ -131,7 +117,7 @@ const SignIn = () => {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   );
