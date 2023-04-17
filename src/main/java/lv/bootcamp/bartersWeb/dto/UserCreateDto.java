@@ -16,12 +16,14 @@ public class UserCreateDto {
 
     @NotBlank
     private String username;
+
     @NotBlank
     @Size(min = 8, message = "Password must have at least 8 characters")
     private String password;
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Incorrect email")
 
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            message = "Incorrect email")
     private String email;
     @NotNull
     @Pattern(regexp = "^([+][3][7][0-2]\\d{8})$",
