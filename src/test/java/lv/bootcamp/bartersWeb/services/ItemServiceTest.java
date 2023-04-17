@@ -25,15 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemServiceTest {
@@ -269,6 +267,44 @@ public class ItemServiceTest {
 
         List<ItemDto> result = itemService.getItemsByCategory("CLOTHING");
         assertThat(result).isEqualTo(itemDtos);
+    }
+
+    @Test
+    public void testSearchItemsByTitle_withMatchingTitle() {
+        String title = "book";
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("Book of Knowledge");
+        item1.setStatus(EItemStatus.AVAILABLE);
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setTitle("Harry Potter book");
+        item2.setStatus(EItemStatus.AVAILABLE);
+        List<Item> items = Arrays.asList(item1, item2);
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("Book of Knowledge");
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("Harry Potter book");
+        List<ItemDto> expected = Arrays.asList(itemDto1, itemDto2);
+        when(itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE)).thenReturn(items);
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+
+        List<ItemDto> actual = itemService.searchItemsByTitle(title);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSearchItemsByTitle_withNonMatchingTitle() {
+        String title = "car";
+        when(itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE)).thenReturn(Collections.emptyList());
+
+        List<ItemDto> actual = itemService.searchItemsByTitle(title);
+
+        assertNull(actual);
     }
 
 }
