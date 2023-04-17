@@ -11,16 +11,29 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useLocation } from 'react-router-dom';
+import { isAuthenticated, getLoggedInUser } from '../auth/isAuthenticated';
 
 const Items = () => {
   const [allItems, setAllItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const location = useLocation();
+
+  const handleShowModalClick = () => {
+    setShowModal(true);
+  };
+
+  const handleCategoryFilter = (category) => {
+    setCategoryFilter(category);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = categoryFilter ? `/api/items/category/${categoryFilter}` : '/api/items';
+      const url = isAuthenticated() && location.pathname === '/my-items'
+        ? `/api/items/user/${getLoggedInUser()}`
+        : (categoryFilter ? `/api/items/category/${categoryFilter}` : '/api/items');
       try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -34,7 +47,7 @@ const Items = () => {
       }
     };
     fetchData();
-  }, [categoryFilter]);
+  }, [categoryFilter, location.pathname]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,6 +97,8 @@ const Items = () => {
   return (
     <>
     <div style={{textAlign: 'center', marginBottom: '20px'}}>
+    {(isAuthenticated() && location.pathname === '/my-items') ? (
+    <>
       <Button style={{marginBottom: '10px'}} variant="contained" color="primary" onClick={handleShowModalClick}>Create Item</Button>
       <br/>
       {showModal && (
@@ -106,6 +121,9 @@ const Items = () => {
         </IconButton>
       </Paper>
       <h/>
+    </>
+      ) : (
+    <>
       <br/>
       <Grid container spacing={1}>
         <Grid item xs={12}>
@@ -124,6 +142,8 @@ const Items = () => {
         </Grid>
       </Grid>
         <h/>
+        </>
+        )}
     </div>
     <Divider />
     <br/>
@@ -131,11 +151,11 @@ const Items = () => {
         <div style={{textAlign: 'center'}}>
           <Button color='error' type='button' onClick={clearFilter} startIcon={<ClearIcon />}>
             Clear Filters
-          </Button>      
+          </Button>
         </div>
       )}
 
-  
+
     {allItems?.length > 0 &&
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
         <ItemCard items={allItems} />

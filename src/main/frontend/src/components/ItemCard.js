@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Textarea from '@mui/material/TextareaAutosize';
 import axios from 'axios';
+import { isAuthenticated, getLoggedInUser } from '../auth/isAuthenticated';
+import { useLocation } from 'react-router-dom';
 
 const ItemCard = ({ items }) => {
   const [showMoreInfoDialog, setShowMoreInfoDialog] = useState(false);
@@ -12,6 +14,7 @@ const ItemCard = ({ items }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [offeredItemId, setOfferedItemId] = React.useState('');
   const [text, setText] = React.useState('');
+  const location = useLocation();
 
   const handleShowMoreInfoClick = (itemObj) => {
     setSelectedItem(itemObj);
@@ -84,9 +87,20 @@ const ItemCard = ({ items }) => {
           DETAILS
         </Button>
 
+        {(isAuthenticated() && location.pathname === '/my-items') ? (
+        <>
+        <Button size="small" variant="contained" color="secondary" onClick={() => alert("add delete function")}>
+          DELETE
+        </Button>
+        <Button size="small" variant="contained" color="info" onClick={() => alert("add update function")}>
+          UPDATE
+        </Button>
+        </>
+        ) : (
         <Button size="small" variant="contained" color="info" onClick={() => handleCreateTradeClick(itemObj)}>
           TRADE
         </Button>
+        )}
 
         </div>
 
