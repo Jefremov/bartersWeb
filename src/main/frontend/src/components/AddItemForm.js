@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ECategory from '../enums/ECategory';
+import { getLoggedInUser } from '../auth/isAuthenticated';
 
 const AddItemForm = () => {
   const [formData, setFormData] = useState({
@@ -8,9 +9,8 @@ const AddItemForm = () => {
     description: '',
     state: '',
     file: null,
-    category: '',
-    userId: '1',
-    status: 'AVAILABLE',
+    category: 'FOODITEMS',
+    username: getLoggedInUser()
   });
 
   const handleChange = (event) => {
@@ -36,8 +36,7 @@ const AddItemForm = () => {
     data.append('state', formData.state);
     data.append('file', formData.file);
     data.append('category', formData.category);
-    data.append('userId', formData.userId);
-    data.append('status', formData.status);
+    data.append('username', formData.username);
 
     axios.post('/api/items/add', data, {
       headers: {

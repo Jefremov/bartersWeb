@@ -51,6 +51,14 @@ public class ItemController {
         }
         return ResponseEntity.ok(items);
     }
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<ItemDto>> getItemsByUser(@PathVariable String username) {
+        List<ItemDto> items = itemService.getItemsByUser(username);
+        if(items.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(items);
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemDto>> searchItems(@RequestParam String title) {

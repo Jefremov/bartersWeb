@@ -8,8 +8,11 @@ import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
+import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
+import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final TradeRepository tradeRepository;
+    private final UsersRepository userRepository;
     private final ItemMapper itemMapper;
     private AmazonS3 s3Client;
     @Value("${aws.s3.bucket}")
@@ -37,10 +41,11 @@ public class ItemService {
     private String url;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper, AmazonS3 s3Client) {
+    public ItemService(ItemRepository itemRepository, TradeRepository tradeRepository, ItemMapper itemMapper, AmazonS3 s3Client, UsersRepository userRepository) {
         this.itemRepository = itemRepository;
         this.tradeRepository = tradeRepository;
         this.itemMapper = itemMapper;
+        this.userRepository = userRepository;
         this.s3Client = s3Client;
     }
 
@@ -51,7 +56,7 @@ public class ItemService {
             s3Client.putObject(bucketName,fileName, file);
             file.delete();
             String imagePath=this.url+fileName;
-            Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, imagePath);
+            Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, imagePath, itemCreateDto.getUsername());
             itemRepository.save(item);
             return ResponseEntity.ok("Added");
         }
@@ -115,6 +120,11 @@ public class ItemService {
     public List<ItemDto> getItemsByCategory(String category) {
         ECategory categoryEnum = ECategory.valueOf(category.toUpperCase());
         List<Item> items = itemRepository.findByCategory(categoryEnum);
+        return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
+    public List<ItemDto> getItemsByUser(String username) {
+        Long userId = userRepository.findUserByUsername(username).getId();
+        List<Item> items = itemRepository.findByUserId(userId);
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 

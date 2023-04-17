@@ -26,6 +26,6 @@ public class ItemCreateDto {
 
     private String status;
 
-    private Long userId;
+    private String username;
 
 }

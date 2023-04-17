@@ -28,6 +28,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/items" element={<ItemsPage />} />
+        {isAuthenticated() && <Route path="/my-items" element={<ItemsPage />} />}
         {isAuthenticated() && <Route path="/trades" element={<TradesPage />} />}
         {isAuthenticated() && <Route path="/users" element={<UsersPage />} />}
         {isAuthenticated() && <Route path="/reviews" element={<ReviewsPage />} />}
