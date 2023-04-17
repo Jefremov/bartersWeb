@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.authService;
 
+import jakarta.mail.MessagingException;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,7 @@ import lv.bootcamp.bartersWeb.authService.token.TokenRepository;
 import lv.bootcamp.bartersWeb.entities.ERole;
 import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
+import lv.bootcamp.bartersWeb.services.MailSenderService;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +43,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    private final MailSenderService mailSenderService;
+
     public AuthenticationResponse registerUser(RegisterRequest request) throws IncorrectDataException {
         registerUserExistenceCheck(request);
         var user = User.builder()
@@ -55,6 +59,12 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
+//        try {
+//            mailSenderService.sendEmail(request.getEmail(), "Registration", "You are register");
+//        } catch (MessagingException ex){
+//            System.out.println(ex);
+//        }
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
