@@ -21,14 +21,6 @@ const Items = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
-  const handleShowModalClick = () => {
-    setShowModal(true);
-  };
-
-  const handleCategoryFilter = (category) => {
-    setCategoryFilter(category);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const url = isAuthenticated() && location.pathname === '/my-items'
@@ -105,6 +97,9 @@ const Items = () => {
         <AddItemForm />
       )}
       <br/>
+    </>
+      ) : (
+    <>
       <Paper component="form">
         <InputBase
           placeholder="Search items by title"
@@ -121,9 +116,6 @@ const Items = () => {
         </IconButton>
       </Paper>
       <h/>
-    </>
-      ) : (
-    <>
       <br/>
       <Grid container spacing={1}>
         <Grid item xs={12}>
@@ -147,7 +139,7 @@ const Items = () => {
     </div>
     <Divider />
     <br/>
-    {(searchQuery || categoryFilter) && (
+    {((searchQuery || categoryFilter) && !(isAuthenticated() && location.pathname === '/my-items')) && (
         <div style={{textAlign: 'center'}}>
           <Button color='error' type='button' onClick={clearFilter} startIcon={<ClearIcon />}>
             Clear Filters
