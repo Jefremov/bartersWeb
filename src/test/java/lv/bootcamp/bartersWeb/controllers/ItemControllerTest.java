@@ -211,4 +211,33 @@ public class ItemControllerTest {
         assertNull(response.getBody());
     }
 
+    @Test
+    public void testSearchItems_withMatchingTitle() {
+        String title = "book";
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("Book of Knowledge");
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("Harry Potter book");
+        List<ItemDto> expected = Arrays.asList(itemDto1, itemDto2);
+        when(itemService.searchItemsByTitle(title)).thenReturn(expected);
+
+        ResponseEntity<List<ItemDto>> response = itemController.searchItems(title);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expected, response.getBody());
+    }
+
+    @Test
+    public void testSearchItems_withNonMatchingTitle() {
+        String title = "car";
+        when(itemService.searchItemsByTitle(title)).thenReturn(null);
+
+        ResponseEntity<List<ItemDto>> response = itemController.searchItems(title);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
 }

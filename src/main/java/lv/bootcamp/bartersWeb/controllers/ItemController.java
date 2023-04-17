@@ -52,5 +52,14 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemDto>> searchItems(@RequestParam String title) {
+        List<ItemDto> items = itemService.searchItemsByTitle(title);
+        if (items == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(items);
+    }
+
 }
 

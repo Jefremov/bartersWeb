@@ -116,4 +116,12 @@ public class ItemService {
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 
+    public List<ItemDto> searchItemsByTitle(String title) {
+        List<Item> items = itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE);
+        if (items.isEmpty()) {
+            return null;
+        }
+        return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
+
 }
