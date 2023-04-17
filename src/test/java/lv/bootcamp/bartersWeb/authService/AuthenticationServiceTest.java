@@ -11,6 +11,7 @@ import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,9 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-//@RunWith(MockitoJUnitRunner.class)
 class AuthenticationServiceTest {
 
     @Mock
@@ -60,6 +62,9 @@ class AuthenticationServiceTest {
 
     @InjectMocks
     private AuthenticationService authenticationService;
+
+    @Mock
+    private AuthenticationManager authenticationManager;
 
     @Test
     public void testRegisterUser() throws IncorrectDataException {
@@ -98,7 +103,79 @@ class AuthenticationServiceTest {
         Mockito.verify(tokenRepository, Mockito.times(1)).save(Mockito.any(Token.class));
     }
 
+    @Test
+    public void testAuthenticate() throws MethodArgumentNotValidException, IncorrectDataException, AuthenticationException {
 
+        User user = new User();
+        user.setUsername("testuser");
+        user.setPassword("testpassword");
+        user.setEmail("testuser@barters.web");
+        user.setPhoneNumber("1234567890");
+        usersRepository.save(user);
+
+        when(usersRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
+        Mockito.verify(usersRepository, Mockito.times(1)).save(Mockito.any(User.class));
+
+        String jwtToken = "jwt-token";
+        String refreshToken = "refresh-token";
+        Mockito.when(tokenRepository.save(Mockito.any(Token.class))).thenReturn(null);
+        authenticationService.saveUserToken(user,jwtToken);
+        Mockito.verify(tokenRepository, Mockito.times(1)).save(Mockito.any(Token.class));
+
+        when(jwtService.generateToken(user)).thenReturn(jwtToken);
+        when(jwtService.generateRefreshToken(user)).thenReturn(refreshToken);
+
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername("testuser");
+        request.setPassword("testpassword");
+
+        when(usersRepository.existsByUsername(user.getUsername())).thenReturn(true);
+        AuthenticationResponse response = authenticationService.authenticate(request);
+
+        Assertions.assertEquals(jwtToken, response.getAccessToken());
+        Assertions.assertEquals(refreshToken, response.getRefreshToken());
+    }
+
+    @Test
+    public void testAuthenticateWithInvalidRequest() {
+        AuthenticationRequest request = new AuthenticationRequest();
+        request.setUsername("testuser");
+        request.setPassword("wrongpassword");
+        assertThrows(IncorrectDataException.class, () -> authenticationService.authenticate(request));
+    }
+
+    @Test
+    public void testRegisterWithInvalidRequest() throws IncorrectDataException {
+        User user = new User();
+        user.setUsername("testuser");
+        user.setPassword("testpassword");
+        user.setEmail("testuser@barters.web");
+        user.setPhoneNumber("1234567890");
+        usersRepository.save(user);
+
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("testuser");
+        request.setPassword("testpassword");
+        request.setEmail("testuser@barters.web");
+        request.setPhoneNumber("1234567890");
+        when(usersRepository.existsByUsername(request.getUsername())).thenReturn(true);
+        when(usersRepository.existsByEmail(request.getEmail())).thenReturn(true);
+        assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
+
+        request.setUsername("testuser");
+        request.setPassword("testpassword");
+        request.setEmail("newemail@barters.web");
+        request.setPhoneNumber("1234567890");
+        when(usersRepository.existsByUsername(request.getUsername())).thenReturn(true);
+        assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
+
+        request.setUsername("newusername");
+        request.setPassword("testpassword");
+        request.setEmail("testuser@barters.web");
+        request.setPhoneNumber("1234567890");
+        when(usersRepository.existsByEmail(request.getEmail())).thenReturn(true);
+        assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
+    }
 
 
 }

@@ -32,7 +32,6 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-          //    .requestMatchers("/login/**").permitAll()
                 .requestMatchers("/api/trades/**").authenticated()
                 .anyRequest()
                 .permitAll()
