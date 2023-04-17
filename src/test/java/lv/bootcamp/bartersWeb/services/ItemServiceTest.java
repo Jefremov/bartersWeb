@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.services;
 
+import com.amazonaws.services.s3.AmazonS3;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
@@ -22,14 +23,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -41,39 +41,36 @@ public class ItemServiceTest {
     private TradeRepository tradeRepository;
 
     private ItemMapper itemMapper;
+    private AmazonS3 S3client;
+
 
     private ItemService itemService;
     @Mock
     private Path root;
     @Mock
-    private Files files;
+    private MultipartFile files;
 
     @BeforeEach
     public void setUp() {
         itemMapper = mock(ItemMapper.class);
         tradeRepository = mock(TradeRepository.class);
         itemRepository = mock(ItemRepository.class);
-        itemService = new ItemService(itemRepository, tradeRepository, itemMapper);
+        S3client = mock(AmazonS3.class);
+        itemService = new ItemService(itemRepository, tradeRepository, itemMapper, S3client);
     }
     @Test
-    @DisplayName("Add Item Test")
-    void testAddItem() throws IOException {
+    public void testAddItem() throws IOException {
+        ItemCreateDto itemCreateDto = new ItemCreateDto();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
+        itemCreateDto.setFile(mockMultipartFile);
 
-        ItemCreateDto itemCreateDto = Mockito.mock(ItemCreateDto.class);
-        MultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[1]);
-        when(itemCreateDto.getFile()).thenReturn(file);
-
-        Item item = Mockito.mock(Item.class);
-        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg")).thenReturn(item);
-
-        when(itemRepository.save(item)).thenReturn(item);
+        when(S3client.putObject((String) any(), (String) any(), (File) any())).thenReturn(null);
 
         ResponseEntity<String> responseEntity = itemService.addItem(itemCreateDto);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
+        assertEquals(200, responseEntity.getStatusCodeValue());
         assertEquals("Added", responseEntity.getBody());
     }
+
     @Test
     @DisplayName("Does not add Item Test")
     void testAddNoItem() throws IOException {

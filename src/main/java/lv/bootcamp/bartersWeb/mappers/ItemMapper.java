@@ -24,10 +24,10 @@ public class ItemMapper {
         dto.setUserId(item.getUserId());
         return dto;
     }
-    public Item CreateDtoToItemFile(ItemCreateDto itemCreateDto, String filepath){
+    public Item CreateDtoToItemFile(ItemCreateDto itemCreateDto,String filename){
         Item item = new Item();
         item.setTitle(itemCreateDto.getTitle());
-        item.setImage(filepath);
+        item.setImage(filename);
         item.setDescription(itemCreateDto.getDescription());
         item.setCategory(ECategory.valueOf(itemCreateDto.getCategory()));
         item.setState(itemCreateDto.getState());
