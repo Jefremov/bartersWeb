@@ -125,7 +125,7 @@ const ItemCard = ({ items }) => {
           DETAILS
         </Button>
 
-        {(isAuthenticated() && location.pathname === '/my-items') ? (
+        {(isAuthenticated() && location.pathname === '/my-items') && (
         <>
         <Button size="small" variant="contained" color="secondary" onClick={() => handleItemDelete(itemObj)}>
           DELETE
@@ -134,11 +134,12 @@ const ItemCard = ({ items }) => {
           UPDATE
         </Button>
         </>
-        ) : (
-        <Button size="small" variant="contained" color="info" onClick={() => handleCreateTradeClick(itemObj)}>
-          TRADE
-        </Button>
         )}
+        {(isAuthenticated() && location.pathname === '/items') && (
+            <Button size="small" variant="contained" color="info" onClick={() => handleCreateTradeClick(itemObj)}>
+              TRADE
+            </Button>
+          )}
 
         </div>
 

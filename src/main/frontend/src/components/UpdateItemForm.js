@@ -2,7 +2,8 @@ import { useState } from "react";
 import { FormControl, Select, MenuItem, TextField, Button } from "@mui/material";
 import ECategory from "../enums/ECategory";
 import { getLoggedInUser } from "../auth/isAuthenticated";
-function UpdateForm({ data, onUpdate }) {
+
+const UpdateForm = ({ data, onUpdate }) => {
   let selectedCategoryValue;
   for (const categoryKey in ECategory) {
     if (ECategory[categoryKey].displayName === data.category) {
