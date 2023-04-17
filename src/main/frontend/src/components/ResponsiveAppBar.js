@@ -152,20 +152,36 @@ function ResponsiveAppBar() {
             BARTERS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{justifyContent: "flex-end"}}>
-            {pages.map((page, index) => (
-                  <MenuItem key={index} onClick={handleCloseNavMenu} style={{display: "flex", alignContent: "center", color: "#FFF"}}>
+
+          {
+            pages.map((page, index) => (
+              <div key={index}>
+                {page.name === 'Items' || page.name === 'Home' || isAuthenticated() ? (
+                  <MenuItem
+                    key={index}
+                    onClick={handleCloseNavMenu}
+                    style={{ display: 'flex', alignContent: 'center', color: '#FFF' }}
+                  >
                     <Link to={page.href} className='menuItem'>
                       <span className='menuItemIcon'>{page.icon}</span>
                       <span>{page.name}</span>
                     </Link>
                   </MenuItem>
-                ))}
-          </Box>
+                ) : null}
+              </div>
+            ))
+          }
 
+          </Box>
           <Box>
-          <Badge badgeContent={17} color="error">
-            <ArticleIcon/>
-          </Badge>
+            {
+              isAuthenticated() && (
+                <Badge badgeContent={17} color="error">
+                <ArticleIcon/>
+              </Badge>
+              )
+            }
+         
 
           </Box>
 

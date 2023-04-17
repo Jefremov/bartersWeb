@@ -11,16 +11,27 @@ VALUES
 COMMIT;
 INSERT INTO `items` (`id`, `category`, `description`, `image`, `state`, `status`, `title`, `user_id`, `date`)
 VALUES
-(1, 6, 'Beautiful vase, but my cat keeps knocking it over. Needs a new home ASAP.', '/images/20230416042310818vase.jpg', 'new', 'AVAILABLE', 'Vase', 1, '2023-04-16 04:23:10.819147'),
-(2, 21, 'Piano for sale, great for practicing your scales or as a decorative piece. Just needs a little love.', '/images/20230416043155820piano.jpg', 'Old', 'AVAILABLE', 'Piano', 1, '2023-04-16 04:31:55.822147'),
-(3, 2, 'Fancy leather shoes, perfect for a night out or as a collectors item.', '/images/20230416043243995shoes.jpg', 'old', 'AVAILABLE', 'Shoes', 1, '2023-04-16 04:32:43.996298'),
-(4, 2, 'Cuuuuuute knitwear, but my grandma keeps knitting me more. Cannot keep them all!', '/images/20230416043318312sweater.jpg', 'new', 'AVAILABLE', 'Knitwear', 1, '2023-04-16 04:33:18.312938'),
-(5, 14, 'Really old phone, might be a cool vintage piece or a fun project for someone. Bartering it because it does not fit in with my decor. ', '/images/20230416044802610phone_old.jpg', 'old', 'AVAILABLE', 'Really old Phone', 1, '2023-04-16 04:48:02.611774'),
-(6, 6, 'Vintage lamp, works perfectly fine but I upgraded to something newer.', '/images/20230416155331409lamp.jpg', 'good enough. No issues.', 'AVAILABLE', 'Vintage lamp.', 1, '2023-04-16 15:53:31.410343'),
-(7, 21, 'Wooden desk, has been well-loved but still has plenty of life left. ', '/images/20230416155506019desk.jpg', 'Used', 'AVAILABLE', 'Wooden Desk', 1, '2023-04-16 15:55:06.020479'),
-(8, 13, 'Robot toy, still in its packaging and waiting for someone to play with it. ', '/images/20230416155601660robot.jpg', 'NEW', 'AVAILABLE', 'Robot toy.', 1, '2023-04-16 15:56:01.662817'),
-(9, 14, 'Items organizer, helps keep everything in its place but I have outgrown it.', '/images/20230416155658035organizer.jpg', 'new', 'AVAILABLE', 'Items Organizer', 1, '2023-04-16 15:56:58.036834'),
-(10, 7, 'Real gold necklace, selling because I have too much jewelry and need to downsize.', '/images/20230416155945532jew.jpg', 'used, but gold never gets old.', 'AVAILABLE', 'Necklace', 1, '2023-04-16 15:59:45.533327');
+(1, 6, 'Beautiful vase, but my cat keeps knocking it over. Needs a new home ASAP.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416042310818vase.jpg', 'new', 'AVAILABLE', 'Vase', 1, '2023-04-16 04:23:10.819147'),
+(2, 21, 'Piano for sale, great for practicing your scales or as a decorative piece. Just needs a little love.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416043155820piano.jpg', 'Old', 'AVAILABLE', 'Piano', 1, '2023-04-16 04:31:55.822147'),
+(3, 2, 'Fancy leather shoes, perfect for a night out or as a collectors item.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416043243995shoes.jpg', 'old', 'AVAILABLE', 'Shoes', 1, '2023-04-16 04:32:43.996298'),
+(4, 2, 'Cuuuuuute knitwear, but my grandma keeps knitting me more. Cannot keep them all!', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416043318312sweater.jpg', 'new', 'AVAILABLE', 'Knitwear', 1, '2023-04-16 04:33:18.312938'),
+(5, 14, 'Really old phone, might be a cool vintage piece or a fun project for someone. Bartering it because it does not fit in with my decor. ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416044802610phone_old.jpg', 'old', 'AVAILABLE', 'Really old Phone', 1, '2023-04-16 04:48:02.611774'),
+(6, 6, 'Vintage lamp, works perfectly fine but I upgraded to something newer.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416155331409lamp.jpg', 'good enough. No issues.', 'AVAILABLE', 'Vintage lamp.', 1, '2023-04-16 15:53:31.410343'),
+(7, 21, 'Wooden desk, has been well-loved but still has plenty of life left. ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416155506019desk.jpg', 'Used', 'AVAILABLE', 'Wooden Desk', 1, '2023-04-16 15:55:06.020479'),
+(8, 13, 'Robot toy, still in its packaging and waiting for someone to play with it. ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416155601660robot.jpg', 'NEW', 'AVAILABLE', 'Robot toy.', 1, '2023-04-16 15:56:01.662817'),
+(9, 14, 'Items organizer, helps keep everything in its place but I have outgrown it.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416155658035organizer.jpg', 'new', 'AVAILABLE', 'Items Organizer', 1, '2023-04-16 15:56:58.036834'),
+(10, 7, 'Real gold necklace, selling because I have too much jewelry and need to downsize.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416155945532jew.jpg', 'used, but gold never gets old.', 'AVAILABLE', 'Necklace', 1, '2023-04-16 15:59:45.533327');
+COMMIT;
+INSERT INTO `items` (`id`, `category`, `date`, `description`, `image`, `state`, `status`, `title`, `user_id`)
+VALUES
+(11, 13, '2023-04-16 21:34:18.992620', ' Beautifully crafted with white hair. Ready for a new home.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416213418991doll.jpg', 'new', 'AVAILABLE', 'Handmade Doll', 1),
+(12, 29, '2023-04-16 21:54:06.913116', 'Used but in excellent condition. Perfect for collectors or casual readers. ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416215406911magazines.jpg', 'Magazines Collection', 'AVAILABLE', 'Magazines colletction', 1),
+(13, 8, '2023-04-16 21:58:54.123093', 'Used but still awesome. Add some style to your wardrobe.', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416215854121prada.jpg', 'used, but still awesome', 'AVAILABLE', 'Prada BAG', 1),
+(14, 10, '2023-04-16 22:06:15.189595', 'Brand new and ready to ride. Get outside and explore! ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416220615188bicycle.jpg', 'new', 'AVAILABLE', 'Bicycle.', 1),
+(15, 14, '2023-04-16 22:30:50.699603', 'Good quality and ready to use. Perfect for writing or drawing. ', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416223050698pen.jpg', 'Good.', 'AVAILABLE', 'Pen', 1),
+(16, 2, '2023-04-16 22:38:38.627311', 'Look stylish and feel comfortable with these amazing jeans!', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416223838626jeans.jpg', 'still goo to wear', 'AVAILABLE', 'Jeans.', 1),
+(17, 14, '2023-04-16 23:13:16.655251', 'Add some green to your life with these beautiful plants!', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416231316654plants.jpg', 'alive', 'AVAILABLE', 'Plants.', 1),
+(18, 9, '2023-04-16 23:36:18.499832', 'Capture your memories in style with this beautiful vintage camera!', 'https://itemimagesbarters.s3.eu-north-1.amazonaws.com/20230416233618499camera.jpg', 'good.', 'AVAILABLE', 'Vintage camera', 1);
 COMMIT;
 
 INSERT INTO `trades` (`comment`, `date`, `status`, `item_id`, `offered_item_id`)

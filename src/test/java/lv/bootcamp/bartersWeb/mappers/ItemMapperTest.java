@@ -5,11 +5,9 @@ import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;

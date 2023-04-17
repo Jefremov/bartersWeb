@@ -23,13 +23,9 @@ public class ValidImageValidator implements ConstraintValidator<ValidImage, Mult
 
             return true;
         }
-
-        // check content type
         if (!ALLOWED_CONTENT_TYPES.contains(file.getContentType())) {
             return false;
         }
-
-        // add other checks if needed
         return true;
     }
 }
