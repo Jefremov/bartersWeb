@@ -4,15 +4,13 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Data;
 import lv.bootcamp.bartersWeb.pojo.ResponseMessage;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -56,26 +54,7 @@ class GlobalExceptionHandler {
         }
         return error;
     }
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ResponseMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-//
-//        try {
-//            BindingResult bindingResult = ex.getBindingResult();
-//            FieldError fieldError = bindingResult.getFieldError();
-//            String fieldName = fieldError.getField();
-//            String errorMessage = fieldError.getDefaultMessage();
-//            if (!errorMessage.isEmpty() && !fieldName.isEmpty()) {
-//                log.info(fieldName + " " + errorMessage);
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(fieldName + " " + errorMessage));
-//            } else {
-//                log.error(fieldName + " " + errorMessage);
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Internal error. Contact administrator"));
-//            }
-//        } catch (Exception e) {
-//            log.error("An error occurred " + e);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Internal error. Contact administrator"));
-//        }
-//    }
+
     @ExceptionHandler(NoSuchMethodException.class)
     public ResponseEntity<ResponseMessage> handleNoSuchMethodException(NoSuchMethodException ex) {
 
