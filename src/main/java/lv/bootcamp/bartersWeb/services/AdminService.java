@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 public interface AdminService {
     ResponseEntity<UserShowDto> getUserByUsername(String username) throws IncorrectDataException;
 
-
     ResponseEntity<String> deleteUserByUsername(String username) throws IncorrectDataException;
 
     ResponseEntity<UserShowDto> setUserAdmin(String username) throws IncorrectDataException;
