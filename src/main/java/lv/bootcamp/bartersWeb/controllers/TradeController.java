@@ -45,7 +45,6 @@ public class TradeController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(hidden = true)
     public void deleteTrade(@PathVariable Long id) {
         logger.info("Deleting trade with ID: " + id);
         tradeService.deleteTrade(id);

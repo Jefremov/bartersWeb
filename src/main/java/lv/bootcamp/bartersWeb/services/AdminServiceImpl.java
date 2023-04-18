@@ -55,19 +55,16 @@ public class AdminServiceImpl implements AdminService {
     public ResponseEntity<UserShowDto> createUser(UserCreateDto userCreateDto) throws IncorrectDataException {
 
 
-        if(usersRepository.existsByUsername(userCreateDto.getUsername()) &&
-                usersRepository.existsByEmail(userCreateDto.getEmail()))
-        {
+        if (usersRepository.existsByUsername(userCreateDto.getUsername()) &&
+                usersRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new IncorrectDataException("Registration is not possible. Username " + userCreateDto.getUsername() +
                     " and email " + userCreateDto.getEmail() + " does exist");
         }
-        if(usersRepository.existsByUsername(userCreateDto.getUsername()))
-        {
+        if (usersRepository.existsByUsername(userCreateDto.getUsername())) {
             throw new IncorrectDataException("Registration is not possible. Username " + userCreateDto.getUsername()
                     + " does exist");
         }
-        if(usersRepository.existsByEmail(userCreateDto.getEmail()))
-        {
+        if (usersRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new IncorrectDataException("Registration is not possible. Username " + userCreateDto.getEmail()
                     + " does exist");
         }

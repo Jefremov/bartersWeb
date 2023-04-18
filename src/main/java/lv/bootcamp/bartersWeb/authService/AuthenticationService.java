@@ -1,5 +1,6 @@
 package lv.bootcamp.bartersWeb.authService;
 
+import lv.bootcamp.bartersWeb.entities.ERole;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.User;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import lv.bootcamp.bartersWeb.authService.config.JwtService;
 import lv.bootcamp.bartersWeb.authService.token.ETokenType;
 import lv.bootcamp.bartersWeb.authService.token.Token;
 import lv.bootcamp.bartersWeb.authService.token.TokenRepository;
-import lv.bootcamp.bartersWeb.entities.ERole;
 import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.security.authentication.AuthenticationManager;
