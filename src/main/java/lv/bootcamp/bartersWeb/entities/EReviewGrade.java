@@ -6,7 +6,6 @@ public enum EReviewGrade {
     AVERAGE("Average",3),
     POOR("Poor",2),
     FAIL("Fail",1);
-
     private final String displayName;
     private final int value;
 

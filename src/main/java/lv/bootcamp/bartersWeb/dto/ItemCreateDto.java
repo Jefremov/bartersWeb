@@ -2,7 +2,7 @@ package lv.bootcamp.bartersWeb.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lv.bootcamp.bartersWeb.exceptions.ValidImage;
+import lv.bootcamp.bartersWeb.annotations.ValidImage;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
@@ -28,4 +28,15 @@ public class ItemCreateDto {
 
     private String username;
 
+    @Override
+    public String toString() {
+        return "ItemCreateDto{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
+                ", state='" + state + '\'' +
+                ", status='" + status + '\'' +
+                ", username=" + username +
+                '}';
+    }
 }

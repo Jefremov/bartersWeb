@@ -4,7 +4,6 @@ public enum EStatus {
     PENDING("Pending"),
     ACCEPTED("Accepted"),
     DECLINED("Declined");
-
     private final String displayName;
 
     EStatus(String displayName) {
@@ -14,4 +13,5 @@ public enum EStatus {
     public String getDisplayName() {
         return displayName;
     }
+
 }

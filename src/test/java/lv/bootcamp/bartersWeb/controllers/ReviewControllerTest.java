@@ -3,17 +3,11 @@ package lv.bootcamp.bartersWeb.controllers;
 import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
 import lv.bootcamp.bartersWeb.dto.ReviewUpdateDto;
-import lv.bootcamp.bartersWeb.entities.EReviewGrade;
-import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
-import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
-import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import lv.bootcamp.bartersWeb.services.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,8 +88,4 @@ public class ReviewControllerTest {
 
         assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
     }
-
-
 }
-
-
