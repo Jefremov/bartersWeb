@@ -40,6 +40,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+ //   @Enumerated(EnumType.STRING)
     @Column(name = "role")
     @Hidden
     private ERole role;
