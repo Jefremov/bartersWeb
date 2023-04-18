@@ -20,7 +20,7 @@ function ItemOwnerInfo({ itemId }) {
 
   return (
     <>
-      <div style={{ margin: '10px 0px 5px 0px' }}>Seller: {itemOwner.username}</div>
+      <div style={{ margin: '10px 0px 5px 0px' }}>Owner: {itemOwner.username}</div>
       <div style={{ display: 'flex' }}>
           <Rating name="rating-display" value={itemOwner.rating} precision={0.05} readOnly />
           <div style={{ position: 'relative', left: '10px', width: '50px' }}>{itemOwner.rating}</div>

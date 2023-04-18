@@ -64,7 +64,7 @@ const Trades = () => {
   return ( 
     <div>
       <h4 style={{textAlign: 'center'}}>TRADES</h4>
-      <TradeFilters trades={trades} handleFilter={handleFilter} />
+      {/* <TradeFilters trades={trades} handleFilter={handleFilter} /> */}
       <div style={{ width: '100wh', display: 'flex', flexWrap: 'wrap' }}>
         {filteredTrades.map(trade => (
           <TradeCard key={trade.id} trade={trade} handleConfirmation={handleConfirmation} />
