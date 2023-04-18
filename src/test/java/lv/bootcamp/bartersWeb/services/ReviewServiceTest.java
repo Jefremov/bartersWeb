@@ -130,7 +130,7 @@ public class ReviewServiceTest {
         User user = new User();
         user.setId(1L);
         user.setUsername(username);
-        reviewCreateDto.setReviewerId(1L);
+        reviewCreateDto.setReviewer(username);
         when(usersRepository.existsByUsername(username)).thenReturn(true);
         when(usersRepository.findUserByUsername(username)).thenReturn(user);
 
@@ -148,11 +148,12 @@ public class ReviewServiceTest {
     public void addReview_invalidUser_notFound() {
         User user = new User();
         user.setId(1L);
+        user.setUsername("user");
 
         ReviewCreateDto reviewCreateDto = new ReviewCreateDto();
         reviewCreateDto.setComment("Great product");
         reviewCreateDto.setGrade("FAIL");
-        reviewCreateDto.setReviewerId(1L);
+        reviewCreateDto.setReviewer("user");
 
         String username = "alpha";
         when(usersRepository.existsByUsername(username)).thenReturn(false);

@@ -26,7 +26,6 @@ export const isAuthenticated = () => {
 
     if (isExpired) {
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         return false;
     }
 

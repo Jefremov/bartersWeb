@@ -15,27 +15,33 @@ const Login = () => {
 
   return (
     <div style={{marginTop: "60px"}}>
-      {isRegistered ? (
+
+    {!isRegistered && (
         <div>
+          <LoginForm onRegister={handleRegister} />
+
           <div style={{textAlign: "center"}}>
             <div>Don't have an account?</div>
             <div>
-              <button onClick={handleLogin}>Register</button>
+              <button onClick={() => setIsRegistered(true)}>Register</button>
             </div>
           </div>
-          <LoginForm onRegister={handleRegister} />
         </div>
-      ) : (
+      )}
+
+      {isRegistered && (
         <div>
+          <RegisterForm onLogin={handleLogin} />
+
           <div style={{textAlign: "center"}}>
             <div>Already have an account? </div>
             <div>
-              <button onClick={handleRegister}>Login</button>
+              <button onClick={() => setIsRegistered(false)}>Login</button>
             </div>
             </div>
-          <RegisterForm onLogin={handleLogin} />
         </div>
       )}
+
     </div>
   );
 };

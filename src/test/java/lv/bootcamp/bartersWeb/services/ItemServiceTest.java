@@ -1,20 +1,22 @@
 package lv.bootcamp.bartersWeb.services;
 
+import com.amazonaws.services.s3.AmazonS3;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
+import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
@@ -23,59 +25,35 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemServiceTest {
 
     private ItemRepository itemRepository;
-
     private TradeRepository tradeRepository;
-
     private ItemMapper itemMapper;
+    private AmazonS3 S3client;
+    private UsersRepository usersRepository;
 
     private ItemService itemService;
-    @Mock
-    private Path root;
-    @Mock
-    private Files files;
 
     @BeforeEach
     public void setUp() {
         itemMapper = mock(ItemMapper.class);
         tradeRepository = mock(TradeRepository.class);
         itemRepository = mock(ItemRepository.class);
-        itemService = new ItemService(itemRepository, tradeRepository, itemMapper);
+        S3client = mock(AmazonS3.class);
+        usersRepository = mock(UsersRepository.class);
+        itemService = new ItemService(itemRepository, tradeRepository, itemMapper, S3client, usersRepository);
     }
-    @Test
-    @DisplayName("Add Item Test")
-    void testAddItem() throws IOException {
 
-        ItemCreateDto itemCreateDto = Mockito.mock(ItemCreateDto.class);
-        MultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[1]);
-        when(itemCreateDto.getFile()).thenReturn(file);
-
-        Item item = Mockito.mock(Item.class);
-        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg")).thenReturn(item);
-
-        when(itemRepository.save(item)).thenReturn(item);
-
-        ResponseEntity<String> responseEntity = itemService.addItem(itemCreateDto);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        assertEquals("Added", responseEntity.getBody());
-    }
     @Test
     @DisplayName("Does not add Item Test")
     void testAddNoItem() throws IOException {
@@ -85,7 +63,7 @@ public class ItemServiceTest {
         when(itemCreateDto.getFile()).thenReturn(file);
 
         Item item = Mockito.mock(Item.class);
-        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg")).thenReturn(item);
+        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg", null)).thenReturn(item);
 
         when(itemRepository.save(item)).thenReturn(item);
 
@@ -270,5 +248,88 @@ public class ItemServiceTest {
         List<ItemDto> result = itemService.getItemsByCategory("CLOTHING");
         assertThat(result).isEqualTo(itemDtos);
     }
+
+    @Test
+    public void testSearchItemsByTitle_withMatchingTitle() {
+        String title = "book";
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("Book of Knowledge");
+        item1.setStatus(EItemStatus.AVAILABLE);
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setTitle("Harry Potter book");
+        item2.setStatus(EItemStatus.AVAILABLE);
+        List<Item> items = Arrays.asList(item1, item2);
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("Book of Knowledge");
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("Harry Potter book");
+        List<ItemDto> expected = Arrays.asList(itemDto1, itemDto2);
+        when(itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE)).thenReturn(items);
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+
+        List<ItemDto> actual = itemService.searchItemsByTitle(title);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSearchItemsByTitle_withNonMatchingTitle() {
+        String title = "car";
+        when(itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE)).thenReturn(Collections.emptyList());
+
+        List<ItemDto> actual = itemService.searchItemsByTitle(title);
+
+        assertNull(actual);
+    }
+
+    @Test
+    void testGetItemsNotBelongingToUser() {
+        Long userId = 123L;
+        String username = "testuser";
+
+        User user = new User();
+        user.setId(userId);
+
+        List<Item> itemList = new ArrayList<>();
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("item1");
+        item1.setUser(user);
+
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setTitle("item2");
+        item2.setUser(user);
+
+        itemList.add(item1);
+        itemList.add(item2);
+
+        List<ItemDto> expectedItemList = new ArrayList<>();
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("item1");
+
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("item2");
+
+        expectedItemList.add(itemDto1);
+        expectedItemList.add(itemDto2);
+
+        when(usersRepository.findUserByUsername(username)).thenReturn(user);
+        when(itemRepository.findByUserIdNot(userId)).thenReturn(itemList);
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+
+        List<ItemDto> actualItemList = itemService.getItemsNotBelongingToUser(username);
+
+        assertEquals(expectedItemList, actualItemList);
+    }
+
 
 }

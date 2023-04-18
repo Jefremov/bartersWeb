@@ -5,12 +5,15 @@ import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
-import org.junit.jupiter.api.BeforeEach;
+import lv.bootcamp.bartersWeb.entities.User;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
@@ -19,9 +22,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@SpringBootTest
 public class ItemMapperTest {
+    @Mock
+    private UsersRepository usersRepository;
+    @InjectMocks
+    private ItemMapper itemMapper;
 
-    private final ItemMapper itemMapper = new ItemMapper();
     @Test
     @DisplayName("Should map Item to ItemDto")
     public void shouldMapItemToItemDto() {
@@ -51,14 +58,19 @@ public class ItemMapperTest {
     @Test
     @DisplayName("Should map ItemCreateDto to Item")
     public void shouldMapItemCreateDtoToItem() {
+        User user = new User();
+        user.setId(1L);
+        String username = "testuser";
+        user.setUsername(username);
+        when(usersRepository.findUserByUsername(username)).thenReturn(user);
+
         ItemCreateDto itemCreateDto = mock(ItemCreateDto.class);
         when(itemCreateDto.getTitle()).thenReturn("Title");
         when(itemCreateDto.getDescription()).thenReturn("Description");
         when(itemCreateDto.getCategory()).thenReturn("ELECTRONICS");
         when(itemCreateDto.getState()).thenReturn("New");
-        when(itemCreateDto.getUserId()).thenReturn(1L);
 
-        Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, null);
+        Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, null, username);
 
         assertEquals("Title", item.getTitle());
         assertEquals("Description", item.getDescription());

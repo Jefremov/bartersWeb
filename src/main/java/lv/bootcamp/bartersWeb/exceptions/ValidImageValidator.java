@@ -2,6 +2,7 @@ package lv.bootcamp.bartersWeb.exceptions;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lv.bootcamp.bartersWeb.annotations.ValidImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -23,13 +24,9 @@ public class ValidImageValidator implements ConstraintValidator<ValidImage, Mult
 
             return true;
         }
-
-        // check content type
         if (!ALLOWED_CONTENT_TYPES.contains(file.getContentType())) {
             return false;
         }
-
-        // add other checks if needed
         return true;
     }
 }

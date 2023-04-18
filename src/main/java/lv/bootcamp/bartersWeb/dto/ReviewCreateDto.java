@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ReviewCreateDto {
     @NotNull(message = "cannot be null")
-    private Long reviewerId;
+    private String reviewer;
     @NotBlank(message = "must be filled")
     private String grade;
     @NotBlank(message = "must be filled")
