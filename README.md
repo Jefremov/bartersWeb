@@ -27,6 +27,10 @@ The vision of BARTERS is to create a sustainable economy that values community a
 
 **Database:** MySQL 8, Amazon RDS
 
+## API Reference
+
+[API Documentation](http://localhost:8080/swagger-ui/index.html)
+
 
 ## Environment Variables
 
@@ -42,11 +46,6 @@ Please contact the team to get it.
 6. Add the necessary configuration to your Spring Boot application.properties file to connect to your MySQL database and Amazon S3 storage.
 7. Build the Spring Boot server code using Gradle by running the following command in your terminal: gradle build.
 8. Run/Start the project.
-
-## API Reference
-
-[API Documentation](http://localhost:8080/swagger-ui/index.html)
-
 
 ## Features
 
