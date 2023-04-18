@@ -1,9 +1,7 @@
 package lv.bootcamp.bartersWeb.entities;
 
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import jakarta.persistence.*;
 import lv.bootcamp.bartersWeb.authService.token.Token;
 
@@ -40,6 +38,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+ //   @Enumerated(EnumType.STRING)
     @Column(name = "role")
     @Hidden
     private ERole role;
@@ -92,7 +91,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
     @Override
     public String toString() {

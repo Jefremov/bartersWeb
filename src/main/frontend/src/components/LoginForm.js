@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,29 +14,42 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const Copyright = (props) => {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        BARTERS
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { setAuthToken } from '../auth/setAuthToken';
 
 const theme = createTheme();
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+        ...formData,
+        [event.target.name]: event.target.value,
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    data.append('username', formData.username);
+    data.append('password', formData.password);
+
+    axios.post('/api/login', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then(response => {
+        localStorage.setItem('accessToken', response.data.access_token);
+        setAuthToken(response.data.access_token);
+        navigate('/');
+    })
+    .catch(error => {
+        console.log(error.response.data)
     });
   };
 
@@ -61,10 +76,12 @@ const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -72,6 +89,8 @@ const SignIn = () => {
               required
               fullWidth
               name="password"
+              value={formData.password}
+              onChange={handleChange}
               label="Password"
               type="password"
               id="password"
@@ -98,7 +117,7 @@ const SignIn = () => {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   );

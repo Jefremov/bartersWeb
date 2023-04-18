@@ -11,6 +11,8 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByCategory(ECategory category);
+    List<Item> findByUserId(Long userId);
     List<Item> findAllByStatus(EItemStatus status);
-
+    List<Item> findByTitleContainingIgnoreCaseAndStatus(String title, EItemStatus available);
+    List<Item> findByUserIdNot(Long userId);
 }

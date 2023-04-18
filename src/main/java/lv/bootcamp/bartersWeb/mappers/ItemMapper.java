@@ -5,12 +5,17 @@ import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 public class ItemMapper {
+    @Autowired
+    private UsersRepository usersRepository;
+
     public ItemDto itemToDto(Item item) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -24,16 +29,17 @@ public class ItemMapper {
         dto.setUserId(item.getUserId());
         return dto;
     }
-    public Item CreateDtoToItemFile(ItemCreateDto itemCreateDto, String filepath){
+
+    public Item CreateDtoToItemFile(ItemCreateDto itemCreateDto,String filename, String username){
         Item item = new Item();
         item.setTitle(itemCreateDto.getTitle());
-        item.setImage(filepath);
+        item.setImage(filename);
         item.setDescription(itemCreateDto.getDescription());
         item.setCategory(ECategory.valueOf(itemCreateDto.getCategory()));
         item.setState(itemCreateDto.getState());
         item.setDate(LocalDateTime.now());
         item.setStatus(EItemStatus.AVAILABLE);
-        item.setUserId(itemCreateDto.getUserId());
+        item.setUserId(usersRepository.findUserByUsername(username).getId());
         return item;
     }
 }
