@@ -30,29 +30,18 @@ The vision of BARTERS is to create a sustainable economy that values community a
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your `resources/.env.properties` file:
+To run this project, you will need to add environment variables to your `resources/.env.properties` file.
+Please contact the team to get it.
 
-`DB_URL`=//barters.cjetxvzqqczr.eu-north-1.rds.amazonaws.com:3306/barters
-
-`DB_USER`=admin
-
-`DB_PASSWORD`=Myvra0-rozgep-jecwin
-
-`SECRET-KEY`=MegaLargeSigningSecretKeyForDemoApplicationMegaLargeSigningSecretKeyForDemoApplication
-
-`KEY-EXPIRATION`=3600000
-
-`REFRESH-EXPIRATION`=604800000
-
-`AWS_ACCESS_KEY`=AKIA2UB7N35YLFJLXLW5
-
-`AWS_SECRET_KEY`=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
-
-`AWS_REGION`=eu-north-1
-
-`AWS_S3_BUCKET`=itemimagesbarters
-
-`AWS_S3_URL`=https://itemimagesbarters.s3.eu-north-1.amazonaws.com/
+## RUN THE APPLICATION
+1. Install Node.js 18.14.2 on your machine.
+2. Install React.js 18 and Material-UI (MUI) 5 by running the following command in your terminal: npm install react@18 @mui/material @emotion/react @emotion/styled
+3. Install Java 17 and Gradle 7.6.1 on your machine.
+4. Clone the repository containing the Spring Boot server code.
+5. Set up your MySQL 8 database and Amazon RDS instance.
+6. Add the necessary configuration to your Spring Boot application.properties file to connect to your MySQL database and Amazon S3 storage.
+7. Build the Spring Boot server code using Gradle by running the following command in your terminal: gradle build.
+8. Run/Start the project.
 
 ## API Reference
 
