@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class ItemMapper {
     @Autowired
     private UsersRepository usersRepository;
+
     public ItemDto itemToDto(Item item) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -28,6 +29,7 @@ public class ItemMapper {
         dto.setUserId(item.getUserId());
         return dto;
     }
+
     public Item CreateDtoToItemFile(ItemCreateDto itemCreateDto,String filename, String username){
         Item item = new Item();
         item.setTitle(itemCreateDto.getTitle());

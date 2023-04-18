@@ -239,5 +239,4 @@ public class ItemControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
     }
-
 }

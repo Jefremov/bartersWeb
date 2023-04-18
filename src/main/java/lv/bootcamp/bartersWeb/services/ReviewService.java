@@ -3,11 +3,11 @@ package lv.bootcamp.bartersWeb.services;
 import lv.bootcamp.bartersWeb.dto.ReviewCreateDto;
 import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
 import lv.bootcamp.bartersWeb.dto.ReviewUpdateDto;
-import lv.bootcamp.bartersWeb.entities.EReviewGrade;
 import lv.bootcamp.bartersWeb.entities.Review;
 import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
+    private static Logger logger = Logger.getLogger(ReviewService.class);
     private ReviewRepository reviewRepository;
     private ReviewMapper reviewMapper;
     private UsersRepository usersRepository;
@@ -28,7 +29,10 @@ public class ReviewService {
     }
 
     public List<ReviewShowDto> reviewsAll(){
-        return reviewRepository.findAll()
+        logger.info("Getting all reviews");
+        List<Review> reviews = reviewRepository.findAll();
+        logger.info("Retrieved " + reviews.size() + " reviews");
+        return reviews
                 .stream()
                 .map(reviewMapper::reviewToDtoReview)
                 .collect(Collectors.toList());
@@ -41,42 +45,49 @@ public class ReviewService {
                     .map(reviewMapper::reviewToDtoReview)
                     .collect(Collectors.toList()));
         }
-        else return  ResponseEntity.notFound().build();
+        logger.info("No user found with username " + username);
+        return  ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<ReviewCreateDto> addReview(ReviewCreateDto reviewCreateDto, String username) {
         if(usersRepository.existsByUsername(username)){
             Review review= reviewMapper.CreateDtoToReview(reviewCreateDto,username);
             reviewRepository.save(review);
+            logger.info("Review added for user " + username);
             return ResponseEntity.ok(reviewCreateDto);
         }
-            else return  ResponseEntity.notFound().build();
+        logger.info("No user found with username " + username);
+        return  ResponseEntity.notFound().build();
     }
 
     public ResponseEntity deleteById(Long reviewId) {
         if(reviewRepository.existsById(reviewId)){
             reviewRepository.deleteById(reviewId);
+            logger.info("Review deleted with ID: " + reviewId);
             return ResponseEntity.ok().build();
         }
-        else return ResponseEntity.notFound().build();
+        logger.info("No review found with ID: " + reviewId);
+        return ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<ReviewShowDto> getReviewById(Long reviewId) {
         if(reviewRepository.existsById(reviewId)) {
             Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new RuntimeException("No review match"));
+            logger.info("Retrieved review with ID: " + reviewId);
             return ResponseEntity.ok(reviewMapper.reviewToDtoReview(review));
         }
-        else return  ResponseEntity.notFound().build();
+        logger.info("No review found with ID: " + reviewId);
+        return  ResponseEntity.notFound().build();
     }
 
     public ResponseEntity updateReview(ReviewUpdateDto reviewUpdateDto, Long reviewId) {
         if(reviewRepository.existsById(reviewId)) {
             Review review = reviewMapper.UpdateDtoToReview(reviewUpdateDto,reviewId);
+            logger.info("Review updated with ID: " + reviewId);
             reviewRepository.save(review);
            return ResponseEntity.ok().build();
         }
-        else return  ResponseEntity.notFound().build();
+        logger.info("No review found with ID: " + reviewId);
+        return  ResponseEntity.notFound().build();
     }
-
-
 }

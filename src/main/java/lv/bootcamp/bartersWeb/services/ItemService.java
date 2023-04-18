@@ -8,10 +8,9 @@ import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
-import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
+import org.apache.log4j.Logger;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
+    private static Logger logger = Logger.getLogger(ItemService.class);
     private final ItemRepository itemRepository;
     private final TradeRepository tradeRepository;
     private final UsersRepository userRepository;
@@ -58,23 +58,31 @@ public class ItemService {
             String imagePath=this.url+fileName;
             Item item = itemMapper.CreateDtoToItemFile(itemCreateDto, imagePath, itemCreateDto.getUsername());
             itemRepository.save(item);
+            logger.info( "Item added with ID: "+item.getId());
             return ResponseEntity.ok("Added");
         }
-        else return ResponseEntity.badRequest().build();
+        else{
+            logger.warn( "Item add failed due to missing file");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     public List<ItemDto> getItems() {
         List<Item> items = itemRepository.findAllByStatus(EItemStatus.AVAILABLE);
-        if(items.isEmpty()) return null;
+        if(items.isEmpty()){
+            logger.warn("No available items found");
+            return null;
+        }
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 
     public ResponseEntity<ItemDto> getItemById(Long id) {
         if(itemRepository.existsById(id)) {
             Item item = itemRepository.findById(id).get();
-
+            logger.info("Retrieved item with ID: " + id);
             return ResponseEntity.ok().body(itemMapper.itemToDto(item));
         }
+        logger.warn("Item not found with ID: "+ id);
         return ResponseEntity.notFound().build();
     }
 
@@ -95,8 +103,10 @@ public class ItemService {
             item.setDescription(itemCreateDto.getDescription());
             item.setStatus(EItemStatus.valueOf(itemCreateDto.getStatus()));
             itemRepository.save(item);
+            logger.info( "Item updated with ID: " + id);
             return ResponseEntity.ok("Item updated");
         }
+        logger.warn( "Item not found for update with ID: " + id);
         return ResponseEntity.notFound().build();
     }
 
@@ -112,14 +122,17 @@ public class ItemService {
                 trades2.forEach(tradeRepository::delete);
             }
             itemRepository.deleteById(id);
+            logger.info("Item with ID " + id + " deleted.");
             return ResponseEntity.ok().build();
         }
-        else return ResponseEntity.notFound().build();
+        logger.error("Item with ID " + id + " not found.");
+        return ResponseEntity.notFound().build();
     }
 
     public List<ItemDto> getItemsByCategory(String category) {
         ECategory categoryEnum = ECategory.valueOf(category.toUpperCase());
         List<Item> items = itemRepository.findByCategory(categoryEnum);
+        logger.info("Retrieved "+items.size()+" items by category: " +category);
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
     public List<ItemDto> getItemsByUser(String username) {
@@ -131,16 +144,20 @@ public class ItemService {
     public List<ItemDto> searchItemsByTitle(String title) {
         List<Item> items = itemRepository.findByTitleContainingIgnoreCaseAndStatus(title, EItemStatus.AVAILABLE);
         if (items.isEmpty()) {
+            logger.warn("No items found with title: " + title);
             return null;
         }
+        logger.info("Found  "+items.size()+" items by title: " +title);
         return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
-    private File convertMultiPartFileToFile(MultipartFile file) throws IOException {
+     public File convertMultiPartFileToFile(MultipartFile file) throws IOException {
         File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
-        } catch (IOException e){return null;}
+        } catch (IOException e){
+            logger.error("An exception occurred while converting multi-part file to file: " + e.getMessage());
+            return null;
+        }
         return convertedFile;
     }
-
 }

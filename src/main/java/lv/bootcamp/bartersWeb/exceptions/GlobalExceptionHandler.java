@@ -42,6 +42,7 @@ class GlobalExceptionHandler {
         }
         return error;
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -66,9 +67,9 @@ class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Internal error. Contact administrator"));
         }
     }
+
     @ExceptionHandler(IncorrectDataException.class)
     public ResponseEntity<ResponseMessage> handleIncorrectDataException(IncorrectDataException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(exception.getMessage()));
     }
-
 }
