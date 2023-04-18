@@ -1,7 +1,8 @@
-package lv.bootcamp.bartersWeb.exceptions;
+package lv.bootcamp.bartersWeb.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import lv.bootcamp.bartersWeb.exceptions.ValidImageValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,4 +18,5 @@ public @interface ValidImage {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
 }

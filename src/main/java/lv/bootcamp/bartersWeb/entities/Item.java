@@ -33,6 +33,7 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User user;
+
     public Item(Long id, String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId, LocalDateTime date) {
         this.id = id;
         this.title = title;
@@ -44,6 +45,7 @@ public class Item {
         this.date = date;
         this.userId = userId;
     }
+
     public Item(String title, String state, String description, String image, ECategory category, EItemStatus status, Long userId, LocalDateTime date) {
         this.title = title;
         this.state = state;
@@ -55,6 +57,6 @@ public class Item {
         this.date = date;
     }
 
-    public Item() {
-    }
+    public Item() {}
+
 }
