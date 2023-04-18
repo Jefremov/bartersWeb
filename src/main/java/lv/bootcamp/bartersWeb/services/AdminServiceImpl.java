@@ -1,7 +1,5 @@
 package lv.bootcamp.bartersWeb.services;
 
-import lv.bootcamp.bartersWeb.controllers.AdminController;
-import lv.bootcamp.bartersWeb.dto.ReviewShowDto;
 import lv.bootcamp.bartersWeb.dto.UserCreateDto;
 import lv.bootcamp.bartersWeb.dto.UserShowDto;
 import lv.bootcamp.bartersWeb.entities.ERole;
@@ -56,6 +54,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ResponseEntity<UserShowDto> createUser(UserCreateDto userCreateDto) throws IncorrectDataException {
 
+
+        if(usersRepository.existsByUsername(userCreateDto.getUsername()) &&
+                usersRepository.existsByEmail(userCreateDto.getEmail()))
+        {
+            throw new IncorrectDataException("Registration is not possible. Username " + userCreateDto.getUsername() +
+                    " and email " + userCreateDto.getEmail() + " does exist");
+        }
         if(usersRepository.existsByUsername(userCreateDto.getUsername()))
         {
             throw new IncorrectDataException("Registration is not possible. Username " + userCreateDto.getUsername()
