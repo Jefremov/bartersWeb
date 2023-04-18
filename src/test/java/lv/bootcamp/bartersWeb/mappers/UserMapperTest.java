@@ -3,16 +3,15 @@ package lv.bootcamp.bartersWeb.mappers;
 import lv.bootcamp.bartersWeb.dto.UserCreateDto;
 import lv.bootcamp.bartersWeb.dto.UserShowDto;
 import lv.bootcamp.bartersWeb.entities.ERole;
-import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 class UserMapperTest {
 
     private final UserMapper userMapper = new UserMapper();
@@ -60,12 +59,12 @@ class UserMapperTest {
 
         User user = userMapper.userCreateDtoToUser(userCreateDto);
 
-        assertEquals(userCreateDto.getUsername(), user.getUsername());
-        assertEquals(userCreateDto.getRole(), user.getRole());
-        assertEquals(userCreateDto.getEmail(), user.getEmail());
-        assertEquals(userCreateDto.getDescription(), user.getDescription());
-        assertEquals(userCreateDto.getEmail(), user.getEmail());
-        assertEquals(userCreateDto.getPhoneNumber(), user.getPhoneNumber());
+        assertEquals(user.getUsername(), userCreateDto.getUsername());
+        assertEquals(user.getRole(), userCreateDto.getRole());
+        assertEquals(user.getEmail(), userCreateDto.getEmail());
+        assertEquals(user.getDescription(), userCreateDto.getDescription());
+        assertEquals(user.getEmail(), userCreateDto.getEmail());
+        assertEquals(user.getPhoneNumber(), userCreateDto.getPhoneNumber());
 
     }
 }
