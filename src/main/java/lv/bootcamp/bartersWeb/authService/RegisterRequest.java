@@ -28,6 +28,8 @@ public class RegisterRequest {
     @Schema(description = "Uniq email")
     private String email;
     @NotNull
+    @Pattern(regexp = "^([+][3][7][0-2]\\d{8})$",
+            message = "Phone number must be 11 digits and start +370 or +371 or +372")
     private String phoneNumber;
 
     @Override

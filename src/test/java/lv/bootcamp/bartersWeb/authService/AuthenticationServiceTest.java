@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
         request.setUsername("testuser");
         request.setPassword("testpassword");
         request.setEmail("testuser@barters.web");
-        request.setPhoneNumber("1234567890");
+        request.setPhoneNumber("+37000000000");
 
         User savedUser = new User();
         savedUser.setUsername(request.getUsername());
@@ -93,7 +93,7 @@ class AuthenticationServiceTest {
         user.setUsername("testuser");
         user.setPassword("testpassword");
         user.setEmail("testuser@barters.web");
-        user.setPhoneNumber("1234567890");
+        user.setPhoneNumber("+37000000000");
         usersRepository.save(user);
 
         when(usersRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
@@ -130,14 +130,14 @@ class AuthenticationServiceTest {
         user.setUsername("testuser");
         user.setPassword("testpassword");
         user.setEmail("testuser@barters.web");
-        user.setPhoneNumber("1234567890");
+        user.setPhoneNumber("+37000000000");
         usersRepository.save(user);
 
         RegisterRequest request = new RegisterRequest();
         request.setUsername("testuser");
         request.setPassword("testpassword");
         request.setEmail("testuser@barters.web");
-        request.setPhoneNumber("1234567890");
+        request.setPhoneNumber("+37000000000");
         when(usersRepository.existsByUsername(request.getUsername())).thenReturn(true);
         when(usersRepository.existsByEmail(request.getEmail())).thenReturn(true);
         assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
@@ -145,14 +145,14 @@ class AuthenticationServiceTest {
         request.setUsername("testuser");
         request.setPassword("testpassword");
         request.setEmail("newemail@barters.web");
-        request.setPhoneNumber("1234567890");
+        request.setPhoneNumber("+37000000000");
         when(usersRepository.existsByUsername(request.getUsername())).thenReturn(true);
         assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
 
         request.setUsername("newusername");
         request.setPassword("testpassword");
         request.setEmail("testuser@barters.web");
-        request.setPhoneNumber("1234567890");
+        request.setPhoneNumber("+37000000000");
         when(usersRepository.existsByEmail(request.getEmail())).thenReturn(true);
         assertThrows(IncorrectDataException.class, () -> authenticationService.registerUser(request));
     }
