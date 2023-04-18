@@ -81,5 +81,12 @@ public class ItemController {
         }
         return ResponseEntity.ok(items);
     }
+
+    @GetMapping("/not/{username}")
+    public ResponseEntity<List<ItemDto>> getItemsNotBelongingToUser(@PathVariable("username") String username) {
+        List<ItemDto> items = itemService.getItemsNotBelongingToUser(username);
+        return ResponseEntity.ok(items);
+    }
+
 }
 

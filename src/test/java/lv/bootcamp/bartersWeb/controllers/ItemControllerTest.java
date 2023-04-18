@@ -239,4 +239,19 @@ public class ItemControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    public void testGetItemsNotBelongingToUser() {
+        String username = "testuser";
+        List<ItemDto> items = new ArrayList<>();
+        items.add(new ItemDto());
+        items.add(new ItemDto());
+        when(itemService.getItemsNotBelongingToUser(username)).thenReturn(items);
+
+        ResponseEntity<List<ItemDto>> response = itemController.getItemsNotBelongingToUser(username);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(items, response.getBody());
+    }
+
 }

@@ -27,7 +27,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -284,4 +285,38 @@ public class ItemServiceTest {
 
         assertNull(actual);
     }
+
+    @Test
+    void testGetItemsNotBelongingToUser() {
+        Long userId = 123L;
+        List<Item> itemList = new ArrayList<>();
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("item1");
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setTitle("item2");
+        itemList.add(item1);
+        itemList.add(item2);
+
+        List<ItemDto> expectedItemList = new ArrayList<>();
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("item1");
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("item2");
+        expectedItemList.add(itemDto1);
+        expectedItemList.add(itemDto2);
+
+        when(itemRepository.findByUserIdNot(userId)).thenReturn(itemList);
+
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+
+        List<ItemDto> actualItemList = itemService.getItemsNotBelongingToUser("testuser");
+
+        assertEquals(expectedItemList, actualItemList);
+    }
+
 }

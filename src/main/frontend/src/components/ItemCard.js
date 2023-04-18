@@ -1,16 +1,15 @@
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo } from 'react';
 import { Paper, Typography, Button, Modal, Box, Divider } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import { TextField, Input } from '@mui/material';
 import Textarea from '@mui/material/TextareaAutosize';
 import axios from 'axios';
-import { isAuthenticated, getLoggedInUser } from '../auth/isAuthenticated';
+import { isAuthenticated } from '../auth/isAuthenticated';
 import { useLocation } from 'react-router-dom';
 import UpdateItemForm from './UpdateItemForm';
 
-const ItemCard = ({ items }) => {
+const ItemCard = ({ items, userItems }) => {
   const [showMoreInfoDialog, setShowMoreInfoDialog] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
@@ -18,6 +17,9 @@ const ItemCard = ({ items }) => {
   const [offeredItemId, setOfferedItemId] = React.useState('');
   const [text, setText] = React.useState('');
   const location = useLocation();
+
+console.log('ITEMS >>> CARD', items);
+console.log('USER ITEMS >>> CARD', userItems);
 
   const handleShowMoreInfoClick = (itemObj) => {
     setSelectedItem(itemObj);
@@ -86,7 +88,7 @@ const ItemCard = ({ items }) => {
     }, config)
     .then(response => {
       console.log('Trade created successfully:', response.data);
-      // add success popup
+      alert('Trade created successfully');
       handleCreateTradeClose();
     })
     .catch(error => {
@@ -140,7 +142,6 @@ const ItemCard = ({ items }) => {
               TRADE
             </Button>
           )}
-
         </div>
 
         {/* CREATE TRADE MODAL*/}  
@@ -158,7 +159,7 @@ const ItemCard = ({ items }) => {
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <section>
                 <b>{itemObj.title}</b>
-                <img style={{width: '100%'}} src={itemObj.image} alt={itemObj.title} style={{width: '100%'}} />
+                <img style={{width: '100%'}} src={itemObj.image} alt={itemObj.title} />
               </section>
 
               <h3>TRADE FOR</h3>
@@ -170,7 +171,7 @@ const ItemCard = ({ items }) => {
                 label="Offered item"
                 onChange={(event) => setOfferedItemId(event.target.value)}
               >
-                {items.map((item) => (
+                {userItems?.map((item) => (
                   <MenuItem value={item.id}>{item.title}</MenuItem>
                 ))}
               </Select>
