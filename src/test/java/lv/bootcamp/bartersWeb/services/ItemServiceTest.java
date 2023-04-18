@@ -6,6 +6,7 @@ import lv.bootcamp.bartersWeb.dto.ItemDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
+import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
@@ -27,7 +28,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -36,9 +38,9 @@ public class ItemServiceTest {
 
     private ItemRepository itemRepository;
     private TradeRepository tradeRepository;
-    private UsersRepository usersRepository;
     private ItemMapper itemMapper;
     private AmazonS3 S3client;
+    private UsersRepository usersRepository;
 
     private ItemService itemService;
 
@@ -47,8 +49,8 @@ public class ItemServiceTest {
         itemMapper = mock(ItemMapper.class);
         tradeRepository = mock(TradeRepository.class);
         itemRepository = mock(ItemRepository.class);
-        usersRepository = mock(UsersRepository.class);
         S3client = mock(AmazonS3.class);
+        usersRepository = mock(UsersRepository.class);
         itemService = new ItemService(itemRepository, tradeRepository, itemMapper, S3client, usersRepository);
     }
 
@@ -284,4 +286,50 @@ public class ItemServiceTest {
 
         assertNull(actual);
     }
+
+    @Test
+    void testGetItemsNotBelongingToUser() {
+        Long userId = 123L;
+        String username = "testuser";
+
+        User user = new User();
+        user.setId(userId);
+
+        List<Item> itemList = new ArrayList<>();
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("item1");
+        item1.setUser(user);
+
+        Item item2 = new Item();
+        item2.setId(2L);
+        item2.setTitle("item2");
+        item2.setUser(user);
+
+        itemList.add(item1);
+        itemList.add(item2);
+
+        List<ItemDto> expectedItemList = new ArrayList<>();
+        ItemDto itemDto1 = new ItemDto();
+        itemDto1.setId(1L);
+        itemDto1.setTitle("item1");
+
+        ItemDto itemDto2 = new ItemDto();
+        itemDto2.setId(2L);
+        itemDto2.setTitle("item2");
+
+        expectedItemList.add(itemDto1);
+        expectedItemList.add(itemDto2);
+
+        when(usersRepository.findUserByUsername(username)).thenReturn(user);
+        when(itemRepository.findByUserIdNot(userId)).thenReturn(itemList);
+        when(itemMapper.itemToDto(item1)).thenReturn(itemDto1);
+        when(itemMapper.itemToDto(item2)).thenReturn(itemDto2);
+
+        List<ItemDto> actualItemList = itemService.getItemsNotBelongingToUser(username);
+
+        assertEquals(expectedItemList, actualItemList);
+    }
+
+
 }

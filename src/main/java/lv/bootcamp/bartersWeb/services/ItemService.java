@@ -160,4 +160,11 @@ public class ItemService {
         }
         return convertedFile;
     }
+
+    public List<ItemDto> getItemsNotBelongingToUser(String username) {
+        Long userId = userRepository.findUserByUsername(username).getId();
+        List<Item> items = itemRepository.findByUserIdNot(userId);
+        return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
+    }
+
 }

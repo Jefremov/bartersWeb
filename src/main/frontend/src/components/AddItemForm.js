@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import ECategory from '../enums/ECategory';
 import { getLoggedInUser } from '../auth/isAuthenticated';
+import { FormControl, Select, MenuItem, TextField, Button } from "@mui/material";
 
 const AddItemForm = () => {
   const [formData, setFormData] = useState({
@@ -44,7 +45,7 @@ const AddItemForm = () => {
       },
     })
       .then(response => {
-        alert("Item successfully added!");
+        alert("Item successfully created!");
         window.location.reload();
       })
       .catch(error => {
@@ -53,33 +54,22 @@ const AddItemForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Title:
-        <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-      </label><br/>
-      <label>
-        Description:
-        <textarea name="description" value={formData.description} onChange={handleChange} required />
-      </label><br/>
-      <label>
-        State:
-        <input type="text" name="state" value={formData.state} onChange={handleChange} required />
-      </label><br/>
-      <label>
-        File:
-        <input type="file" name="file" onChange={handleFileChange} required />
-      </label><br/>
-      <label>
-          Category:
-          <select name="category" value={formData.category} onChange={handleChange} required>
+    <div style={{display: 'flex', justifyContent: 'center' }}>
+      <form onSubmit={handleSubmit}>
+        <FormControl fullWidth >
+          <TextField style={{marginBottom: '6px'}} label="Title" name="title" value={formData.title} onChange={handleChange} required fullWidth />
+          <TextField style={{marginBottom: '6px'}} label="Description" name="description" value={formData.description} onChange={handleChange} required fullWidth />
+          <TextField style={{marginBottom: '10px'}} label="State" name="state" value={formData.state} onChange={handleChange} required fullWidth />
+          <input style={{marginBottom: '10px'}} type="file" name="file" onChange={handleFileChange} required fullWidth />
+          <Select name="category" value={formData.category} onChange={handleChange} required fullWidth>
             {Object.values(ECategory).map(option => (
-              <option key={option.value} value={option.value}>{option.displayName}</option>
+              <MenuItem key={option.value} value={option.value}>{option.displayName}</MenuItem>
             ))}
-          </select>
-        </label><br/>
-      <button type="submit">Submit</button>
-    </form>
+          </Select>
+          <Button style={{margin: '10px 0'}} variant="contained" type="submit" fullWidth>Submit</Button>
+        </FormControl>
+      </form>
+    </div>
   );
 };
 
