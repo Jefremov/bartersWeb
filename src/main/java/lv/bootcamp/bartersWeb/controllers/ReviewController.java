@@ -60,7 +60,6 @@ public class ReviewController {
     }
 
     @DeleteMapping(value = "/{reviewid}")
-    @Operation(hidden = true)
     public ResponseEntity deleteById(@PathVariable("reviewid") Long reviewId){
         logger.info("Deleting review with ID: " + reviewId);
         return reviewService.deleteById(reviewId);

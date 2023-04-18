@@ -2,7 +2,6 @@ package lv.bootcamp.bartersWeb.authService.config;
 
 import lombok.RequiredArgsConstructor;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,10 +1,7 @@
 package lv.bootcamp.bartersWeb.authService.token;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lv.bootcamp.bartersWeb.entities.User;
 
 @Data

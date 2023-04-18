@@ -1,9 +1,7 @@
 package lv.bootcamp.bartersWeb.controllers;
 
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.UserCreateDto;
 import lv.bootcamp.bartersWeb.dto.UserShowDto;
 import lv.bootcamp.bartersWeb.exceptions.IncorrectDataException;
@@ -13,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
-@Hidden
 @RestController
 @RequestMapping(path = "/admin")
 @PreAuthorize("hasRole = ('ADMIN')")
@@ -52,8 +47,5 @@ public class AdminController {
             throws IncorrectDataException {
         return adminService.createUser(userCreateDto);
     }
-
-
-
 
 }
