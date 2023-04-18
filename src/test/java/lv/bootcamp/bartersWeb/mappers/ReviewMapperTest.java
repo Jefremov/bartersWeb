@@ -8,8 +8,6 @@ import lv.bootcamp.bartersWeb.entities.Review;
 import lv.bootcamp.bartersWeb.entities.User;
 import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

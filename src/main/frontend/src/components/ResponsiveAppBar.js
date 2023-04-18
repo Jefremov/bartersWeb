@@ -35,7 +35,7 @@ const pages = [
 ];
 const settings = [
   { name: 'Profile', link: '/' },
-  { name: 'Dashboard', link: '/' },
+  { name: 'My items', link: '/my-items' },
   { name: 'Support', link: '/' },
   { name: 'Logout', link: 'login' }
 ];

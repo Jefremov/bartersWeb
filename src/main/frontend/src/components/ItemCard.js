@@ -1,17 +1,23 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { Paper, Typography, Button, Modal, Box, Divider } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { TextField, Input } from '@mui/material';
 import Textarea from '@mui/material/TextareaAutosize';
 import axios from 'axios';
+import { isAuthenticated, getLoggedInUser } from '../auth/isAuthenticated';
+import { useLocation } from 'react-router-dom';
+import UpdateItemForm from './UpdateItemForm';
 
 const ItemCard = ({ items }) => {
   const [showMoreInfoDialog, setShowMoreInfoDialog] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showCreateTradeModal, setShowCreateTradeModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [offeredItemId, setOfferedItemId] = React.useState('');
   const [text, setText] = React.useState('');
+  const location = useLocation();
 
   const handleShowMoreInfoClick = (itemObj) => {
     setSelectedItem(itemObj);
@@ -30,6 +36,41 @@ const ItemCard = ({ items }) => {
   const handleCreateTradeClose = () => {
     setShowCreateTradeModal(false);
   };
+
+  const handleUpdateModalClick = (itemObj) => {
+    setSelectedItem(itemObj);
+    setShowUpdateModal(true);
+  }
+
+  const handleUpdateModalClose = () => {
+    setShowUpdateModal(false);
+  }
+
+    const handleUpdateSubmit = (updatedData) => {
+      axios.put(`/api/items/update/${selectedItem.id}`, updatedData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(response => {
+          alert("Item successfully updated!");
+          window.location.reload();
+        })
+        .catch(error => {
+          alert("ERROR");
+        });
+    }
+
+  const handleItemDelete = (itemObj) => {
+    axios.delete(`/api/items/delete/${itemObj.id}`)
+    .then(response => {
+      alert('Item deleted successfully');
+      window.location.reload();
+    })
+    .catch(error => {
+      alert('Error deleting item:', error);
+    });
+  }
 
   const handleCreateTradeFormSubmit = () => {
     const config = {
@@ -84,9 +125,20 @@ const ItemCard = ({ items }) => {
           DETAILS
         </Button>
 
+        {(isAuthenticated() && location.pathname === '/my-items') ? (
+        <>
+        <Button size="small" variant="contained" color="secondary" onClick={() => handleItemDelete(itemObj)}>
+          DELETE
+        </Button>
+        <Button size="small" variant="contained" color="info" onClick={() => handleUpdateModalClick(itemObj)}>
+          UPDATE
+        </Button>
+        </>
+        ) : (
         <Button size="small" variant="contained" color="info" onClick={() => handleCreateTradeClick(itemObj)}>
           TRADE
         </Button>
+        )}
 
         </div>
 
@@ -173,6 +225,24 @@ const ItemCard = ({ items }) => {
               <Divider/>
               <div style={{width:"100%", textAlign: "right", marginTop: '6px'}}>
                 <Button size="small" variant="contained" onClick={handleShowMoreInfoClose}>Close</Button>
+              </div>
+            </Box>
+          </Modal>
+        )}
+
+        {/* ITEM UPDATE MODAL */}
+
+        {selectedItem && selectedItem.id === itemObj.id && (
+          <Modal
+            open={showUpdateModal}
+            onClose={handleUpdateModalClose}
+          >
+            <Box sx={{ position: 'absolute', top: '10%', left: '50%', transform: 'translate(-50%, -10%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+              <br/>
+                <UpdateItemForm data={itemObj} onUpdate={handleUpdateSubmit} />
+              <Divider/>
+              <div style={{width:"100%", textAlign: "right", marginTop: '6px'}}>
+                <Button size="small" variant="contained" onClick={handleUpdateModalClose}>Close</Button>
               </div>
             </Box>
           </Modal>

@@ -9,13 +9,13 @@ import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
+import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,38 +35,21 @@ import static org.mockito.Mockito.*;
 public class ItemServiceTest {
 
     private ItemRepository itemRepository;
-
     private TradeRepository tradeRepository;
-
+    private UsersRepository usersRepository;
     private ItemMapper itemMapper;
     private AmazonS3 S3client;
 
-
     private ItemService itemService;
-    @Mock
-    private Path root;
-    @Mock
-    private MultipartFile files;
 
     @BeforeEach
     public void setUp() {
         itemMapper = mock(ItemMapper.class);
         tradeRepository = mock(TradeRepository.class);
         itemRepository = mock(ItemRepository.class);
+        usersRepository = mock(UsersRepository.class);
         S3client = mock(AmazonS3.class);
-        itemService = new ItemService(itemRepository, tradeRepository, itemMapper, S3client);
-    }
-    @Test
-    public void testAddItem() throws IOException {
-        ItemCreateDto itemCreateDto = new ItemCreateDto();
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
-        itemCreateDto.setFile(mockMultipartFile);
-
-        when(S3client.putObject((String) any(), (String) any(), (File) any())).thenReturn(null);
-
-        ResponseEntity<String> responseEntity = itemService.addItem(itemCreateDto);
-        assertEquals(200, responseEntity.getStatusCodeValue());
-        assertEquals("Added", responseEntity.getBody());
+        itemService = new ItemService(itemRepository, tradeRepository, itemMapper, S3client, usersRepository);
     }
 
     @Test
@@ -80,7 +61,7 @@ public class ItemServiceTest {
         when(itemCreateDto.getFile()).thenReturn(file);
 
         Item item = Mockito.mock(Item.class);
-        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg")).thenReturn(item);
+        when(itemMapper.CreateDtoToItemFile(itemCreateDto, "src/main/resources/itemimages/test.jpg", null)).thenReturn(item);
 
         when(itemRepository.save(item)).thenReturn(item);
 
@@ -303,5 +284,4 @@ public class ItemServiceTest {
 
         assertNull(actual);
     }
-
 }

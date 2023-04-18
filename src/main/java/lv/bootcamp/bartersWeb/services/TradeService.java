@@ -23,15 +23,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class TradeService {
-
+    private static final Logger logger = LogManager.getLogger(TradeService.class);
     @Autowired
     private TradeRepository tradesRepository;
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
     private TradeMapper tradeMapper;
-
-    private static final Logger logger = LogManager.getLogger(TradeService.class);
 
     public List<TradeShowDto> getAllTrades() {
         try {
@@ -40,7 +38,7 @@ public class TradeService {
                     .map(tradeMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            logger.warn("An error occurred while retrieving trades: {}", e.getMessage(), e);
+            logger.warn("An error occurred while retrieving trades: {}", e.getMessage());
             return Collections.emptyList();
         }
     }
@@ -49,8 +47,10 @@ public class TradeService {
         try {
             Trade trade = tradeMapper.toEntity(tradeDto);
             tradesRepository.save(trade);
+            logger.info("Created trade successfully with ID: " + trade.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(trade);
         } catch (Exception e) {
+            logger.error("An error occurred while creating trade", e);
             e.printStackTrace();
             throw new RuntimeException("Error occurred while creating trade");
         }
@@ -58,6 +58,7 @@ public class TradeService {
 
     public void deleteTrade(Long id) {
         tradesRepository.deleteById(id);
+        logger.info("Deleted trade with ID: " + id);
     }
 
     public String updateTradeStatus(Long id, EStatus status) {
@@ -69,12 +70,14 @@ public class TradeService {
         }
         trade.setStatus(status);
         tradesRepository.save(trade);
+        logger.info("Updated trade status successfully for trade with ID: " + id);
         return "Trade status updated successfully";
     }
 
     public ResponseEntity<TradeShowDto> getTradeById(Long id) {
         TradeShowDto tradeShowDto = tradeMapper.toDto(tradesRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Trade not found")));
+        logger.info("Retrieved trade with ID: " + id);
         return ResponseEntity.ok().body(tradeShowDto);
     }
 }
