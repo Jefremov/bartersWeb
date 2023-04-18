@@ -66,4 +66,10 @@ public class ReviewController {
         return reviewService.deleteById(reviewId);
     }
 
+    @GetMapping("/{username}/average")
+    public ResponseEntity<Double> getAverageRatingByUsername(@PathVariable String username) {
+        Double averageRating = reviewService.getAverageRatingForUser(username);
+        return ResponseEntity.ok(averageRating);
+    }
+
 }
