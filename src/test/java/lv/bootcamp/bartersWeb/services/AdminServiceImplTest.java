@@ -182,7 +182,6 @@ class AdminServiceImplTest {
         assertEquals(userCreateDto.getUsername(), userShowDto.getUsername());
         assertEquals(userCreateDto.getEmail(), userShowDto.getEmail());
 
-        // existing username and email
         UserCreateDto userCreateDto1 = new UserCreateDto();
         userCreateDto1.setUsername("testuser");
         userCreateDto1.setPassword("newPassword");
@@ -195,7 +194,6 @@ class AdminServiceImplTest {
             adminService.createUser(userCreateDto1);
         });
 
-        // existing username and unique email
         UserCreateDto userCreateDto2 = new UserCreateDto();
         userCreateDto2.setUsername("testuser");
         userCreateDto2.setPassword("newPassword");
@@ -204,11 +202,10 @@ class AdminServiceImplTest {
         userCreateDto2.setRole(ERole.USER);
         userCreateDto2.setDescription("newDescription");
         userCreateDto2.setImage("newImage");
-
         assertThrows(IncorrectDataException.class, () -> {
             adminService.createUser(userCreateDto2);
         });
-        // unique username and existing email
+
         UserCreateDto userCreateDto3 = new UserCreateDto();
         userCreateDto3.setUsername("uniqueUsername");
         userCreateDto3.setPassword("testpassword");
@@ -217,7 +214,6 @@ class AdminServiceImplTest {
         userCreateDto3.setDescription("testDescription");
         userCreateDto3.setPhoneNumber("+37000000000");
         userCreateDto3.setImage("testImage");
-
         assertThrows(IncorrectDataException.class, () -> {
             adminService.createUser(userCreateDto3);
         });
