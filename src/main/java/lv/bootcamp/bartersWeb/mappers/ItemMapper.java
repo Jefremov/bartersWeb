@@ -2,9 +2,11 @@ package lv.bootcamp.bartersWeb.mappers;
 
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
+import lv.bootcamp.bartersWeb.dto.ItemOwnerDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
+import lv.bootcamp.bartersWeb.services.ReviewService;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ public class ItemMapper {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private ReviewService reviewService;
     public ItemDto itemToDto(Item item) {
         ItemDto dto = new ItemDto();
         dto.setId(item.getId());
@@ -27,6 +31,12 @@ public class ItemMapper {
         dto.setDate(item.getDate());
         dto.setStatus(item.getStatus().getDisplayName());
         dto.setUserId(item.getUserId());
+        return dto;
+    }
+    public ItemOwnerDto itemToDtoOwner(Item item) {
+        ItemOwnerDto dto = new ItemOwnerDto();
+        dto.setUsername(usersRepository.findById(item.getUserId()).get().getUsername());
+        dto.setRating(reviewService.getAverageRatingForUser(dto.getUsername()));
         return dto;
     }
 

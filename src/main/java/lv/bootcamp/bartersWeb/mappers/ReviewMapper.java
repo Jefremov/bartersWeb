@@ -32,7 +32,7 @@ public class ReviewMapper {
     public Review CreateDtoToReview(ReviewCreateDto reviewCreateDto, String username){
         Review review = new Review();
             review.setReviewedId(usersRepository.findUserByUsername(username).getId());
-            review.setReviewerId(reviewCreateDto.getReviewerId());
+            review.setReviewerId(usersRepository.findUserByUsername(reviewCreateDto.getReviewer()).getId());
             review.setGrade(EReviewGrade.valueOf(reviewCreateDto.getGrade()));
             review.setComment(reviewCreateDto.getComment());
         return review;

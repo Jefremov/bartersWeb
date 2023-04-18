@@ -3,6 +3,7 @@ package lv.bootcamp.bartersWeb.services;
 import com.amazonaws.services.s3.AmazonS3;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
+import lv.bootcamp.bartersWeb.dto.ItemOwnerDto;
 import lv.bootcamp.bartersWeb.entities.ECategory;
 import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
@@ -83,6 +84,13 @@ public class ItemService {
             return ResponseEntity.ok().body(itemMapper.itemToDto(item));
         }
         logger.warn("Item not found with ID: "+ id);
+        return ResponseEntity.notFound().build();
+    }
+    public ResponseEntity<ItemOwnerDto> getItemOwner(Long id) {
+        if(itemRepository.existsById(id)) {
+            Item item = itemRepository.findById(id).get();
+            return ResponseEntity.ok().body(itemMapper.itemToDtoOwner(item));
+        }
         return ResponseEntity.notFound().build();
     }
 

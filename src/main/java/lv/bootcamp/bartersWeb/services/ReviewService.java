@@ -90,4 +90,18 @@ public class ReviewService {
         logger.info("No review found with ID: " + reviewId);
         return  ResponseEntity.notFound().build();
     }
+
+    public Double getAverageRatingForUser(String username) {
+        if(usersRepository.existsByUsername(username)) {
+            List<Review> reviews = reviewRepository.findByReviewedId(usersRepository.findUserByUsername(username).getId());
+            Double averageRating = reviews.stream()
+                    .mapToDouble(review -> review.getGrade().getValue())
+                    .average()
+                    .orElse(0.0);
+            return Math.round(averageRating * 100.0) / 100.0;
+        }
+        else return 0.0;
+    }
+
+
 }
