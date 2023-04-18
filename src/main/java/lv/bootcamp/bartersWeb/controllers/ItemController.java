@@ -3,6 +3,7 @@ package lv.bootcamp.bartersWeb.controllers;
 import jakarta.validation.Valid;
 import lv.bootcamp.bartersWeb.dto.ItemCreateDto;
 import lv.bootcamp.bartersWeb.dto.ItemDto;
+import lv.bootcamp.bartersWeb.dto.ItemOwnerDto;
 import lv.bootcamp.bartersWeb.services.ItemService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class ItemController {
     public List<ItemDto> getItems() {
         logger.info("Getting all items");
         return itemService.getItems();
+    }
+    @GetMapping("/{itemid}/owner")
+    public ResponseEntity<ItemOwnerDto> getItemOwner(@PathVariable("itemid") Long itemid){
+        return itemService.getItemOwner(itemid);
     }
 
     @GetMapping("/{itemid}")

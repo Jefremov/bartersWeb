@@ -8,6 +8,7 @@ import axios from 'axios';
 import { isAuthenticated } from '../auth/isAuthenticated';
 import { useLocation } from 'react-router-dom';
 import UpdateItemForm from './UpdateItemForm';
+import ItemOwner from './ItemOwner';
 
 const ItemCard = ({ items, userItems }) => {
   const [showMoreInfoDialog, setShowMoreInfoDialog] = useState(false);
@@ -210,6 +211,9 @@ console.log('USER ITEMS >>> CARD', userItems);
 
               <Typography variant="h6" gutterBottom>
                 {selectedItem.title}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <ItemOwner itemId={selectedItem.id} />
               </Typography>
               <Typography variant="body1" gutterBottom>
                 {selectedItem.description}

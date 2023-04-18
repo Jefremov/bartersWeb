@@ -6,6 +6,7 @@ import ItemsPage from './pages/ItemsPage';
 import TradesPage from './pages/TradesPage';
 import ResponsiveAppBar from './components/ResponsiveAppBar';
 import ReviewsPage from './pages/ReviewsPage';
+import AddReviewForm from './components/AddReviewForm';
 import AdminPage from './pages/AdminPage';
 import UsersPage from './pages/UsersPage';
 import LoginPage from './pages/LoginPage';
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/items" element={<ItemsPage />} />
+        <Route path="/add-review" element={<AddReviewForm />} />
         {isAuthenticated() && <Route path="/my-items" element={<ItemsPage />} />}
         {isAuthenticated() && <Route path="/trades" element={<TradesPage />} />}
         {isAuthenticated() && <Route path="/users" element={<UsersPage />} />}
