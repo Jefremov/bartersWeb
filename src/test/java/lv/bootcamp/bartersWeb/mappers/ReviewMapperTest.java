@@ -75,19 +75,22 @@ public class ReviewMapperTest {
     @Test
     public void testCreateDtoToReview() {
 
-        User user = new User();
-        user.setId(1L);
-        when(usersRepository.findUserByUsername("user")).thenReturn(user);
+        User user1 = new User();
+        user1.setId(1L);
+        when(usersRepository.findUserByUsername("user1")).thenReturn(user1);
+        User user2 = new User();
+        user2.setId(2L);
+        when(usersRepository.findUserByUsername("user2")).thenReturn(user2);
 
         ReviewCreateDto reviewCreateDto = new ReviewCreateDto();
-        reviewCreateDto.setReviewerId(1L);
+        reviewCreateDto.setReviewer("user2");
         reviewCreateDto.setGrade("GOOD");
         reviewCreateDto.setComment("Test comment");
 
-        Review review = reviewMapper.CreateDtoToReview(reviewCreateDto, "user");
+        Review review = reviewMapper.CreateDtoToReview(reviewCreateDto, "user1");
 
         assertEquals(1L, review.getReviewedId());
-        assertEquals(1L, review.getReviewerId());
+        assertEquals(2L, review.getReviewerId());
         assertEquals(EReviewGrade.GOOD, review.getGrade());
         assertEquals("Test comment", review.getComment());
     }
