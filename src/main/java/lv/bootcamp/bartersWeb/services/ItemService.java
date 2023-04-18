@@ -8,9 +8,7 @@ import lv.bootcamp.bartersWeb.entities.EItemStatus;
 import lv.bootcamp.bartersWeb.entities.Item;
 import lv.bootcamp.bartersWeb.entities.Trade;
 import lv.bootcamp.bartersWeb.mappers.ItemMapper;
-import lv.bootcamp.bartersWeb.mappers.ReviewMapper;
 import lv.bootcamp.bartersWeb.repositories.ItemRepository;
-import lv.bootcamp.bartersWeb.repositories.ReviewRepository;
 import lv.bootcamp.bartersWeb.repositories.TradeRepository;
 import lv.bootcamp.bartersWeb.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,6 +139,12 @@ public class ItemService {
             fos.write(file.getBytes());
         } catch (IOException e){return null;}
         return convertedFile;
+    }
+
+    public List<ItemDto> getItemsNotBelongingToUser(String username) {
+        Long userId = userRepository.findUserByUsername(username).getId();
+        List<Item> items = itemRepository.findByUserIdNot(userId);
+        return items.stream().map(itemMapper::itemToDto).collect(Collectors.toList());
     }
 
 }

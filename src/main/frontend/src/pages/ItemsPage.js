@@ -15,43 +15,154 @@ import { useLocation } from 'react-router-dom';
 import { isAuthenticated, getLoggedInUser } from '../auth/isAuthenticated';
 
 const Items = () => {
-  const [allItems, setAllItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
+  const [userItems, setUserItems] = useState([]);
+  const [otherItems, setOtherItems] = useState([]);
+  const [items, setItems] = useState([]);
+  const loggedInUser = getLoggedInUser();
+
+  useEffect(() => {
+    const fetchUserItems = async () => {
+      const loggedInUser = getLoggedInUser();
+      if (!loggedInUser) {
+        setUserItems([]);
+        return;
+      }
+  
+      const url = `/api/items/user/${loggedInUser}`;
+  
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user items. Status code: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setUserItems(data);
+      } catch (error) {
+        console.error('Error fetching user items:', error);
+        setUserItems([]);
+      }
+    };
+  
+    fetchUserItems();
+  }, [loggedInUser]);
+  
+
+  useEffect(() => {
+    const fetchOtherItems = async () => {
+      if (!loggedInUser) {
+        setOtherItems([]);
+        return;
+      }
+  
+      const url = `/api/items/not/${loggedInUser}`;
+  
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch other items. Status code: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setOtherItems(data);
+      } catch (error) {
+        console.error('Error fetching other items:', error);
+        setOtherItems([]);
+      }
+    };
+  
+    fetchOtherItems();
+  }, [loggedInUser]);
+  
+  console.log('OTHER ITEMS >>> PAGE', otherItems);
+
+  useEffect(() => {
+    const fetchUserItems = async () => {
+      const loggedInUser = getLoggedInUser();
+      if (!loggedInUser) {
+        setUserItems([]);
+        return;
+      }
+  
+      const url = `/api/items/user/${loggedInUser}`;
+  
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user items. Status code: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setUserItems(data);
+      } catch (error) {
+        console.error('Error fetching user items:', error);
+        setUserItems([]);
+      }
+    };
+  
+    fetchUserItems();
+  }, [loggedInUser]);
+  
+  console.log('USER ITEMS >>> PAGE', userItems);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const url = '/api/items';
+  
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch items. Status code: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+        setItems([]);
+      }
+    };
+  
+    fetchItems();
+  }, []);
+  
+  console.log('ALL ITEMS', items);  
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = isAuthenticated() && location.pathname === '/my-items'
-        ? `/api/items/user/${getLoggedInUser()}`
-        : (categoryFilter ? `/api/items/category/${categoryFilter}` : '/api/items');
+      const url = categoryFilter ? `/api/items/category/${categoryFilter}` : '/api/items';
       try {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const json = await response.json();
-        setAllItems(json);
+        setItems(json);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setAllItems([]);
+        setItems([]);
       }
     };
     fetchData();
-  }, [categoryFilter, location.pathname]);
+  }, [categoryFilter]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`/api/items/search?title=${searchQuery}`);
-        setAllItems(response.data);
+        setItems(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-    if (!(isAuthenticated() && location.pathname === '/my-items')) { fetchData(); }
+  
+    fetchData();
   }, [searchQuery, location.pathname]);
+    
 
   const handleShowModalClick = () => {
     setShowModal(true);
@@ -65,20 +176,29 @@ const Items = () => {
     setSearchQuery(event.target.value);
     };
 
-  const handleItemSearch = () => {
-    console.log('Search button clicked with search text:', searchQuery);
+    const handleItemSearch = async () => {
+      console.log('Search button clicked with search text:', searchQuery);
       try {
-        const response = axios.get(`/api/items/search?title=${searchQuery}`);
-        setAllItems(response.data);
+        const response = await axios.get(`/api/items/search?title=${searchQuery}`);
+        setItems(response.data);
       } catch (error) {
         console.log(error);
       }
-  };
+    };
+    
+    // useEffect(() => {
+    //   if (searchQuery !== '') {
+    //     handleItemSearch();
+    //   }
+    // }, [searchQuery]);
+    
 
   const clearFilter = () => {
     setCategoryFilter(null);
     setSearchQuery('');
   };
+
+  console.log('search query', searchQuery);
 
 
   return (
@@ -95,10 +215,23 @@ const Items = () => {
         </>
       )}
       <br/>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
+        <ItemCard items={userItems} userItems={null} />
+      </div>
     </>
       ) : (
     <>
-      <Paper component="form">
+    {!isAuthenticated() && (
+      <>
+      {((searchQuery || categoryFilter)) && (
+          <div style={{textAlign: 'center'}}>
+            <Button color='error' type='button' onClick={clearFilter} startIcon={<ClearIcon />}>
+              Clear Filters
+            </Button>
+          </div>
+        )}
+
+        <Paper component="form">
         <InputBase
           placeholder="Search items by title"
           inputProps={{ 'aria-label': 'Search items by title' }}
@@ -113,8 +246,7 @@ const Items = () => {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <h/>
-      <br/>
+
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Box display="flex" overflow="auto">
@@ -131,36 +263,34 @@ const Items = () => {
           </Box>
         </Grid>
       </Grid>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
+          <ItemCard items={items} userItems={null} />
+        </div>
+
+        {(items?.length === 0) && (
+          <div style={{textAlign: 'center', color: 'gray', marginTop: '60px'}}>
+            No items in this category, yet.
+          </div>
+        )} 
+      </>
+      )}
+
+    {isAuthenticated() && (
+      <>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
+          <ItemCard items={otherItems} userItems={userItems} />
+        </div>
+      </>
+    )}
+      <h/>
+      <br/>
         <h/>
         </>
         )}
     </div>
     <Divider />
     <br/>
-    {((searchQuery || categoryFilter) && !(isAuthenticated() && location.pathname === '/my-items')) && (
-        <div style={{textAlign: 'center'}}>
-          <Button color='error' type='button' onClick={clearFilter} startIcon={<ClearIcon />}>
-            Clear Filters
-          </Button>
-        </div>
-      )}
-
-
-    {allItems?.length > 0 &&
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
-        <ItemCard items={allItems} />
-      </div>
-    }
-
-    {allItems?.length === 0 && (
-      <div style={{textAlign: 'center', color: 'gray', marginTop: '60px'}}>
-        No items in this category, yet.
-        <br/><br/>
-        Would you like to add one? 
-        <br/><br/>
-        <Button style={{marginBottom: '10px'}} variant="contained" color="primary" onClick={handleShowModalClick}>Create Item</Button>
-      </div>
-    )}
     </>
   );
 }
