@@ -13,8 +13,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Box from '@mui/material/Box';
 import Badge from '@mui/material/Badge';
 import { Link, useNavigate } from 'react-router-dom';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import CategoryIcon from '@mui/icons-material/Category';
 import HomeIcon from '@mui/icons-material/Home';
@@ -28,15 +26,11 @@ const pages = [
   { name: 'Home', href: '/' , icon: <HomeIcon />},
   { name: 'Items', href: '/items', icon: <CategoryIcon /> },
   { name: 'Trades', href: '/trades', icon: <ViewListIcon /> },
-  { name: 'Users', href: '/users', icon: <PeopleAltIcon />},
   { name: 'Reviews', href: '/reviews', icon: <ReviewsIcon /> },
-  { name: 'Admin', href: '/admin', icon: <AdminPanelSettingsIcon />}
 
 ];
 const settings = [
-  { name: 'Profile', link: '/' },
   { name: 'My items', link: '/my-items' },
-  { name: 'Support', link: '/' },
   { name: 'Logout', link: 'login' }
 ];
 
@@ -175,7 +169,7 @@ function ResponsiveAppBar() {
           </Box>
           <Box>
             {
-              isAuthenticated() && (
+              false && (
                 <Badge badgeContent={17} color="error">
                 <ArticleIcon/>
               </Badge>

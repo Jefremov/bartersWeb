@@ -160,10 +160,12 @@ console.log('USER ITEMS >>> CARD', userItems);
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <section>
                 <b>{itemObj.title}</b>
-                <img style={{width: '100%'}} src={itemObj.image} alt={itemObj.title} />
+                <div style={{width: 'auto', height: '300px'}}>
+                  <img style={{width: 'auto', height: '300px'}} src={itemObj.image} alt={itemObj.title} />
+                </div>
               </section>
 
-              <h3>TRADE FOR</h3>
+              <strong>TRADE FOR</strong>
               <div>OFFERED ITEM: </div>
               <Select
                 labelId="demo-select-small"
@@ -176,13 +178,11 @@ console.log('USER ITEMS >>> CARD', userItems);
                   <MenuItem value={item.id}>{item.title}</MenuItem>
                 ))}
               </Select>
-
-              <br/>
-              <h6>MESSAGE:</h6>
+              <strong>MESSAGE:</strong>
               <Textarea
                 placeholder="Type in here…"
-                minRows={6}
-                maxRows={6}
+                minRows={4}
+                maxRows={4}
                 onChange={(event) => setText(event.target.value)}
                 title='Comment'
               />
@@ -206,15 +206,16 @@ console.log('USER ITEMS >>> CARD', userItems);
             onClose={handleShowMoreInfoClose}
           >
             <Box sx={{ position: 'absolute', top: '10%', left: '50%', transform: 'translate(-50%, -10%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
-              <img src={itemObj.image} alt={itemObj.title} style={{width: '100%'}} />
               <br/>
-
-              <Typography variant="h6" gutterBottom>
-                {selectedItem.title}
-              </Typography>
+              <img style={{width: 'auto', height: '300px'}} src={itemObj.image} alt={itemObj.title} />
               <Typography variant="body1" gutterBottom>
                 <ItemOwner itemId={selectedItem.id} />
               </Typography>
+              <Divider/>
+              <Typography variant="h6" gutterBottom>
+                {selectedItem.title}
+              </Typography>
+            
               <Typography variant="body1" gutterBottom>
                 {selectedItem.description}
               </Typography>
@@ -222,7 +223,6 @@ console.log('USER ITEMS >>> CARD', userItems);
               <Typography variant="body2">
                 State: {selectedItem.state}
               </Typography>
-
               <Typography variant="body2">
                 Status: {selectedItem.status}
               </Typography>
