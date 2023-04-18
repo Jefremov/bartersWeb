@@ -14,16 +14,16 @@ The vision of BARTERS is to create a sustainable economy that values community a
 
 ## Authors
 
-- [Berta](https://github.com/bertamatu)
-- [Elizabete](https://github.com/etitane)
-- [Konstantin](https://github.com/Jefremov)
-- [Ralfs](https://github.com/Ralerido)
+- [Berta](https://www.linkedin.com/in/bertam/)
+- [Elizabete](https://www.linkedin.com/in/elizabete-titane/)
+- [Konstantin](https://www.linkedin.com/in/konstantin-jefremov/)
+- [Ralfs](https://www.linkedin.com/in/ralfsl)
 
 ## Tech Stack and Required Environment
 
 **Client:** Node.js 18.14.2, React js 18, MUI 5, css
 
-**Server:** Java 17, Gradle 7.6.1, Spring Boot 3.0.5, JUnit 5.
+**Server:** Java 17, Gradle 7.6.1, Spring Boot 3.0.5, JUnit 5, Mockito 4.0.0, Swagger 3.0.0, Amazon S3
 
 **Database:** MySQL 8, Amazon RDS
 
@@ -40,14 +40,23 @@ To run this project, you will need to add the following environment variables to
 
 `SECRET-KEY`=MegaLargeSigningSecretKeyForDemoApplicationMegaLargeSigningSecretKeyForDemoApplication
 
-`KEY-EXPIRATION`=60000
+`KEY-EXPIRATION`=3600000
 
 `REFRESH-EXPIRATION`=604800000
+
+`AWS_ACCESS_KEY`=AKIA2UB7N35YLFJLXLW5
+
+`AWS_SECRET_KEY`=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
+
+`AWS_REGION`=eu-north-1
+
+`AWS_S3_BUCKET`=itemimagesbarters
+
+`AWS_S3_URL`=https://itemimagesbarters.s3.eu-north-1.amazonaws.com/
 
 ## API Reference
 
 [API Documentation](http://localhost:8080/swagger-ui/index.html)
-
 
 
 ## Features
@@ -57,8 +66,6 @@ To run this project, you will need to add the following environment variables to
 - Review CRUD
 - User auth
 - Mobile-First UI approach
-
-
 
 ## Contributing
 
